@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="el">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Επίπεδο 2 - Μεταβλητές στη C</title>
+
+    <style>
+        body {
+        font-family: Arial, sans-serif;
+        background-color: #FFF8DC;
+        margin: 0;
+        color: #222;
+}
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #174ea6;
+        }
+
+        h2 {
+            color: #285ea8;
+            margin-top: 35px;
+        }
+
+        p {
+            line-height: 1.7;
+        }
+
+        pre {
+            background: #1e1e1e;
+            color: white;
+            padding: 18px;
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: Consolas, monospace;
+        }
+
+        .score-box {
+            background: #e8f0fe;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        .question {
+            background: #f7f9fc;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-top: 25px;
+            border-radius: 10px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            text-align: left;
+            border: 1px solid #bbb;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        button:hover {
+            background: #e9f1ff;
+        }
+
+        button:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 6px;
+            border: 1px solid #aaa;
+        }
+
+        .check-button {
+            width: auto;
+            display: inline-block;
+            background: #174ea6;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .feedback {
+            font-weight: bold;
+            margin-top: 12px;
+        }
+
+        .correct {
+            color: green;
+        }
+
+        .wrong {
+            color: #c62828;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 30px;
+            text-decoration: none;
+            color: #174ea6;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>📦 Επίπεδο 2: Μεταβλητές στη C</h1>
+
+    <div class="score-box">
+        Σωστές απαντήσεις:
+        <span id="score">0</span> / 15
+    </div>
+
+    <h2>📖 Σύνοψη</h2>
+
+    <p>
+        Οι μεταβλητές είναι από τις πιο βασικές έννοιες στον προγραμματισμό.
+        Μια μεταβλητή είναι ένας χώρος στη μνήμη του υπολογιστή όπου μπορούμε
+        να αποθηκεύσουμε μια τιμή και να τη χρησιμοποιήσουμε αργότερα στο
+        πρόγραμμά μας. Στη C, πριν χρησιμοποιήσουμε μια μεταβλητή, πρέπει να
+        δηλώσουμε τον τύπο των δεδομένων που θα αποθηκεύει. Για παράδειγμα,
+        ο τύπος <code>int</code> χρησιμοποιείται για ακέραιους αριθμούς,
+        όπως 5, 20 ή -3. Ο τύπος <code>float</code> χρησιμοποιείται για
+        αριθμούς με δεκαδικό μέρος, όπως 3.14 ή 7.5. Ο τύπος
+        <code>double</code> χρησιμοποιείται επίσης για δεκαδικούς αριθμούς,
+        αλλά με μεγαλύτερη ακρίβεια. Ο τύπος <code>char</code>
+        χρησιμοποιείται για έναν μόνο χαρακτήρα, όπως
+        <code>'A'</code> ή <code>'x'</code>.
+        Μπορούμε να δηλώσουμε μια μεταβλητή γράφοντας πρώτα τον τύπο της,
+        μετά το όνομά της και στο τέλος ελληνικό ερωτηματικό.
+        Για παράδειγμα, <code>int age;</code>.
+        Αν θέλουμε να της δώσουμε τιμή αμέσως, μπορούμε να γράψουμε
+        <code>int age = 20;</code>. Αυτό ονομάζεται αρχικοποίηση.
+        Η τιμή μιας μεταβλητής μπορεί να αλλάξει κατά την εκτέλεση
+        του προγράμματος. Για παράδειγμα, αν έχουμε
+        <code>int score = 10;</code>, αργότερα μπορούμε να γράψουμε
+        <code>score = 15;</code>.
+        Για να εμφανίσουμε την τιμή μιας μεταβλητής με την
+        <code>printf()</code>, χρησιμοποιούμε ειδικά σύμβολα μορφοποίησης.
+        Το <code>%d</code> χρησιμοποιείται για <code>int</code>,
+        το <code>%f</code> για δεκαδικούς αριθμούς και το
+        <code>%c</code> για χαρακτήρες.
+        Η C ξεχωρίζει τα κεφαλαία από τα πεζά γράμματα, επομένως οι
+        μεταβλητές <code>age</code> και <code>Age</code> θεωρούνται διαφορετικές.
+        Επίσης, ένα όνομα μεταβλητής δεν πρέπει να ξεκινά με αριθμό.
+    </p>
+
+    <h2>💻 Παραδείγματα</h2>
+
+<pre><code>int age = 20;
+float temperature = 23.5;
+double price = 19.99;
+char grade = 'A';
+
+printf("%d", age);
+printf("%f", temperature);
+printf("%c", grade);</code></pre>
+
+    <p>
+        Μπορούμε επίσης να αλλάξουμε την τιμή μιας μεταβλητής:
+    </p>
+
+<pre><code>int score = 10;
+
+score = 20;
+
+printf("%d", score);</code></pre>
+
+    <p>
+        Το αποτέλεσμα θα είναι:
+    </p>
+
+<pre><code>20</code></pre>
+
+    <h2>🧠 Quiz — 15 ερωτήσεις</h2>
+
+
+    <!-- 1 -->
+    <div class="question">
+        <h3>1. Τι είναι μια μεταβλητή;</h3>
+
+        <button onclick="answer(this, false, 'Η printf() είναι συνάρτηση και όχι μεταβλητή.')">
+            Μια συνάρτηση εμφάνισης
+        </button>
+
+        <button onclick="answer(this, true)">
+            Ένας χώρος όπου αποθηκεύουμε μια τιμή
+        </button>
+
+        <button onclick="answer(this, false, 'Η main() είναι συνάρτηση.')">
+            Το σημείο έναρξης του προγράμματος
+        </button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 2 -->
+    <div class="question">
+        <h3>2. Ποιος τύπος χρησιμοποιείται για ακέραιους αριθμούς;</h3>
+
+        <button onclick="answer(this, true)">int</button>
+        <button onclick="answer(this, false, 'Το float χρησιμοποιείται για δεκαδικούς αριθμούς.')">float</button>
+        <button onclick="answer(this, false, 'Το char χρησιμοποιείται για χαρακτήρες.')">char</button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 3 -->
+    <div class="question">
+        <h3>3. Ποιος τύπος είναι κατάλληλος για την τιμή 12.5;</h3>
+
+        <button onclick="answer(this, false, 'Το int χρησιμοποιείται για ακέραιους αριθμούς.')">int</button>
+        <button onclick="answer(this, true)">float</button>
+        <button onclick="answer(this, false, 'Το char χρησιμοποιείται για χαρακτήρες.')">char</button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 4 -->
+    <div class="question">
+        <h3>4. Ποια δήλωση μεταβλητής είναι σωστή;</h3>
+
+        <button onclick="answer(this, false, 'Στη C γράφουμε πρώτα τον τύπο και μετά το όνομα.')">
+            age int = 20;
+        </button>
+
+        <button onclick="answer(this, true)">
+            int age = 20;
+        </button>
+
+        <button onclick="answer(this, false, 'Η σύνταξη δεν είναι σωστή.')">
+            age = 20 int;
+        </button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 5 -->
+    <div class="question">
+        <h3>5. Συμπλήρωσε το κενό:</h3>
+
+<pre>___ score = 100;</pre>
+
+        <input type="text" id="q5">
+
+        <button class="check-button"
+                onclick="checkInput('q5','int',this)">
+            Έλεγχος
+        </button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 6 -->
+    <div class="question">
+        <h3>6. Ποιος τύπος χρησιμοποιείται για έναν χαρακτήρα;</h3>
+
+        <button onclick="answer(this, false, 'Το int χρησιμοποιείται για ακέραιους αριθμούς.')">int</button>
+        <button onclick="answer(this, true)">char</button>
+        <button onclick="answer(this, false, 'Το float χρησιμοποιείται για δεκαδικούς αριθμούς.')">float</button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 7 -->
+    <div class="question">
+        <h3>7. Ποια τιμή ταιριάζει σε μεταβλητή char;</h3>
+
+        <button onclick="answer(this, false, 'Το 25 είναι ακέραιος αριθμός.')">25</button>
+
+        <button onclick="answer(this, true)">
+            'A'
+        </button>
+
+        <button onclick="answer(this, false, 'Το 3.14 είναι δεκαδικός αριθμός.')">
+            3.14
+        </button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 8 -->
+    <div class="question">
+        <h3>8. Τι θα εμφανίσει ο παρακάτω κώδικας;</h3>
+
+<pre>int x = 5;
+x = 10;
+
+printf("%d", x);</pre>
+
+        <button onclick="answer(this, false, 'Η τιμή της x άλλαξε από 5 σε 10.')">5</button>
+        <button onclick="answer(this, true)">10</button>
+        <button onclick="answer(this, false, 'Η x έχει τιμή και μπορεί να εμφανιστεί.')">Τίποτα</button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 9 -->
+    <div class="question">
+        <h3>9. Ποιο σύμβολο χρησιμοποιούμε στην printf() για int;</h3>
+
+        <button onclick="answer(this, true)">%d</button>
+        <button onclick="answer(this, false, 'Το %c χρησιμοποιείται για char.')">%c</button>
+        <button onclick="answer(this, false, 'Το %f χρησιμοποιείται για δεκαδικούς αριθμούς.')">%f</button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 10 -->
+    <div class="question">
+        <h3>10. Συμπλήρωσε το κενό:</h3>
+
+<pre>char grade = ___;</pre>
+
+        <input type="text" id="q10">
+
+        <button class="check-button"
+                onclick="checkInput('q10', &quot;'A'&quot;, this)">
+            Έλεγχος
+        </button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 11 -->
+    <div class="question">
+        <h3>11. Ποιο όνομα μεταβλητής ΔΕΝ είναι σωστό;</h3>
+
+        <button onclick="answer(this, false, 'Το age είναι σωστό όνομα μεταβλητής.')">
+            age
+        </button>
+
+        <button onclick="answer(this, true)">
+            2score
+        </button>
+
+        <button onclick="answer(this, false, 'Το userScore είναι σωστό όνομα μεταβλητής.')">
+            userScore
+        </button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 12 -->
+    <div class="question">
+        <h3>12. Είναι οι μεταβλητές age και Age ίδιες στη C;</h3>
+
+        <button onclick="answer(this, false, 'Η C ξεχωρίζει τα κεφαλαία από τα πεζά γράμματα.')">
+            Ναι
+        </button>
+
+        <button onclick="answer(this, true)">
+            Όχι
+        </button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 13 -->
+    <div class="question">
+        <h3>13. Ποιο θα εμφανίσει σωστά τη μεταβλητή age;</h3>
+
+<pre>int age = 18;</pre>
+
+        <button onclick="answer(this, true)">
+            printf("%d", age);
+        </button>
+
+        <button onclick="answer(this, false, 'Το %c χρησιμοποιείται για χαρακτήρες.')">
+            printf("%c", age);
+        </button>
+
+        <button onclick="answer(this, false, 'Η printf χρειάζεται format specifier.')">
+            printf(age);
+        </button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 14 -->
+    <div class="question">
+        <h3>14. Συμπλήρωσε το κενό:</h3>
+
+<pre>float temperature = 22.5;
+
+printf("___", temperature);</pre>
+
+        <input type="text" id="q14">
+
+        <button class="check-button"
+                onclick="checkInput('q14','%f',this)">
+            Έλεγχος
+        </button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 15 -->
+    <div class="question">
+        <h3>15. Ποιο πρόγραμμα δηλώνει σωστά τρεις διαφορετικούς τύπους;</h3>
+
+        <button onclick="answer(this, true)">
+            int age = 20; float height = 1.75; char grade = 'A';
+        </button>
+
+        <button onclick="answer(this, false, 'Το height έχει δεκαδική τιμή, οπότε το float είναι πιο κατάλληλο.')">
+            int age = 20; int height = 1.75; char grade = 'A';
+        </button>
+
+        <button onclick="answer(this, false, 'Οι τύποι δεν αντιστοιχούν σωστά στις τιμές.')">
+            char age = 20; float height = 1.75; int grade = 'A';
+        </button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <a class="back" href="/skills">
+        ← Επιστροφή στο Skill Tree
+    </a>
+
+</div>
+
+
+<script>
+
+let score = 0;
+
+
+function answer(button, correct, explanation = "") {
+
+    const question = button.parentElement;
+    const feedback = question.querySelector(".feedback");
+
+    if (question.dataset.answered === "true") {
+        return;
+    }
+
+    if (correct) {
+
+        question.dataset.answered = "true";
+
+        feedback.innerHTML = "✅ Σωστά! Μπράβο!";
+        feedback.className = "feedback correct";
+
+        const buttons = question.querySelectorAll("button");
+
+        buttons.forEach(btn => btn.disabled = true);
+
+        score++;
+
+        document.getElementById("score").innerText = score;
+
+    } else {
+
+        feedback.innerHTML =
+            "❌ Δεν είναι σωστό. " + explanation +
+            " Προσπάθησε ξανά.";
+
+        feedback.className = "feedback wrong";
+
+        button.disabled = true;
+    }
+}
+
+
+function checkInput(inputId, correctAnswer, button) {
+
+    const input = document.getElementById(inputId);
+    const question = button.parentElement;
+    const feedback = question.querySelector(".feedback");
+
+    if (question.dataset.answered === "true") {
+        return;
+    }
+
+    const userAnswer = input.value.trim().toLowerCase();
+    const correct = correctAnswer.trim().toLowerCase();
+
+    if (userAnswer === correct) {
+
+        question.dataset.answered = "true";
+
+        feedback.innerHTML = "✅ Σωστά! Μπράβο!";
+        feedback.className = "feedback correct";
+
+        input.disabled = true;
+        button.disabled = true;
+
+        score++;
+
+        document.getElementById("score").innerText = score;
+
+    } else {
+
+        feedback.innerHTML =
+            "❌ Δεν είναι σωστό. Προσπάθησε ξανά.";
+
+        feedback.className = "feedback wrong";
+    }
+}
+
+</script>
+
+</body>
+</html>

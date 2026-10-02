@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="el">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Επίπεδο 1 - Βασικά της C</title>
+
+    <style>
+        body {
+        font-family: Arial, sans-serif;
+        background-color: #FFF8DC;
+        margin: 0;
+        color: #222;
+}
+
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #174ea6;
+        }
+
+        h2 {
+            color: #285ea8;
+            margin-top: 35px;
+        }
+
+        p {
+            line-height: 1.7;
+        }
+
+        pre {
+            background: #1e1e1e;
+            color: white;
+            padding: 18px;
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: Consolas, monospace;
+        }
+
+        .question {
+            background: #f7f9fc;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-top: 25px;
+            border-radius: 10px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #bbb;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        button:hover {
+            background: #e9f1ff;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 6px;
+            border: 1px solid #aaa;
+        }
+
+        .check-button {
+            width: auto;
+            display: inline-block;
+            background: #174ea6;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .feedback {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .correct {
+            color: green;
+        }
+
+        .wrong {
+            color: #c62828;
+        }
+
+        .score-box {
+            background: #e8f0fe;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 30px;
+            text-decoration: none;
+            color: #174ea6;
+        }
+    </style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <h1>🌱 Επίπεδο 1: Τα βασικά της C</h1>
+
+    <div class="score-box">
+        Σωστές απαντήσεις:
+        <span id="score">0</span> / 15
+    </div>
+
+
+    <h2>📖 Σύνοψη</h2>
+
+    <p>
+        Η C είναι μια γλώσσα προγραμματισμού γενικού σκοπού και αποτελεί
+        μία από τις σημαντικότερες γλώσσες για την κατανόηση των βασικών
+        αρχών του προγραμματισμού. Ένα απλό πρόγραμμα C ξεκινά συνήθως
+        με την οδηγία <code>#include &lt;stdio.h&gt;</code>, η οποία μας
+        επιτρέπει να χρησιμοποιούμε λειτουργίες εισόδου και εξόδου όπως
+        τις <code>printf()</code> και <code>scanf()</code>. Η εκτέλεση
+        ενός προγράμματος ξεκινά από τη συνάρτηση <code>main()</code>.
+        Με την <code>printf()</code> μπορούμε να εμφανίζουμε πληροφορίες
+        στην οθόνη, ενώ με τη <code>scanf()</code> μπορούμε να λαμβάνουμε
+        δεδομένα που πληκτρολογεί ο χρήστης. Για την αποθήκευση δεδομένων
+        χρησιμοποιούμε μεταβλητές. Ο τύπος <code>int</code> χρησιμοποιείται
+        για ακέραιους αριθμούς, ο <code>float</code> για αριθμούς με
+        δεκαδικό μέρος και ο <code>char</code> για έναν χαρακτήρα.
+        Για παράδειγμα, <code>int age = 20;</code> δημιουργεί μία
+        μεταβλητή με όνομα age και τιμή 20. Στη C οι περισσότερες απλές
+        εντολές ολοκληρώνονται με ελληνικό ερωτηματικό
+        <code>;</code>. Μπορούμε επίσης να πραγματοποιούμε αριθμητικές
+        πράξεις χρησιμοποιώντας τους τελεστές <code>+</code>,
+        <code>-</code>, <code>*</code>, <code>/</code> και
+        <code>%</code>. Όταν το πρόγραμμα πρέπει να πάρει μια απόφαση,
+        χρησιμοποιούμε την <code>if</code> και προαιρετικά την
+        <code>else</code>. Για επαναλαμβανόμενες ενέργειες μπορούμε να
+        χρησιμοποιήσουμε βρόχους όπως <code>for</code> και
+        <code>while</code>. Τα σχόλια μιας γραμμής γράφονται με
+        <code>//</code> και βοηθούν τον προγραμματιστή να εξηγεί τον
+        κώδικα χωρίς να εκτελούνται από τον υπολογιστή. Τέλος, η εντολή
+        <code>return 0;</code> στο τέλος της <code>main()</code>
+        χρησιμοποιείται συνήθως για να δηλώσει ότι το πρόγραμμα
+        ολοκληρώθηκε επιτυχώς.
+    </p>
+
+
+    <h2>💻 Παράδειγμα</h2>
+
+<pre><code>#include &lt;stdio.h&gt;
+
+int main() {
+
+    int age = 20;
+
+    printf("Hello!");
+    printf("Age: %d", age);
+
+    return 0;
+}</code></pre>
+
+    <p>
+        Μην ανησυχείς αν δεν θυμάσαι ακόμα όλα τα παραπάνω.
+        Στόχος αυτού του επιπέδου είναι να εξοικειωθείς με τις βασικές
+        έννοιες. Θα τις συναντήσουμε ξανά στα επόμενα επίπεδα.
+    </p>
+
+
+    <h2>🧠 Quiz — 15 ερωτήσεις</h2>
+
+
+    <!-- 1 -->
+    <div class="question">
+        <h3>1. Από ποια συνάρτηση ξεκινά η εκτέλεση ενός προγράμματος C;</h3>
+
+        <button onclick="answer(this, false)">printf()</button>
+        <button onclick="answer(this, true)">main()</button>
+        <button onclick="answer(this, false)">scanf()</button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 2 -->
+    <div class="question">
+        <h3>2. Ποια συνάρτηση εμφανίζει κείμενο στην οθόνη;</h3>
+
+        <button onclick="answer(this, false)">scanf()</button>
+        <button onclick="answer(this, false)">main()</button>
+        <button onclick="answer(this, true)">printf()</button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 3 -->
+    <div class="question">
+        <h3>3. Ποιος τύπος χρησιμοποιείται για ακέραιους αριθμούς;</h3>
+
+        <button onclick="answer(this, true)">int</button>
+        <button onclick="answer(this, false)">char</button>
+        <button onclick="answer(this, false)">float</button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 4 -->
+    <div class="question">
+        <h3>4. Ποιος τύπος είναι κατάλληλος για τον αριθμό 3.14;</h3>
+
+        <button onclick="answer(this, false)">int</button>
+        <button onclick="answer(this, true)">float</button>
+        <button onclick="answer(this, false)">char</button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 5 -->
+    <div class="question">
+        <h3>5. Ποιος τύπος χρησιμοποιείται για έναν χαρακτήρα;</h3>
+
+        <button onclick="answer(this, false)">int</button>
+        <button onclick="answer(this, false)">float</button>
+        <button onclick="answer(this, true)">char</button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 6 -->
+    <div class="question">
+        <h3>6. Συμπλήρωσε το κενό:</h3>
+
+        <pre>___ age = 20;</pre>
+
+        <input type="text" id="q6">
+        <button class="check-button"
+                onclick="checkInput('q6','int',this)">
+            Έλεγχος
+        </button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 7 -->
+    <div class="question">
+        <h3>7. Ποιο σύμβολο βάζουμε συνήθως στο τέλος μιας εντολής;</h3>
+
+        <button onclick="answer(this, false)">:</button>
+        <button onclick="answer(this, true)">;</button>
+        <button onclick="answer(this, false)">,</button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 8 -->
+    <div class="question">
+        <h3>8. Τι κάνει η scanf();</h3>
+
+        <button onclick="answer(this, false)">
+            Εμφανίζει μόνο κείμενο
+        </button>
+
+        <button onclick="answer(this, true)">
+            Διαβάζει δεδομένα από τον χρήστη
+        </button>
+
+        <button onclick="answer(this, false)">
+            Τερματίζει το πρόγραμμα
+        </button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 9 -->
+    <div class="question">
+        <h3>9. Συμπλήρωσε την εντολή:</h3>
+
+        <pre>___("Hello World!");</pre>
+
+        <input type="text" id="q9">
+
+        <button class="check-button"
+                onclick="checkInput('q9','printf',this)">
+            Έλεγχος
+        </button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 10 -->
+    <div class="question">
+        <h3>10. Ποιος τελεστής χρησιμοποιείται για πρόσθεση;</h3>
+
+        <button onclick="answer(this, true)">+</button>
+        <button onclick="answer(this, false)">*</button>
+        <button onclick="answer(this, false)">%</button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 11 -->
+    <div class="question">
+        <h3>11. Ποια εντολή χρησιμοποιούμε για μια απόφαση;</h3>
+
+        <button onclick="answer(this, false)">printf</button>
+        <button onclick="answer(this, true)">if</button>
+        <button onclick="answer(this, false)">include</button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 12 -->
+    <div class="question">
+        <h3>12. Ποιο από τα παρακάτω είναι loop;</h3>
+
+        <button onclick="answer(this, false)">char</button>
+        <button onclick="answer(this, true)">for</button>
+        <button onclick="answer(this, false)">return</button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 13 -->
+    <div class="question">
+        <h3>13. Με ποια σύμβολα ξεκινά ένα σχόλιο μιας γραμμής;</h3>
+
+        <button onclick="answer(this, false)">##</button>
+        <button onclick="answer(this, true)">//</button>
+        <button onclick="answer(this, false)">**</button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 14 -->
+    <div class="question">
+        <h3>14. Συμπλήρωσε το κενό:</h3>
+
+<pre>int main() {
+
+    printf("Hello");
+
+    return __;
+}</pre>
+
+        <input type="text" id="q14">
+
+        <button class="check-button"
+                onclick="checkInput('q14','0',this)">
+            Έλεγχος
+        </button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <!-- 15 -->
+    <div class="question">
+        <h3>15. Τι κάνει το return 0; στο τέλος της main();</h3>
+
+        <button onclick="answer(this, false)">
+            Εμφανίζει τον αριθμό 0
+        </button>
+
+        <button onclick="answer(this, false)">
+            Δημιουργεί μια μεταβλητή
+        </button>
+
+        <button onclick="answer(this, true)">
+            Δηλώνει ότι το πρόγραμμα ολοκληρώθηκε επιτυχώς
+        </button>
+
+        <p class="feedback"></p>
+    </div>
+
+
+    <br>
+
+    <a class="back" href="/skills">
+        ← Επιστροφή στο Skill Tree
+    </a>
+
+</div>
+
+
+<script>
+
+let score = 0;
+
+
+function answer(button, correct) {
+
+    const question = button.parentElement;
+    const feedback = question.querySelector(".feedback");
+
+    if (question.dataset.answered === "true") {
+        return;
+    }
+
+    if (correct) {
+
+        question.dataset.answered = "true";
+
+        feedback.innerHTML = "✅ Σωστά! Μπράβο!";
+        feedback.className = "feedback correct";
+
+        const buttons = question.querySelectorAll("button");
+
+        buttons.forEach(btn => btn.disabled = true);
+
+        score++;
+
+        document.getElementById("score").innerText = score;
+
+    } else {
+
+        feedback.innerHTML =
+            "❌ Δεν είναι σωστό. Σκέψου ξανά και προσπάθησε άλλη μία φορά.";
+
+        feedback.className = "feedback wrong";
+
+        // Απενεργοποιούμε μόνο τη λάθος επιλογή
+        button.disabled = true;
+    }
+}
+
+function checkInput(inputId, correctAnswer, button) {
+
+    const input = document.getElementById(inputId);
+    const question = button.parentElement;
+    const feedback = question.querySelector(".feedback");
+
+    if (question.dataset.answered === "true") {
+        return;
+    }
+
+    const userAnswer = input.value.trim().toLowerCase();
+
+    if (userAnswer === correctAnswer.toLowerCase()) {
+
+        question.dataset.answered = "true";
+
+        feedback.innerHTML = "✅ Σωστά!";
+        feedback.className = "feedback correct";
+
+        input.disabled = true;
+        button.disabled = true;
+
+        score++;
+
+        document.getElementById("score").innerText = score;
+
+    } else {
+
+        feedback.innerHTML = "❌ Δεν είναι σωστό. Προσπάθησε ξανά.";
+        feedback.className = "feedback wrong";
+
+    }
+}
+
+</script>
+
+</body>
+</html>
