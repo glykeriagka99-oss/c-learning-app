@@ -6,14 +6,16 @@
     <title>Επίπεδο 1 - Βασικά της C</title>
 
     <style>
+
+        /* Βασική εμφάνιση της σελίδας */
         body {
-        font-family: Arial, sans-serif;
-        background-color: #FFF8DC;
-        margin: 0;
-        color: #222;
-}
+            font-family: Arial, sans-serif;
+            background-color: #FFF8DC;
+            margin: 0;
+            color: #222;
+        }
 
-
+        /* Κεντρικό πλαίσιο περιεχομένου */
         .container {
             max-width: 900px;
             margin: 40px auto;
@@ -48,6 +50,7 @@
             font-family: Consolas, monospace;
         }
 
+        /* Εμφάνιση των ερωτήσεων του Quiz */
         .question {
             background: #f7f9fc;
             border: 1px solid #ddd;
@@ -88,6 +91,7 @@
             margin-left: 10px;
         }
 
+        /* Μηνύματα σωστής και λάθος απάντησης */
         .feedback {
             font-weight: bold;
             margin-top: 10px;
@@ -101,6 +105,7 @@
             color: #c62828;
         }
 
+        /* Πλαίσιο εμφάνισης βαθμολογίας */
         .score-box {
             background: #e8f0fe;
             padding: 20px;
@@ -115,6 +120,7 @@
             text-decoration: none;
             color: #174ea6;
         }
+
     </style>
 </head>
 
@@ -130,6 +136,8 @@
         <span id="score">0</span> / 15
     </div>
 
+
+    <!-- Θεωρία του επιπέδου -->
 
     <h2>📖 Σύνοψη</h2>
 
@@ -166,6 +174,8 @@
     </p>
 
 
+    <!-- Παράδειγμα κώδικα C -->
+
     <h2>💻 Παράδειγμα</h2>
 
 <pre><code>#include &lt;stdio.h&gt;
@@ -186,6 +196,8 @@ int main() {
         έννοιες. Θα τις συναντήσουμε ξανά στα επόμενα επίπεδα.
     </p>
 
+
+    <!-- Διαδραστικό Quiz -->
 
     <h2>🧠 Quiz — 15 ερωτήσεις</h2>
 
@@ -257,6 +269,7 @@ int main() {
         <pre>___ age = 20;</pre>
 
         <input type="text" id="q6">
+
         <button class="check-button"
                 onclick="checkInput('q6','int',this)">
             Έλεγχος
@@ -416,78 +429,81 @@ int main() {
 
 <script>
 
-let score = 0;
+    // Αρχική βαθμολογία
+    let score = 0;
 
 
-function answer(button, correct) {
+    // Έλεγχος ερωτήσεων πολλαπλής επιλογής
+    function answer(button, correct) {
 
-    const question = button.parentElement;
-    const feedback = question.querySelector(".feedback");
+        const question = button.parentElement;
+        const feedback = question.querySelector(".feedback");
 
-    if (question.dataset.answered === "true") {
-        return;
+        if (question.dataset.answered === "true") {
+            return;
+        }
+
+        if (correct) {
+
+            question.dataset.answered = "true";
+
+            feedback.innerHTML = "✅ Σωστά! Μπράβο!";
+            feedback.className = "feedback correct";
+
+            const buttons = question.querySelectorAll("button");
+
+            buttons.forEach(btn => btn.disabled = true);
+
+            score++;
+
+            document.getElementById("score").innerText = score;
+
+        } else {
+
+            feedback.innerHTML =
+                "❌ Δεν είναι σωστό. Σκέψου ξανά και προσπάθησε άλλη μία φορά.";
+
+            feedback.className = "feedback wrong";
+
+            // Απενεργοποιούμε μόνο τη λάθος επιλογή
+            button.disabled = true;
+        }
     }
 
-    if (correct) {
 
-        question.dataset.answered = "true";
+    // Έλεγχος ερωτήσεων συμπλήρωσης κενού
+    function checkInput(inputId, correctAnswer, button) {
 
-        feedback.innerHTML = "✅ Σωστά! Μπράβο!";
-        feedback.className = "feedback correct";
+        const input = document.getElementById(inputId);
+        const question = button.parentElement;
+        const feedback = question.querySelector(".feedback");
 
-        const buttons = question.querySelectorAll("button");
+        if (question.dataset.answered === "true") {
+            return;
+        }
 
-        buttons.forEach(btn => btn.disabled = true);
+        const userAnswer = input.value.trim().toLowerCase();
 
-        score++;
+        if (userAnswer === correctAnswer.toLowerCase()) {
 
-        document.getElementById("score").innerText = score;
+            question.dataset.answered = "true";
 
-    } else {
+            feedback.innerHTML = "✅ Σωστά!";
+            feedback.className = "feedback correct";
 
-        feedback.innerHTML =
-            "❌ Δεν είναι σωστό. Σκέψου ξανά και προσπάθησε άλλη μία φορά.";
+            input.disabled = true;
+            button.disabled = true;
 
-        feedback.className = "feedback wrong";
+            score++;
 
-        // Απενεργοποιούμε μόνο τη λάθος επιλογή
-        button.disabled = true;
+            document.getElementById("score").innerText = score;
+
+        } else {
+
+            feedback.innerHTML = "❌ Δεν είναι σωστό. Προσπάθησε ξανά.";
+            feedback.className = "feedback wrong";
+        }
     }
-}
-
-function checkInput(inputId, correctAnswer, button) {
-
-    const input = document.getElementById(inputId);
-    const question = button.parentElement;
-    const feedback = question.querySelector(".feedback");
-
-    if (question.dataset.answered === "true") {
-        return;
-    }
-
-    const userAnswer = input.value.trim().toLowerCase();
-
-    if (userAnswer === correctAnswer.toLowerCase()) {
-
-        question.dataset.answered = "true";
-
-        feedback.innerHTML = "✅ Σωστά!";
-        feedback.className = "feedback correct";
-
-        input.disabled = true;
-        button.disabled = true;
-
-        score++;
-
-        document.getElementById("score").innerText = score;
-
-    } else {
-
-        feedback.innerHTML = "❌ Δεν είναι σωστό. Προσπάθησε ξανά.";
-        feedback.className = "feedback wrong";
-
-    }
-}
 
 </script>
 

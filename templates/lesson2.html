@@ -6,13 +6,16 @@
     <title>Επίπεδο 2 - Μεταβλητές στη C</title>
 
     <style>
-        body {
-        font-family: Arial, sans-serif;
-        background-color: #FFF8DC;
-        margin: 0;
-        color: #222;
-}
 
+        /* Βασική εμφάνιση της σελίδας */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFF8DC;
+            margin: 0;
+            color: #222;
+        }
+
+        /* Κεντρικό πλαίσιο περιεχομένου */
         .container {
             max-width: 900px;
             margin: 40px auto;
@@ -47,6 +50,7 @@
             font-family: Consolas, monospace;
         }
 
+        /* Πλαίσιο εμφάνισης βαθμολογίας */
         .score-box {
             background: #e8f0fe;
             padding: 20px;
@@ -55,6 +59,7 @@
             font-weight: bold;
         }
 
+        /* Εμφάνιση των ερωτήσεων */
         .question {
             background: #f7f9fc;
             border: 1px solid #ddd;
@@ -100,6 +105,7 @@
             margin-left: 10px;
         }
 
+        /* Μηνύματα σωστής και λάθος απάντησης */
         .feedback {
             font-weight: bold;
             margin-top: 12px;
@@ -119,6 +125,7 @@
             text-decoration: none;
             color: #174ea6;
         }
+
     </style>
 </head>
 
@@ -132,6 +139,9 @@
         Σωστές απαντήσεις:
         <span id="score">0</span> / 15
     </div>
+
+
+    <!-- Θεωρία του επιπέδου -->
 
     <h2>📖 Σύνοψη</h2>
 
@@ -167,6 +177,9 @@
         Επίσης, ένα όνομα μεταβλητής δεν πρέπει να ξεκινά με αριθμό.
     </p>
 
+
+    <!-- Παραδείγματα κώδικα -->
+
     <h2>💻 Παραδείγματα</h2>
 
 <pre><code>int age = 20;
@@ -193,6 +206,9 @@ printf("%d", score);</code></pre>
     </p>
 
 <pre><code>20</code></pre>
+
+
+    <!-- Διαδραστικό Quiz -->
 
     <h2>🧠 Quiz — 15 ερωτήσεις</h2>
 
@@ -460,81 +476,84 @@ printf("___", temperature);</pre>
 
 <script>
 
-let score = 0;
+    // Αρχική βαθμολογία
+    let score = 0;
 
 
-function answer(button, correct, explanation = "") {
+    // Έλεγχος ερωτήσεων πολλαπλής επιλογής
+    function answer(button, correct, explanation = "") {
 
-    const question = button.parentElement;
-    const feedback = question.querySelector(".feedback");
+        const question = button.parentElement;
+        const feedback = question.querySelector(".feedback");
 
-    if (question.dataset.answered === "true") {
-        return;
+        if (question.dataset.answered === "true") {
+            return;
+        }
+
+        if (correct) {
+
+            question.dataset.answered = "true";
+
+            feedback.innerHTML = "✅ Σωστά! Μπράβο!";
+            feedback.className = "feedback correct";
+
+            const buttons = question.querySelectorAll("button");
+
+            buttons.forEach(btn => btn.disabled = true);
+
+            score++;
+
+            document.getElementById("score").innerText = score;
+
+        } else {
+
+            feedback.innerHTML =
+                "❌ Δεν είναι σωστό. " + explanation +
+                " Προσπάθησε ξανά.";
+
+            feedback.className = "feedback wrong";
+
+            button.disabled = true;
+        }
     }
 
-    if (correct) {
 
-        question.dataset.answered = "true";
+    // Έλεγχος ερωτήσεων συμπλήρωσης κενού
+    function checkInput(inputId, correctAnswer, button) {
 
-        feedback.innerHTML = "✅ Σωστά! Μπράβο!";
-        feedback.className = "feedback correct";
+        const input = document.getElementById(inputId);
+        const question = button.parentElement;
+        const feedback = question.querySelector(".feedback");
 
-        const buttons = question.querySelectorAll("button");
+        if (question.dataset.answered === "true") {
+            return;
+        }
 
-        buttons.forEach(btn => btn.disabled = true);
+        const userAnswer = input.value.trim().toLowerCase();
+        const correct = correctAnswer.trim().toLowerCase();
 
-        score++;
+        if (userAnswer === correct) {
 
-        document.getElementById("score").innerText = score;
+            question.dataset.answered = "true";
 
-    } else {
+            feedback.innerHTML = "✅ Σωστά! Μπράβο!";
+            feedback.className = "feedback correct";
 
-        feedback.innerHTML =
-            "❌ Δεν είναι σωστό. " + explanation +
-            " Προσπάθησε ξανά.";
+            input.disabled = true;
+            button.disabled = true;
 
-        feedback.className = "feedback wrong";
+            score++;
 
-        button.disabled = true;
+            document.getElementById("score").innerText = score;
+
+        } else {
+
+            feedback.innerHTML =
+                "❌ Δεν είναι σωστό. Προσπάθησε ξανά.";
+
+            feedback.className = "feedback wrong";
+        }
     }
-}
-
-
-function checkInput(inputId, correctAnswer, button) {
-
-    const input = document.getElementById(inputId);
-    const question = button.parentElement;
-    const feedback = question.querySelector(".feedback");
-
-    if (question.dataset.answered === "true") {
-        return;
-    }
-
-    const userAnswer = input.value.trim().toLowerCase();
-    const correct = correctAnswer.trim().toLowerCase();
-
-    if (userAnswer === correct) {
-
-        question.dataset.answered = "true";
-
-        feedback.innerHTML = "✅ Σωστά! Μπράβο!";
-        feedback.className = "feedback correct";
-
-        input.disabled = true;
-        button.disabled = true;
-
-        score++;
-
-        document.getElementById("score").innerText = score;
-
-    } else {
-
-        feedback.innerHTML =
-            "❌ Δεν είναι σωστό. Προσπάθησε ξανά.";
-
-        feedback.className = "feedback wrong";
-    }
-}
 
 </script>
 
