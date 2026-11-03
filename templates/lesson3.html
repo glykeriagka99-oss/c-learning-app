@@ -1,0 +1,1755 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Επίπεδο 3 | Τελεστές στη C</title>
+
+<style>
+:root {
+    --navy: #0B1220;
+    --slate: #16243A;
+    --blue: #2563EB;
+    --cyan: #22D3EE;
+    --green: #10B981;
+    --bg: #F1F5F9;
+    --text: #1E293B;
+    --muted: #64748B;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, sans-serif;
+}
+
+nav {
+    background: var(--navy);
+    padding: 20px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.logo span { color: var(--cyan); }
+
+nav a:last-child {
+    color: #CBD5E1;
+    text-decoration: none;
+}
+
+header {
+    background: linear-gradient(135deg, var(--navy), var(--slate));
+    color: white;
+    text-align: center;
+    padding: 55px 20px;
+}
+
+header h1 {
+    font-size: 36px;
+    margin: 0 0 15px;
+}
+
+header p {
+    color: #CBD5E1;
+    line-height: 1.7;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 35px auto;
+    padding: 0 20px;
+}
+
+.card {
+    background: white;
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+}
+
+.card h2 {
+    margin-top: 0;
+    color: #0F172A;
+}
+
+.description {
+    color: var(--muted);
+    line-height: 1.8;
+}
+
+.theory {
+    background: #EFF6FF;
+    border-left: 4px solid var(--blue);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    line-height: 1.8;
+}
+
+pre {
+    background: #0F172A;
+    color: #E2E8F0;
+    border-radius: 10px;
+    padding: 20px;
+    overflow-x: auto;
+    line-height: 1.7;
+}
+
+code, textarea {
+    font-family: Consolas, monospace;
+}
+
+.score-number {
+    color: var(--blue);
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.progress {
+    height: 12px;
+    background: #E2E8F0;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 15px 0;
+}
+
+.progress-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--green);
+    transition: width 0.3s;
+}
+
+.section-score {
+    background: #F1F5F9;
+    border-radius: 8px;
+    padding: 14px;
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+.question {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 18px 0;
+}
+
+.question h3 {
+    margin-top: 0;
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+.question-code {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.option {
+    display: block;
+    width: 100%;
+    padding: 13px 15px;
+    margin: 9px 0;
+    background: white;
+    border: 1px solid #CBD5E1;
+    border-radius: 8px;
+    text-align: left;
+    color: var(--text);
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.option:hover:not(:disabled) {
+    background: #DBEAFE;
+    border-color: var(--blue);
+}
+
+.option.correct-option {
+    background: #D1FAE5;
+    border-color: var(--green);
+}
+
+.option.wrong-option {
+    background: #FEE2E2;
+    border-color: #EF4444;
+}
+
+.answer-input {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    margin-bottom: 12px;
+    border: 1px solid #CBD5E1;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+button { font-family: inherit; }
+
+.primary-button {
+    background: var(--blue);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.primary-button:hover:not(:disabled) {
+    background: #1D4ED8;
+}
+
+button:disabled {
+    opacity: 0.8;
+    cursor: default;
+}
+
+.reset-button {
+    background: #FEE2E2;
+    color: #B91C1C;
+    border: 1px solid #FECACA;
+    border-radius: 8px;
+    padding: 12px 18px;
+    cursor: pointer;
+}
+
+.feedback {
+    margin-top: 12px;
+    line-height: 1.6;
+    font-weight: bold;
+}
+
+.correct { color: #047857; }
+.wrong { color: #B91C1C; }
+
+.editor-section {
+    border-top: 5px solid var(--cyan);
+}
+
+.editor-score {
+    background: #DBEAFE;
+    color: #1E40AF;
+    border-radius: 10px;
+    padding: 16px;
+    font-weight: bold;
+}
+
+.editor-exercise {
+    background: #F8FAFC;
+    border: 1px solid #CBD5E1;
+    border-radius: 12px;
+    padding: 22px;
+    margin: 25px 0;
+}
+
+.editor-exercise p {
+    line-height: 1.7;
+}
+
+.editor-label {
+    display: block;
+    background: var(--slate);
+    color: var(--cyan);
+    border-radius: 10px 10px 0 0;
+    padding: 12px 16px;
+    font-family: Consolas, monospace;
+}
+
+.code-editor {
+    display: block;
+    width: 100%;
+    min-height: 270px;
+    background: #0F172A;
+    color: #E2E8F0;
+    border: 1px solid #334155;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 18px;
+    font-size: 14px;
+    line-height: 1.6;
+    resize: vertical;
+    tab-size: 4;
+}
+
+.code-editor:focus {
+    outline: 2px solid var(--blue);
+}
+
+.back-button {
+    display: inline-block;
+    background: var(--navy);
+    color: white;
+    text-decoration: none;
+    padding: 14px 24px;
+    border-radius: 8px;
+    margin-bottom: 40px;
+}
+
+footer {
+    background: var(--navy);
+    color: #94A3B8;
+    text-align: center;
+    padding: 25px;
+}
+
+@media (max-width: 600px) {
+    header h1 { font-size: 27px; }
+    .container { padding: 0 12px; }
+    .card { padding: 18px; }
+    .editor-exercise { padding: 14px; }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <a class="logo" href="/">C<span>Learning</span></a>
+    <a href="/skills">Skill Tree</a>
+</nav>
+
+<header>
+    <h1>Επίπεδο 3: Τελεστές στη C</h1>
+    <p>
+        5 ενότητες - 30 ερωτήσεις -
+        3 τελικές ασκήσεις με Online Editor
+    </p>
+</header>
+
+<main class="container">
+
+<section class="card">
+    <h2>Η πρόοδός σου</h2>
+
+    <div class="score-number">
+        <span id="total-score">0</span> / 30
+    </div>
+
+    <p id="progress-text">
+        Έχεις ολοκληρώσει 0 από τις 30 ερωτήσεις.
+    </p>
+
+    <div class="progress">
+        <div class="progress-fill" id="progress-fill"></div>
+    </div>
+
+<p>
+    Πρακτικές ασκήσεις:
+    <strong id="editor-progress">0 / 3</strong>
+</p>
+    <button class="reset-button" onclick="resetProgress()">
+        Επαναφορά όλης της προόδου
+    </button>
+</section>
+
+<div id="sections-container"></div>
+
+<section class="card editor-section">
+
+    <h2>Τελική Επανάληψη – Γράψε κώδικα C</h2>
+
+    <p class="description">
+        Γράψε τις λύσεις σου στους editors.
+        Ο έλεγχος γίνεται χωρίς εκτέλεση κώδικα.
+    </p>
+
+    <div class="editor-score">
+        Ολοκληρωμένες ασκήσεις:
+        <span id="editor-score">0</span> / 3
+    </div>
+
+    <!-- ΤΕΛΙΚΗ ΑΣΚΗΣΗ 1 -->
+
+    <div class="editor-exercise">
+        <h3>Άσκηση 1: Σύγκριση δύο αριθμών</h3>
+
+        <p>
+            Δήλωσε <code>int a = 10;</code> και
+            <code>int b = 5;</code>.
+            Δήλωσε μια μεταβλητή <code>int result</code>
+            που θα αποθηκεύει το αποτέλεσμα της
+            σύγκρισης <code>a &gt; b</code>.
+            Εμφάνισε το <code>result</code>
+            με <code>printf()</code> και <code>%d</code>.
+        </p>
+
+        <label class="editor-label" for="editor1">
+            main.c — Άσκηση 1
+        </label>
+
+        <textarea id="editor1" class="code-editor"
+                  spellcheck="false">#include <stdio.h>
+
+int main() {
+
+    // Δήλωσε τις a και b
+    // Σύγκρινέ τες χρησιμοποιώντας >
+    // Εμφάνισε το result
+
+    return 0;
+}</textarea>
+
+        <button class="primary-button"
+                onclick="checkEditor(1)">
+            Έλεγχος κώδικα
+        </button>
+
+        <p id="editor-feedback1"
+           class="feedback"
+           aria-live="polite"></p>
+    </div>
+
+    <!-- ΤΕΛΙΚΗ ΑΣΚΗΣΗ 2 -->
+
+    <div class="editor-exercise">
+        <h3>Άσκηση 2: Λογικοί τελεστές</h3>
+
+        <p>
+            Δήλωσε <code>int age = 20;</code>.
+            Δημιούργησε μια μεταβλητή
+            <code>int valid</code> που θα ελέγχει
+            αν η ηλικία είναι τουλάχιστον 18
+            <strong>και</strong> το πολύ 65,
+            χρησιμοποιώντας <code>&amp;&amp;</code>.
+            Εμφάνισε το αποτέλεσμα με
+            <code>printf()</code>.
+        </p>
+
+        <label class="editor-label" for="editor2">
+            main.c — Άσκηση 2
+        </label>
+
+        <textarea id="editor2" class="code-editor"
+                  spellcheck="false">#include <stdio.h>
+
+int main() {
+
+    // Δήλωσε int age = 20;
+    // Χρησιμοποίησε >=, <= και &&
+    // Εμφάνισε το valid
+
+    return 0;
+}</textarea>
+
+        <button class="primary-button"
+                onclick="checkEditor(2)">
+            Έλεγχος κώδικα
+        </button>
+
+        <p id="editor-feedback2"
+           class="feedback"
+           aria-live="polite"></p>
+    </div>
+
+    <!-- ΤΕΛΙΚΗ ΑΣΚΗΣΗ 3 -->
+
+    <div class="editor-exercise">
+        <h3>Άσκηση 3: Αύξηση και σύνθετη ανάθεση</h3>
+
+        <p>
+            Δήλωσε <code>int score = 10;</code>.
+            Αύξησε το score κατά 1 με
+            <code>score++;</code>.
+            Στη συνέχεια πρόσθεσε 5 με
+            <code>score += 5;</code>.
+            Εμφάνισε την τελική τιμή με
+            <code>printf()</code>.
+        </p>
+
+        <label class="editor-label" for="editor3">
+            main.c — Άσκηση 3
+        </label>
+
+        <textarea id="editor3" class="code-editor"
+                  spellcheck="false">#include <stdio.h>
+
+int main() {
+
+    // Δήλωσε int score = 10;
+    // Χρησιμοποίησε ++ και +=
+    // Εμφάνισε το score
+
+    return 0;
+}</textarea>
+
+        <button class="primary-button"
+                onclick="checkEditor(3)">
+            Έλεγχος κώδικα
+        </button>
+
+        <p id="editor-feedback3"
+           class="feedback"
+           aria-live="polite"></p>
+    </div>
+
+</section>
+
+<a href="/skills" class="back-button">
+    ← Επιστροφή στο Skill Tree
+</a>
+
+</main>
+
+<footer>
+    C Learning App • Microlearning για τη γλώσσα C
+</footer>
+
+<script>
+
+/*
+    ΕΠΙΠΕΔΟ 3
+    5 ενότητες × 6 ερωτήσεις = 30
+*/
+
+const sections = [
+
+    // =========================================
+    // ΕΝΟΤΗΤΑ 1: ΑΡΙΘΜΗΤΙΚΟΙ ΤΕΛΕΣΤΕΣ
+    // =========================================
+
+    {
+        title: "1. Αριθμητικοί τελεστές",
+
+        description:
+            "Εξάσκηση στις πράξεις μέσα σε προγράμματα C.",
+
+        theory: `
+            <p>
+                Οι βασικοί αριθμητικοί τελεστές
+                στη C είναι:
+                <code>+</code>, <code>-</code>,
+                <code>*</code>, <code>/</code>
+                και <code>%</code>.
+            </p>
+
+            <p>
+                Ο τελεστής <code>%</code>
+                υπολογίζει το υπόλοιπο
+                της ακέραιας διαίρεσης.
+            </p>
+
+            <p>
+                Η διαίρεση δύο μεταβλητών
+                τύπου <code>int</code>
+                δίνει ακέραιο αποτέλεσμα.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main() {
+    int a = 10;
+    int b = 3;
+
+    printf("%d\\n", a + b);
+    printf("%d\\n", a / b);
+    printf("%d\\n", a % b);
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Ποια εντολή αποθηκεύει το γινόμενο των a και b;",
+                options: [
+                    "result = a * b;",
+                    "result = a x b;",
+                    "result == a * b;"
+                ],
+                correct: 0,
+                explanation:
+                    "Ο πολλαπλασιασμός γράφεται με *."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int a = 12;
+int b = 5;
+printf("%d", a - b);`,
+                options: ["17", "7", "12"],
+                correct: 1,
+                explanation:
+                    "Η αφαίρεση υπολογίζεται πριν την εμφάνιση."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int a = 11;
+int b = 4;
+printf("%d", a / b);`,
+                options: ["2", "2.75", "3"],
+                correct: 0,
+                explanation:
+                    "Η ακέραια διαίρεση απορρίπτει το δεκαδικό μέρος."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τον τελεστή για το υπόλοιπο της διαίρεσης:",
+                code: "int remainder = a ___ b;",
+                correct: ["%"],
+                explanation:
+                    "Ο τελεστής υπολοίπου είναι %."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int x = 7;
+printf("%d", x % 3);`,
+                options: ["1", "2", "3"],
+                correct: 0,
+                explanation:
+                    "Το 7 % 3 δίνει υπόλοιπο 1."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int result = 2 + 3 * 4;
+printf("%d", result);`,
+                options: ["20", "14", "24"],
+                correct: 1,
+                explanation:
+                    "Ο πολλαπλασιασμός προηγείται της πρόσθεσης."
+            }
+        ]
+    },
+
+    // =========================================
+    // ΕΝΟΤΗΤΑ 2: ΤΕΛΕΣΤΕΣ ΣΥΓΚΡΙΣΗΣ
+    // =========================================
+
+    {
+        title: "2. Τελεστές σύγκρισης",
+
+        description:
+            "Μάθε πώς συγκρίνουμε τιμές στη C.",
+
+        theory: `
+            <p>
+                Οι τελεστές σύγκρισης είναι:
+                <code>==</code>, <code>!=</code>,
+                <code>&gt;</code>, <code>&lt;</code>,
+                <code>&gt;=</code>, <code>&lt;=</code>.
+            </p>
+
+            <p>
+                Μια σύγκριση επιστρέφει
+                <code>1</code> όταν είναι αληθής
+                και <code>0</code> όταν είναι ψευδής.
+            </p>
+
+            <p>
+                Προσοχή:
+                <code>=</code> σημαίνει ανάθεση,
+                ενώ <code>==</code> σημαίνει σύγκριση.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main() {
+    int a = 10;
+    int b = 5;
+
+    printf("%d\\n", a > b);
+    printf("%d\\n", a == b);
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Ποιος τελεστής ελέγχει αν δύο τιμές είναι ίσες;",
+                options: ["=", "==", "!="],
+                correct: 1,
+                explanation:
+                    "Η ισότητα ελέγχεται με ==."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int a = 10;
+int b = 5;
+printf("%d", a > b);`,
+                options: ["1", "0", "10"],
+                correct: 0,
+                explanation:
+                    "Η σύγκριση 10 > 5 είναι αληθής."
+            },
+            {
+                type: "choice",
+                text: "Ποιος τελεστής σημαίνει 'διαφορετικό από';",
+                options: ["==", "!=", ">="],
+                correct: 1,
+                explanation:
+                    "Ο τελεστής != ελέγχει αν οι τιμές διαφέρουν."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τον τελεστή ισότητας:",
+                code: "int same = (a ___ b);",
+                correct: ["=="],
+                explanation:
+                    "Για σύγκριση ισότητας γράφουμε ==."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int x = 7;
+printf("%d", x <= 5);`,
+                options: ["1", "0", "7"],
+                correct: 1,
+                explanation:
+                    "Το 7 δεν είναι μικρότερο ή ίσο του 5."
+            },
+            {
+                type: "choice",
+                text: "Ποια εντολή ελέγχει αν η age είναι τουλάχιστον 18;",
+                options: [
+                    "age > 18",
+                    "age >= 18",
+                    "age == 18"
+                ],
+                correct: 1,
+                explanation:
+                    "Το >= περιλαμβάνει και την τιμή 18."
+            }
+        ]
+    },
+
+    // =========================================
+    // ΕΝΟΤΗΤΑ 3: ΛΟΓΙΚΟΙ ΤΕΛΕΣΤΕΣ
+    // =========================================
+
+    {
+        title: "3. Λογικοί τελεστές",
+
+        description:
+            "Συνδύασε πολλαπλές συγκρίσεις σε μία έκφραση.",
+
+        theory: `
+            <p>
+                Ο τελεστής <code>&amp;&amp;</code>
+                σημαίνει λογικό ΚΑΙ.
+                Το αποτέλεσμα είναι αληθές
+                όταν και οι δύο συνθήκες είναι αληθείς.
+            </p>
+
+            <p>
+                Ο τελεστής <code>||</code>
+                σημαίνει λογικό Ή.
+                Αρκεί μία συνθήκη να είναι αληθής.
+            </p>
+
+            <p>
+                Ο τελεστής <code>!</code>
+                αντιστρέφει τη λογική τιμή.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main() {
+    int age = 20;
+
+    int valid = (age >= 18 && age <= 65);
+
+    printf("%d", valid);
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Ποιος τελεστής σημαίνει λογικό ΚΑΙ;",
+                options: ["&&", "||", "!"],
+                correct: 0,
+                explanation:
+                    "Ο τελεστής && σημαίνει ΚΑΙ."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int a = 10;
+int b = 5;
+printf("%d", a > 5 && b < 10);`,
+                options: ["1", "0", "15"],
+                correct: 0,
+                explanation:
+                    "Και οι δύο συγκρίσεις είναι αληθείς."
+            },
+            {
+                type: "choice",
+                text: "Ποιος τελεστής σημαίνει λογικό Ή;",
+                options: ["&&", "||", "=="],
+                correct: 1,
+                explanation:
+                    "Ο τελεστής || σημαίνει Ή."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τον τελεστή ώστε να αρκεί μία από τις δύο συνθήκες:",
+                code: "int valid = (a > 10 ___ b > 10);",
+                correct: ["||"],
+                explanation:
+                    "Χρησιμοποιούμε ||."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int ready = 0;
+printf("%d", !ready);`,
+                options: ["0", "1", "-1"],
+                correct: 1,
+                explanation:
+                    "Το !0 δίνει 1."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int a = 3;
+int b = 8;
+printf("%d", a > 5 || b > 5);`,
+                options: ["0", "1", "8"],
+                correct: 1,
+                explanation:
+                    "Η δεύτερη σύγκριση είναι αληθής, άρα το || δίνει 1."
+            }
+        ]
+    },
+
+    // =========================================
+    // ΕΝΟΤΗΤΑ 4: ΑΥΞΗΣΗ ΚΑΙ ΜΕΙΩΣΗ
+    // =========================================
+
+    {
+        title: "4. Αύξηση και μείωση",
+
+        description:
+            "Χρησιμοποίησε τους τελεστές ++ και --.",
+
+        theory: `
+            <p>
+                Ο τελεστής <code>++</code>
+                αυξάνει μια μεταβλητή κατά 1.
+            </p>
+
+            <p>
+                Ο τελεστής <code>--</code>
+                μειώνει μια μεταβλητή κατά 1.
+            </p>
+
+            <p>
+                Οι μορφές <code>++x</code>
+                και <code>x++</code> αυξάνουν
+                και οι δύο την x, αλλά διαφέρουν
+                ως προς την τιμή της έκφρασης.
+            </p>
+
+            <p>
+                Στην προαύξηση <code>++x</code>
+                η νέα τιμή χρησιμοποιείται αμέσως.
+                Στη μετααύξηση <code>x++</code>
+                χρησιμοποιείται πρώτα η παλιά τιμή.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main() {
+    int x = 5;
+
+    x++;
+    printf("%d\\n", x);
+
+    x--;
+    printf("%d\\n", x);
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Τι κάνει η εντολή x++;",
+                options: [
+                    "Αυξάνει την x κατά 1",
+                    "Μειώνει την x κατά 1",
+                    "Διπλασιάζει την x"
+                ],
+                correct: 0,
+                explanation:
+                    "Το ++ αυξάνει την τιμή κατά 1."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int x = 5;
+x++;
+printf("%d", x);`,
+                options: ["5", "6", "4"],
+                correct: 1,
+                explanation:
+                    "Η x γίνεται 6."
+            },
+            {
+                type: "choice",
+                text: "Τι κάνει η εντολή count--;",
+                options: [
+                    "Αυξάνει την count",
+                    "Μειώνει την count κατά 1",
+                    "Μηδενίζει την count"
+                ],
+                correct: 1,
+                explanation:
+                    "Το -- μειώνει την τιμή κατά 1."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τον τελεστή για αύξηση κατά 1:",
+                code: "score___;",
+                correct: ["++"],
+                explanation:
+                    "Η εντολή είναι score++;."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int x = 5;
+int y = ++x;
+printf("%d", y);`,
+                options: ["5", "6", "4"],
+                correct: 1,
+                explanation:
+                    "Η προαύξηση αυξάνει την x πριν ανατεθεί η τιμή στην y."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int x = 5;
+int y = x++;
+printf("%d", y);`,
+                options: ["5", "6", "4"],
+                correct: 0,
+                explanation:
+                    "Η μετααύξηση επιστρέφει την παλιά τιμή της x."
+            }
+        ]
+    },
+
+    // =========================================
+    // ΕΝΟΤΗΤΑ 5: ΣΥΝΘΕΤΗ ΑΝΑΘΕΣΗ
+    // =========================================
+
+    {
+        title: "5. Σύνθετοι τελεστές ανάθεσης",
+
+        description:
+            "Γράψε πιο σύντομες εντολές με +=, -=, *= και /=.",
+
+        theory: `
+            <p>
+                Οι σύνθετοι τελεστές ανάθεσης
+                συνδυάζουν μια πράξη
+                με ανάθεση τιμής.
+            </p>
+
+            <p>
+                Η εντολή <code>x += 5;</code>
+                ισοδυναμεί με <code>x = x + 5;</code>.
+            </p>
+
+            <p>
+                Αντίστοιχα:
+                <code>-=</code> για αφαίρεση,
+                <code>*=</code> για πολλαπλασιασμό,
+                <code>/=</code> για διαίρεση
+                και <code>%=</code> για υπόλοιπο.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main() {
+    int score = 10;
+
+    score += 5;
+    score *= 2;
+
+    printf("%d", score);
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Με ποια εντολή ισοδυναμεί το x += 5;",
+                options: [
+                    "x = x + 5;",
+                    "x = 5;",
+                    "x == x + 5;"
+                ],
+                correct: 0,
+                explanation:
+                    "Το += προσθέτει και αναθέτει τη νέα τιμή."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int score = 10;
+score += 5;
+printf("%d", score);`,
+                options: ["10", "15", "5"],
+                correct: 1,
+                explanation:
+                    "Η score γίνεται 15."
+            },
+            {
+                type: "choice",
+                text: "Ποια εντολή μειώνει την x κατά 3;",
+                options: ["x += 3;", "x -= 3;", "x *= 3;"],
+                correct: 1,
+                explanation:
+                    "Το -= αφαιρεί και αναθέτει."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τον τελεστή για διπλασιασμό της x:",
+                code: "x ___ 2;",
+                correct: ["*="],
+                explanation:
+                    "Η εντολή είναι x *= 2;."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int x = 20;
+x /= 4;
+printf("%d", x);`,
+                options: ["5", "4", "20"],
+                correct: 0,
+                explanation:
+                    "Το x /= 4 ισοδυναμεί με x = x / 4."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int x = 10;
+x += 2;
+x *= 3;
+printf("%d", x);`,
+                options: ["16", "36", "30"],
+                correct: 1,
+                explanation:
+                    "Πρώτα η x γίνεται 12 και μετά 36."
+            }
+        ]
+    }
+
+];
+
+
+/*
+    ΑΠΟΘΗΚΕΥΣΗ ΠΡΟΟΔΟΥ
+*/
+
+const STORAGE_KEY = "c_learning_lesson3_quiz_v1";
+const EDITOR_KEY = "c_learning_lesson3_editors_v1";
+
+const totalQuestions = sections.reduce(
+    (sum, section) => sum + section.questions.length,
+    0
+);
+
+function readStorage(key) {
+    try {
+        const data = JSON.parse(localStorage.getItem(key));
+        return data && typeof data === "object" ? data : {};
+    } catch (error) {
+        return {};
+    }
+}
+
+let answeredQuestions = readStorage(STORAGE_KEY);
+let completedEditors = readStorage(EDITOR_KEY);
+
+
+/*
+    ΠΡΟΣΤΑΣΙΑ ΚΕΙΜΕΝΟΥ HTML
+*/
+
+function escapeHTML(value) {
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+
+/*
+    ΔΗΜΙΟΥΡΓΙΑ ΕΝΟΤΗΤΩΝ ΚΑΙ ΕΡΩΤΗΣΕΩΝ
+*/
+
+function createSections() {
+
+    const container =
+        document.getElementById("sections-container");
+
+    container.innerHTML = "";
+
+    sections.forEach((section, sectionIndex) => {
+
+        const sectionElement = document.createElement("section");
+        sectionElement.className = "card";
+
+        sectionElement.innerHTML = `
+            <h2>${escapeHTML(section.title)}</h2>
+
+            <p class="description">
+                ${escapeHTML(section.description)}
+            </p>
+
+            <div class="theory">
+                ${section.theory}
+            </div>
+
+            <h3>Παράδειγμα κώδικα C</h3>
+
+            <pre><code>${escapeHTML(section.example)}</code></pre>
+
+            <div class="section-score">
+                Ολοκληρωμένες ερωτήσεις:
+                <span id="section-score-${sectionIndex}">0</span>
+                / ${section.questions.length}
+            </div>
+
+            <h3>Quiz ενότητας</h3>
+
+            <div id="questions-${sectionIndex}"></div>
+        `;
+
+        container.appendChild(sectionElement);
+
+        const questionsContainer =
+            document.getElementById(
+                `questions-${sectionIndex}`
+            );
+
+        section.questions.forEach((question, questionIndex) => {
+
+            const element = document.createElement("div");
+            element.className = "question";
+
+            let html = `
+                <h3>
+                    ${questionIndex + 1}.
+                    ${escapeHTML(question.text)}
+                </h3>
+            `;
+
+            if (question.code) {
+                html += `
+                    <pre class="question-code"><code>${escapeHTML(question.code)}</code></pre>
+                `;
+            }
+
+            if (question.type === "choice") {
+
+                question.options.forEach((option, optionIndex) => {
+
+                    html += `
+                        <button class="option"
+                            onclick="checkChoice(
+                                this,
+                                ${sectionIndex},
+                                ${questionIndex},
+                                ${optionIndex}
+                            )">
+                            ${escapeHTML(option)}
+                        </button>
+                    `;
+                });
+
+            } else {
+
+                html += `
+                    <input class="answer-input"
+                        type="text"
+                        placeholder="Γράψε την απάντησή σου"
+                        autocomplete="off">
+
+                    <button class="primary-button"
+                        onclick="checkInput(
+                            this,
+                            ${sectionIndex},
+                            ${questionIndex}
+                        )">
+                        Έλεγχος
+                    </button>
+                `;
+            }
+
+            html += `
+                <p class="feedback" aria-live="polite"></p>
+            `;
+
+            element.innerHTML = html;
+            questionsContainer.appendChild(element);
+        });
+    });
+}
+
+
+/*
+    ΕΛΕΓΧΟΣ QUIZ
+*/
+
+function questionKey(sectionIndex, questionIndex) {
+    return `${sectionIndex}-${questionIndex}`;
+}
+
+function getQuestionElement(sectionIndex, questionIndex) {
+    return document.getElementById(
+        `questions-${sectionIndex}`
+    ).children[questionIndex];
+}
+
+function saveAnswer(sectionIndex, questionIndex) {
+
+    const key = questionKey(sectionIndex, questionIndex);
+
+    if (answeredQuestions[key]) return;
+
+    answeredQuestions[key] = true;
+
+    try {
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(answeredQuestions)
+        );
+    } catch (error) {
+        console.warn("Δεν αποθηκεύτηκε η πρόοδος.");
+    }
+
+    refreshScore();
+}
+
+function checkChoice(button, sectionIndex, questionIndex, optionIndex) {
+
+    const question =
+        sections[sectionIndex].questions[questionIndex];
+
+    const element =
+        getQuestionElement(sectionIndex, questionIndex);
+
+    const feedback = element.querySelector(".feedback");
+
+    if (answeredQuestions[questionKey(sectionIndex, questionIndex)]) {
+        return;
+    }
+
+    if (optionIndex === question.correct) {
+
+        button.classList.add("correct-option");
+
+        element.querySelectorAll(".option").forEach(
+            btn => btn.disabled = true
+        );
+
+        feedback.textContent =
+            "✓ Σωστά! " + question.explanation;
+
+        feedback.className = "feedback correct";
+
+        saveAnswer(sectionIndex, questionIndex);
+
+    } else {
+
+        button.classList.add("wrong-option");
+        button.disabled = true;
+
+        feedback.textContent =
+            "✗ Λανθασμένη απάντηση. Προσπάθησε ξανά.";
+
+        feedback.className = "feedback wrong";
+    }
+}
+
+function checkInput(button, sectionIndex, questionIndex) {
+
+    const question =
+        sections[sectionIndex].questions[questionIndex];
+
+    const element =
+        getQuestionElement(sectionIndex, questionIndex);
+
+    const input = element.querySelector(".answer-input");
+    const feedback = element.querySelector(".feedback");
+
+    if (answeredQuestions[questionKey(sectionIndex, questionIndex)]) {
+        return;
+    }
+
+    const answer = input.value.trim();
+
+    const isCorrect = question.correct.some(
+        correctAnswer => answer === correctAnswer
+    );
+
+    if (isCorrect) {
+
+        input.disabled = true;
+        button.disabled = true;
+
+        feedback.textContent =
+            "✓ Σωστά! " + question.explanation;
+
+        feedback.className = "feedback correct";
+
+        saveAnswer(sectionIndex, questionIndex);
+
+    } else {
+
+        feedback.textContent =
+            "✗ Έλεγξε την απάντησή σου και προσπάθησε ξανά.";
+
+        feedback.className = "feedback wrong";
+    }
+}
+
+
+/*
+    ΒΑΘΜΟΛΟΓΙΑ
+*/
+
+function refreshScore() {
+
+    let total = 0;
+
+    sections.forEach((section, sectionIndex) => {
+
+        let sectionScore = 0;
+
+        section.questions.forEach((question, questionIndex) => {
+
+            if (answeredQuestions[questionKey(sectionIndex, questionIndex)]) {
+                sectionScore++;
+                total++;
+            }
+        });
+
+        document.getElementById(
+            `section-score-${sectionIndex}`
+        ).textContent = sectionScore;
+    });
+
+    document.getElementById("total-score").textContent = total;
+
+    document.getElementById("progress-text").textContent =
+        `Έχεις ολοκληρώσει ${total} από τις ${totalQuestions} ερωτήσεις.`;
+
+    document.getElementById("progress-fill").style.width =
+        (total / totalQuestions * 100) + "%";
+}
+
+
+/*
+    ΕΠΑΝΑΦΟΡΑ ΑΠΑΝΤΗΣΕΩΝ ΜΕΤΑ ΑΠΟ REFRESH
+*/
+
+function restoreProgress() {
+
+    sections.forEach((section, sectionIndex) => {
+
+        section.questions.forEach((question, questionIndex) => {
+
+            if (!answeredQuestions[questionKey(sectionIndex, questionIndex)]) {
+                return;
+            }
+
+            const element =
+                getQuestionElement(sectionIndex, questionIndex);
+
+            const feedback = element.querySelector(".feedback");
+
+            feedback.textContent =
+                "✓ Έχεις ήδη απαντήσει σωστά!";
+
+            feedback.className = "feedback correct";
+
+            if (question.type === "choice") {
+
+                element.querySelectorAll(".option").forEach(
+                    (button, optionIndex) => {
+
+                        button.disabled = true;
+
+                        if (optionIndex === question.correct) {
+                            button.classList.add("correct-option");
+                        }
+                    }
+                );
+
+            } else {
+
+                const input = element.querySelector(".answer-input");
+                const button = element.querySelector("button");
+
+                input.value = question.correct[0];
+                input.disabled = true;
+                button.disabled = true;
+            }
+        });
+    });
+
+    refreshScore();
+}
+
+
+/*
+    ONLINE EDITOR
+
+    Ο έλεγχος γίνεται με μοτίβα JavaScript.
+    Δεν γίνεται εκτέλεση κώδικα C.
+*/
+
+function removeComments(code) {
+    return code
+        .replace(/\/\*[\s\S]*?\*\//g, "")
+        .replace(/\/\/[^\n]*/g, "");
+}
+
+function checkEditor(number) {
+
+    if (completedEditors[number]) return;
+
+    const textarea =
+        document.getElementById("editor" + number);
+
+    const feedback =
+        document.getElementById("editor-feedback" + number);
+
+    const code = removeComments(textarea.value);
+    const missing = [];
+
+    // Κοινά στοιχεία προγράμματος C
+
+    if (!/#\s*include\s*<stdio\.h>/.test(code)) {
+        missing.push("Πρόσθεσε το #include <stdio.h>.");
+    }
+
+    if (!/\bint\s+main\s*\(\s*(?:void\s*)?\)/.test(code)) {
+        missing.push("Χρειάζεται η int main().");
+    }
+
+    if (!/\breturn\s+0\s*;/.test(code)) {
+        missing.push("Πρόσθεσε το return 0;.");
+    }
+
+    // ==================================
+    // EDITOR 1: ΣΥΓΚΡΙΣΗ
+    // ==================================
+
+    if (number === 1) {
+
+        if (!/\bint\s+a\s*=\s*10\s*;/.test(code)) {
+            missing.push("Δήλωσε int a = 10;.");
+        }
+
+        if (!/\bint\s+b\s*=\s*5\s*;/.test(code)) {
+            missing.push("Δήλωσε int b = 5;.");
+        }
+
+        if (!/\bint\s+result\s*=\s*\(?\s*a\s*>\s*b\s*\)?\s*;/.test(code)) {
+            missing.push(
+                "Δήλωσε int result = (a > b);."
+            );
+        }
+
+        if (!/\bprintf\s*\(\s*"[^"]*%d[^"]*"\s*,\s*result\s*\)\s*;/.test(code)) {
+            missing.push(
+                "Εμφάνισε το result με printf και %d."
+            );
+        }
+    }
+
+    // ==================================
+    // EDITOR 2: ΛΟΓΙΚΟ ΚΑΙ
+    // ==================================
+
+    if (number === 2) {
+
+        if (!/\bint\s+age\s*=\s*20\s*;/.test(code)) {
+            missing.push("Δήλωσε int age = 20;.");
+        }
+
+        const condition =
+            /\bint\s+valid\s*=\s*\(?\s*age\s*>=\s*18\s*&&\s*age\s*<=\s*65\s*\)?\s*;/.test(code);
+
+        if (!condition) {
+            missing.push(
+                "Δήλωσε int valid = (age >= 18 && age <= 65);."
+            );
+        }
+
+        if (!/\bprintf\s*\(\s*"[^"]*%d[^"]*"\s*,\s*valid\s*\)\s*;/.test(code)) {
+            missing.push(
+                "Εμφάνισε το valid με printf και %d."
+            );
+        }
+    }
+
+    // ==================================
+    // EDITOR 3: ++ ΚΑΙ +=
+    // ==================================
+
+    if (number === 3) {
+
+        if (!/\bint\s+score\s*=\s*10\s*;/.test(code)) {
+            missing.push("Δήλωσε int score = 10;.");
+        }
+
+        if (!/\bscore\s*\+\+\s*;/.test(code)) {
+            missing.push("Χρησιμοποίησε score++;.");
+        }
+
+        if (!/\bscore\s*\+=\s*5\s*;/.test(code)) {
+            missing.push("Χρησιμοποίησε score += 5;.");
+        }
+
+        if (!/\bprintf\s*\(\s*"[^"]*%d[^"]*"\s*,\s*score\s*\)\s*;/.test(code)) {
+            missing.push(
+                "Εμφάνισε το score με printf και %d."
+            );
+        }
+
+        // Ελέγχουμε και τη σειρά των δύο πράξεων.
+        const incrementPosition = code.search(
+            /\bscore\s*\+\+\s*;/
+        );
+
+        const additionPosition = code.search(
+            /\bscore\s*\+=\s*5\s*;/
+        );
+
+        if (
+            incrementPosition !== -1 &&
+            additionPosition !== -1 &&
+            incrementPosition > additionPosition
+        ) {
+            missing.push(
+                "Πρώτα γράψε score++; και μετά score += 5;."
+            );
+        }
+    }
+
+    // ΑΠΟΤΕΛΕΣΜΑ
+
+    if (missing.length === 0) {
+
+        completedEditors[number] = textarea.value;
+
+        try {
+            localStorage.setItem(
+                EDITOR_KEY,
+                JSON.stringify(completedEditors)
+            );
+        } catch (error) {
+            console.warn("Δεν αποθηκεύτηκε η πρόοδος.");
+        }
+
+        textarea.disabled = true;
+
+        textarea.parentElement.querySelector(
+            ".primary-button"
+        ).disabled = true;
+
+        feedback.textContent =
+            "✓ Μπράβο! Βρέθηκαν τα ζητούμενα στοιχεία. Ο κώδικας δεν εκτελέστηκε.";
+
+        feedback.className = "feedback correct";
+
+        refreshEditorScore();
+
+    } else {
+
+        feedback.textContent =
+            "Χρειάζονται διορθώσεις: " + missing.join(" ");
+
+        feedback.className = "feedback wrong";
+    }
+}
+
+
+/*
+    ΒΑΘΜΟΛΟΓΙΑ EDITORS
+*/
+
+function refreshEditorScore() {
+
+    let score = 0;
+
+    for (let number = 1; number <= 3; number++) {
+        if (completedEditors[number]) score++;
+    }
+
+    document.getElementById("editor-score").textContent =
+        score;
+}
+
+
+/*
+    ΕΠΑΝΑΦΟΡΑ EDITORS ΜΕΤΑ ΑΠΟ REFRESH
+*/
+
+function restoreEditors() {
+
+    for (let number = 1; number <= 3; number++) {
+
+        if (!completedEditors[number]) continue;
+
+        const textarea =
+            document.getElementById("editor" + number);
+
+        const feedback =
+            document.getElementById("editor-feedback" + number);
+
+        textarea.value = completedEditors[number];
+        textarea.disabled = true;
+
+        textarea.parentElement.querySelector(
+            ".primary-button"
+        ).disabled = true;
+
+        feedback.textContent =
+            "✓ Έχεις ήδη ολοκληρώσει αυτή την άσκηση.";
+
+        feedback.className = "feedback correct";
+    }
+
+    refreshEditorScore();
+}
+
+
+/*
+    ΕΠΑΝΑΦΟΡΑ ΟΛΗΣ ΤΗΣ ΠΡΟΟΔΟΥ
+*/
+
+const initialCode = [
+    "",
+    `#include <stdio.h>
+
+int main() {
+
+    // Δήλωσε τις a και b
+    // Σύγκρινέ τες χρησιμοποιώντας >
+    // Εμφάνισε το result
+
+    return 0;
+}`,
+    `#include <stdio.h>
+
+int main() {
+
+    // Δήλωσε int age = 20;
+    // Χρησιμοποίησε >=, <= και &&
+    // Εμφάνισε το valid
+
+    return 0;
+}`,
+    `#include <stdio.h>
+
+int main() {
+
+    // Δήλωσε int score = 10;
+    // Χρησιμοποίησε ++ και +=
+    // Εμφάνισε το score
+
+    return 0;
+}`
+];
+
+function resetProgress() {
+
+    const confirmed = confirm(
+        "Θέλεις να μηδενίσεις τις 30 ερωτήσεις και τις 3 τελικές ασκήσεις;"
+    );
+
+    if (!confirmed) return;
+
+    try {
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(EDITOR_KEY);
+    } catch (error) {
+        console.warn("Δεν διαγράφηκε η πρόοδος.");
+    }
+
+    answeredQuestions = {};
+    completedEditors = {};
+
+    createSections();
+    refreshScore();
+
+    for (let number = 1; number <= 3; number++) {
+
+        const textarea =
+            document.getElementById("editor" + number);
+
+        const feedback =
+            document.getElementById("editor-feedback" + number);
+
+        textarea.value = initialCode[number];
+        textarea.disabled = false;
+
+        textarea.parentElement.querySelector(
+            ".primary-button"
+        ).disabled = false;
+
+        feedback.textContent = "";
+        feedback.className = "feedback";
+    }
+
+    refreshEditorScore();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/*
+    ΕΚΚΙΝΗΣΗ
+*/
+
+createSections();
+restoreProgress();
+restoreEditors();
+
+</script>
+
+</body>
+</html>

@@ -1,213 +1,726 @@
-<!DOCTYPE html> 
-<html lang="el"> 
- 
-<head> 
-    <meta charset="UTF-8"> 
-    <title>Skill Tree - Μάθε C</title> 
- 
-    <style> 
 
-        /* Βασική εμφάνιση της σελίδας */
-        body { 
-            font-family: Arial, sans-serif; 
-            background-color: #FFF8DC; 
-            margin: 0; 
-            padding: 0; 
-            color: #333; 
-        } 
- 
-        /* Κεντρικό πλαίσιο περιεχομένου */
-        .container { 
-            max-width: 800px; 
-            margin: 40px auto; 
-            padding: 40px; 
-        } 
- 
-        h1 { 
-            text-align: center; 
-            color: #5D4037; 
-            font-size: 38px; 
-        } 
- 
-        .subtitle { 
-            text-align: center; 
-            color: #666; 
-            margin-bottom: 40px; 
-        } 
- 
-        /* Εμφάνιση κάθε επιπέδου */
-        .level { 
-            background-color: #FFFDF3; 
-            border: 2px solid #F2D675; 
-            border-radius: 15px; 
-            padding: 20px; 
-            margin-bottom: 18px; 
-            box-shadow: 0 3px 8px rgba(0,0,0,0.08); 
-        } 
- 
-        .level h2 { 
-            margin-top: 0; 
-            color: #5D4037; 
-        } 
- 
-        .level p { 
-            margin-bottom: 5px; 
-        } 
- 
-        /* Διαθέσιμα επίπεδα */
-        .available { 
-            border-left: 7px solid #E5B93F; 
-        } 
- 
-        /* Κλειδωμένα επίπεδα */
-        .locked { 
-            opacity: 0.65; 
-        } 
- 
-        .level a { 
-            text-decoration: none; 
-            color: #5D4037; 
-        } 
- 
-        .level a:hover { 
-            color: #C28B00; 
-        } 
- 
-        .icon { 
-            font-size: 25px; 
-        } 
- 
-    </style> 
- 
-</head> 
- 
- 
-<body> 
- 
-<!-- Κεντρικό Skill Tree -->
-<div class="container"> 
- 
-    <h1>🌱 Το μονοπάτι εκμάθησής σου</h1> 
- 
-    <p class="subtitle"> 
-        Ολοκλήρωσε τα επίπεδα και μάθε C βήμα-βήμα. 
-    </p> 
- 
- 
-    <!-- ΕΠΙΠΕΔΟ 1 --> 
- 
-    <div class="level available"> 
- 
-        <a href="/lesson/1"> 
- 
-            <h2> 
-                🟢 Επίπεδο 1: Εισαγωγή στη C 
-            </h2> 
- 
-        </a> 
- 
-        <p> 
-            Γνώρισε τις βασικές έννοιες και εντολές της C. 
-        </p> 
- 
-    </div> 
- 
- 
-    <!-- ΕΠΙΠΕΔΟ 2 --> 
- 
-    <div class="level available"> 
- 
-        <a href="/lesson/2"> 
- 
-            <h2> 
-                🟢 Επίπεδο 2: Μεταβλητές 
-            </h2> 
- 
-        </a> 
- 
-        <p> 
-            Μάθε για int, float, double και char. 
-        </p> 
- 
-    </div> 
- 
- 
-    <!-- ΕΠΙΠΕΔΟ 3 --> 
- 
-    <div class="level locked"> 
- 
-        <h2> 
-            🔒 Επίπεδο 3: Τελεστές 
-        </h2> 
- 
-        <p> 
-            Πρόσθεση, αφαίρεση, πολλαπλασιασμός και συγκρίσεις. 
-        </p> 
- 
-    </div> 
- 
- 
-    <!-- ΕΠΙΠΕΔΟ 4 --> 
- 
-    <div class="level locked"> 
- 
-        <h2> 
-            🔒 Επίπεδο 4: If / Else 
-        </h2> 
- 
-        <p> 
-            Μάθε πώς ένα πρόγραμμα παίρνει αποφάσεις. 
-        </p> 
- 
-    </div> 
- 
- 
-    <!-- ΕΠΙΠΕΔΟ 5 --> 
- 
-    <div class="level locked"> 
- 
-        <h2> 
-            🔒 Επίπεδο 5: Loops 
-        </h2> 
- 
-        <p> 
-            Επανάληψη εντολών με for και while. 
-        </p> 
- 
-    </div> 
- 
- 
-    <!-- ΕΠΙΠΕΔΟ 6 --> 
- 
-    <div class="level locked"> 
- 
-        <h2> 
-            🔒 Επίπεδο 6: Arrays 
-        </h2> 
- 
-        <p> 
-            Αποθήκευσε πολλές τιμές μαζί. 
-        </p> 
- 
-    </div> 
- 
- 
-    <!-- ΕΠΙΠΕΔΟ 7 --> 
- 
-    <div class="level locked"> 
- 
-        <h2> 
-            🔒 Επίπεδο 7: Functions 
-        </h2> 
- 
-        <p> 
-            Δημιούργησε τις δικές σου συναρτήσεις. 
-        </p> 
- 
-    </div> 
- 
-</div> 
- 
-</body> 
- 
+<!DOCTYPE html>
+<html lang="el">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Skill Tree - C Learning App</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #F1F5F9;
+            color: #1E293B;
+        }
+
+        /* ΕΠΑΝΩ ΜΕΝΟΥ */
+
+        .navbar {
+            background: #0B1220;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: #22D3EE;
+        }
+
+        .nav-link {
+            color: #CBD5E1;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        .nav-link:hover {
+            color: #22D3EE;
+        }
+
+        /* ΕΠΙΚΕΦΑΛΙΔΑ */
+
+        .header {
+            background: linear-gradient(
+                135deg,
+                #0B1220,
+                #16243A
+            );
+            color: white;
+            padding: 65px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            margin: 0 0 15px;
+        }
+
+        .header h1 span {
+            color: #22D3EE;
+        }
+
+        .header p {
+            color: #CBD5E1;
+            font-size: 17px;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        /* ΚΕΝΤΡΙΚΟ ΠΕΡΙΕΧΟΜΕΝΟ */
+
+        .container {
+            max-width: 900px;
+            margin: 45px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            color: #0F172A;
+            font-size: 23px;
+            margin-bottom: 25px;
+        }
+
+        /* ΚΑΡΤΕΣ ΕΠΙΠΕΔΩΝ */
+
+        .level-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 25px;
+
+            background: white;
+            border: 1px solid #E2E8F0;
+            border-left: 5px solid #2563EB;
+            border-radius: 14px;
+
+            padding: 25px;
+            margin-bottom: 18px;
+
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+            transition: 0.2s;
+        }
+
+        .level-card.available:hover {
+            transform: translateY(-3px);
+            border-color: #93C5FD;
+            border-left-color: #2563EB;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .level-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .level-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .level-title h2 {
+            margin: 0;
+            font-size: 21px;
+            color: #0F172A;
+        }
+
+        .level-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: #DBEAFE;
+            color: #1D4ED8;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .level-description {
+            margin: 0 0 12px 48px;
+            color: #64748B;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .level-status {
+            display: inline-block;
+            margin-left: 48px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: #DBEAFE;
+            color: #1D4ED8;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* ΚΟΥΜΠΙΑ */
+
+        .level-button {
+            display: inline-block;
+            flex-shrink: 0;
+            background: #2563EB;
+            color: white;
+            padding: 12px 22px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+
+        .level-button:hover {
+            background: #1D4ED8;
+        }
+
+        /* ΟΛΟΚΛΗΡΩΜΕΝΑ ΕΠΙΠΕΔΑ */
+
+        .level-card.completed {
+            border-left-color: #10B981;
+        }
+
+        .level-card.completed .level-icon {
+            background: #D1FAE5;
+            color: #047857;
+        }
+
+        .level-card.completed .level-status {
+            background: #D1FAE5;
+            color: #047857;
+        }
+
+        /* ΚΛΕΙΔΩΜΕΝΑ ΕΠΙΠΕΔΑ */
+
+        .level-card.locked {
+            background: #F8FAFC;
+            border-left-color: #CBD5E1;
+            opacity: 0.75;
+        }
+
+        .level-card.locked .level-icon {
+            background: #E2E8F0;
+            color: #64748B;
+        }
+
+        .level-card.locked .level-title h2 {
+            color: #64748B;
+        }
+
+        .level-card.locked .level-status {
+            background: #E2E8F0;
+            color: #64748B;
+        }
+
+        .locked-button {
+            background: #E2E8F0;
+            color: #64748B;
+            padding: 12px 22px;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: not-allowed;
+            flex-shrink: 0;
+        }
+
+        /* ΕΠΙΣΤΡΟΦΗ */
+
+        .back-button {
+            display: inline-block;
+            margin-top: 25px;
+            margin-bottom: 45px;
+            padding: 13px 23px;
+            border-radius: 9px;
+            background: #0F172A;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-button:hover {
+            background: #16243A;
+        }
+
+        /* FOOTER */
+
+        .footer {
+            background: #0B1220;
+            color: #94A3B8;
+            text-align: center;
+            padding: 25px;
+            font-size: 14px;
+        }
+
+        /* ΚΙΝΗΤΑ */
+
+        @media (max-width: 650px) {
+
+            .navbar {
+                padding: 18px 5%;
+            }
+
+            .logo {
+                font-size: 18px;
+            }
+
+            .nav-link {
+                font-size: 13px;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .level-card {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 18px;
+                padding: 20px;
+            }
+
+            .level-title h2 {
+                font-size: 18px;
+            }
+
+            .level-description,
+            .level-status {
+                margin-left: 0;
+            }
+
+            .level-button,
+            .locked-button {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ΕΠΑΝΩ ΜΕΝΟΥ -->
+
+    <nav class="navbar">
+
+        <a href="/" class="logo">
+            C<span>Learning</span>
+        </a>
+
+        <a href="/" class="nav-link">
+            Αρχική σελίδα
+        </a>
+
+    </nav>
+
+    <!-- ΕΠΙΚΕΦΑΛΙΔΑ -->
+
+    <header class="header">
+
+        <h1>
+            Το <span>μονοπάτι εκμάθησής</span> σου
+        </h1>
+
+        <p>
+            Ολοκλήρωσε τα επίπεδα και μάθε C βήμα-βήμα.
+        </p>
+
+    </header>
+
+    <!-- ΕΠΙΠΕΔΑ -->
+
+    <main class="container">
+
+        <h2 class="section-title">
+            Τα επίπεδα εκμάθησης
+        </h2>
+
+        <!-- ΕΠΙΠΕΔΟ 1 -->
+
+        <div class="level-card available" id="level-1">
+
+            <div class="level-info">
+
+                <div class="level-title">
+                    <div class="level-icon">01</div>
+                    <h2>Επίπεδο 1: Εισαγωγή στη C</h2>
+                </div>
+
+                <p class="level-description">
+                    Γνώρισε τις βασικές έννοιες,
+                    τις εντολές και τη δομή της C.
+                </p>
+
+                <span class="level-status" id="status-1">
+                    Διαθέσιμο
+                </span>
+
+            </div>
+
+            <a href="/lesson/1"
+               class="level-button"
+               id="button-1">
+                Ξεκίνα →
+            </a>
+
+        </div>
+
+        <!-- ΕΠΙΠΕΔΟ 2 -->
+
+        <div class="level-card available" id="level-2">
+
+            <div class="level-info">
+
+                <div class="level-title">
+                    <div class="level-icon">02</div>
+                    <h2>Επίπεδο 2: Μεταβλητές</h2>
+                </div>
+
+                <p class="level-description">
+                    Μάθε για int, float, double και char.
+                </p>
+
+                <span class="level-status" id="status-2">
+                    Διαθέσιμο
+                </span>
+
+            </div>
+
+            <a href="/lesson/2"
+               class="level-button"
+               id="button-2">
+                Ξεκίνα →
+            </a>
+
+        </div>
+
+        <!-- ΕΠΙΠΕΔΟ 3 -->
+
+        <div class="level-card available" id="level-3">
+
+            <div class="level-info">
+
+                <div class="level-title">
+                    <div class="level-icon">03</div>
+                    <h2>Επίπεδο 3: Τελεστές στη C</h2>
+                </div>
+
+                <p class="level-description">
+                    Αριθμητικοί, συγκριτικοί και λογικοί
+                    τελεστές, αύξηση, μείωση
+                    και σύνθετη ανάθεση.
+                </p>
+
+                <span class="level-status" id="status-3">
+                    Διαθέσιμο
+                </span>
+
+            </div>
+
+            <a href="/lesson/3"
+               class="level-button"
+               id="button-3">
+                Ξεκίνα →
+            </a>
+
+        </div>
+
+        <!-- ΕΠΙΠΕΔΟ 4 -->
+
+        <div class="level-card available" id="level-4">
+
+            <div class="level-info">
+
+                <div class="level-title">
+                    <div class="level-icon">04</div>
+                    <h2>Επίπεδο 4: If / Else</h2>
+                </div>
+
+                <p class="level-description">
+                    Μάθε πώς ένα πρόγραμμα παίρνει
+                    αποφάσεις με if, else, else if
+                    και switch / case.
+                </p>
+
+                <span class="level-status" id="status-4">
+                    Διαθέσιμο
+                </span>
+
+            </div>
+
+            <a href="/lesson/4"
+               class="level-button"
+               id="button-4">
+                Ξεκίνα →
+            </a>
+
+        </div>
+
+        <!-- ΕΠΙΠΕΔΟ 5 -->
+
+        <div class="level-card available" id="level-5">
+
+            <div class="level-info">
+
+                <div class="level-title">
+                    <div class="level-icon">05</div>
+                    <h2>Επίπεδο 5: Επαναλήψεις (Loops)</h2>
+                </div>
+
+                <p class="level-description">
+                    Μάθε να χρησιμοποιείς τους βρόχους
+                    for, while και do...while στη C.
+                </p>
+
+                <span class="level-status" id="status-5">
+                    Διαθέσιμο
+                </span>
+
+            </div>
+
+            <a href="/lesson/5"
+               class="level-button"
+               id="button-5">
+                Ξεκίνα →
+            </a>
+
+        </div>
+
+        <!-- ΕΠΙΠΕΔΟ 6 -->
+
+        <div class="level-card available" id="level-6">
+
+            <div class="level-info">
+
+                <div class="level-title">
+                    <div class="level-icon">06</div>
+                    <h2>Επίπεδο 6: Πίνακες (Arrays)</h2>
+                </div>
+
+                <p class="level-description">
+                    Μάθε να δημιουργείς πίνακες,
+                    να χρησιμοποιείς δείκτες και
+                    να επεξεργάζεσαι στοιχεία με for.
+                </p>
+
+                <span class="level-status" id="status-6">
+                    Διαθέσιμο
+                </span>
+
+            </div>
+
+            <a href="/lesson/6"
+               class="level-button"
+               id="button-6">
+                Ξεκίνα →
+            </a>
+
+        </div>
+
+        <!-- ΕΠΙΠΕΔΟ 7 -->
+
+        <!-- ΕΠΙΠΕΔΟ 7 -->
+
+<div class="level-card available" id="level-7">
+
+    <div class="level-info">
+
+        <div class="level-title">
+            <div class="level-icon">07</div>
+
+            <h2>
+                Επίπεδο 7: Σύνθετοι Τύποι Δεδομένων
+            </h2>
+        </div>
+
+        <p class="level-description">
+            Μάθε συμβολοσειρές, δομές struct,
+            απαριθμήσεις enum και typedef στη C.
+        </p>
+
+        <span class="level-status" id="status-7">
+            Διαθέσιμο
+        </span>
+
+    </div>
+
+    <a href="/lesson/7"
+       class="level-button"
+       id="button-7">
+        Ξεκίνα →
+    </a>
+
+</div>
+<!-- ΕΠΙΠΕΔΟ 8 -->
+
+<div class="level-card available" id="level-8">
+
+    <div class="level-info">
+
+        <div class="level-title">
+            <div class="level-icon">08</div>
+
+            <h2>
+                Επίπεδο 8: Συναρτήσεις (Functions)
+            </h2>
+        </div>
+
+        <p class="level-description">
+            Μάθε να δημιουργείς συναρτήσεις,
+            να χρησιμοποιείς παραμέτρους,
+            να επιστρέφεις τιμές με return
+            και να οργανώνεις τον κώδικά σου.
+        </p>
+
+        <span class="level-status" id="status-8">
+            Διαθέσιμο
+        </span>
+
+    </div>
+
+    <a href="/lesson/8"
+       class="level-button"
+       id="button-8">
+        Ξεκίνα →
+    </a>
+
+</div>
+
+    </main>
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+        C Learning App • Microlearning για τη γλώσσα C
+    </footer>
+
+    <script>
+        /*
+           ΕΛΕΓΧΟΣ ΟΛΟΚΛΗΡΩΣΗΣ ΕΠΙΠΕΔΩΝ
+
+           Τα επίπεδα παραμένουν διαθέσιμα.
+           Όταν υπάρχει ένδειξη ολοκλήρωσης
+           στο localStorage, εμφανίζεται
+           πράσινη κάρτα.
+        */
+
+        function markCompleted(level) {
+            const card = document.getElementById(
+                "level-" + level
+            );
+
+            const status = document.getElementById(
+                "status-" + level
+            );
+
+            const button = document.getElementById(
+                "button-" + level
+            );
+
+            if (!card || !status || !button) {
+                return;
+            }
+
+            card.classList.add("completed");
+            status.textContent = "✓ Ολοκληρωμένο";
+            button.textContent = "Επανάληψη →";
+        }
+
+        /*
+           ΕΠΙΠΕΔΟ 1
+
+           Διατηρούμε τον έλεγχο προόδου
+           από τον αρχικό κώδικα.
+        */
+
+        function checkLevel1Completion() {
+            let quizCompleted = false;
+            let editorsCompleted = false;
+
+            try {
+                const quizData = JSON.parse(
+                    localStorage.getItem(
+                        "c_learning_lesson1_progress"
+                    )
+                );
+
+                const answers =
+                    quizData && quizData.answeredQuestions
+                        ? quizData.answeredQuestions
+                        : {};
+
+                quizCompleted =
+                    Object.values(answers).filter(
+                        value => value === true
+                    ).length === 42;
+
+                const editorData = JSON.parse(
+                    localStorage.getItem(
+                        "c_learning_lesson1_editors"
+                    )
+                ) || {};
+
+                editorsCompleted =
+                    [1, 2, 3].every(
+                        number => Boolean(editorData[number])
+                    );
+
+            } catch (error) {
+                console.warn(
+                    "Δεν ήταν δυνατός ο έλεγχος προόδου του Επιπέδου 1."
+                );
+            }
+
+            if (quizCompleted && editorsCompleted) {
+                markCompleted(1);
+            }
+        }
+
+        /*
+           ΕΠΙΠΕΔΟ 6
+
+           Το lesson6.html αποθηκεύει
+           αυτό το κλειδί όταν ολοκληρωθούν
+           και οι 30 ερωτήσεις και οι
+           3 ασκήσεις.
+        */
+
+        function checkLevel6Completion() {
+            if (
+                localStorage.getItem(
+                    "c_learning_level6_completed"
+                ) === "true"
+            ) {
+                markCompleted(6);
+            }
+        }
+
+        /*
+           ΕΚΚΙΝΗΣΗ
+        */
+
+        checkLevel1Completion();
+        checkLevel6Completion();
+
+    </script>
+
+</body>
 </html>

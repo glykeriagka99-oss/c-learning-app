@@ -1,97 +1,404 @@
+
 <!DOCTYPE html>
 <html lang="el">
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Μάθε C με Microlearning</title>
 
     <style>
 
-        /* Βασική εμφάνιση της σελίδας */
+        /* ΒΑΣΙΚΑ ΧΡΩΜΑΤΑ ΚΑΙ ΕΜΦΑΝΙΣΗ */
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #FFF8DC;
             margin: 0;
-            color: #333;
+            font-family: Arial, sans-serif;
+            background: #F1F5F9;
+            color: #1E293B;
         }
 
-        /* Κεντρικό περιεχόμενο */
-        .container {
-            max-width: 850px;
-            margin: 70px auto;
-            padding: 40px;
-            text-align: center;
+        /* ΕΠΑΝΩ ΜΕΝΟΥ */
+
+        .navbar {
+            background: #0B1220;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
         }
 
-        /* Κεντρική κάρτα */
+        .logo {
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: #22D3EE;
+        }
+
+        .nav-link {
+            color: #CBD5E1;
+            text-decoration: none;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .nav-link:hover {
+            color: #22D3EE;
+        }
+
+        /* ΚΕΝΤΡΙΚΗ ΠΕΡΙΟΧΗ */
+
         .hero {
-            background-color: #FFFDF3;
-            border: 2px solid #F2D675;
-            border-radius: 25px;
-            padding: 55px 40px;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.10);
+            background: linear-gradient(
+                135deg,
+                #0B1220,
+                #16243A
+            );
+
+            padding: 90px 7%;
+            color: white;
         }
 
-        /* Εικονίδια αρχικής σελίδας */
-        .icon {
-            font-size: 65px;
-            margin-bottom: 10px;
+        .hero-container {
+            max-width: 1200px;
+            margin: auto;
+
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            align-items: center;
+            gap: 60px;
+        }
+
+        /* ΑΡΙΣΤΕΡΟ ΜΕΡΟΣ */
+
+        .hero-content {
+            text-align: left;
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(34, 211, 238, 0.12);
+            color: #22D3EE;
+            border: 1px solid rgba(34, 211, 238, 0.35);
+            border-radius: 30px;
+            padding: 10px 18px;
+            font-size: 14px;
+            margin-bottom: 25px;
         }
 
         h1 {
-            color: #5D4037;
-            font-size: 42px;
-            margin-bottom: 15px;
+            font-size: 49px;
+            line-height: 1.2;
+            margin: 0 0 25px;
+        }
+
+        h1 span {
+            color: #22D3EE;
         }
 
         .subtitle {
-            font-size: 19px;
-            line-height: 1.6;
-            color: #666;
-            max-width: 650px;
-            margin: 0 auto 30px;
-        }
-
-        /* Μικρές πληροφορίες για την εφαρμογή */
-        .features {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
+            color: #CBD5E1;
+            font-size: 18px;
+            line-height: 1.8;
+            max-width: 560px;
             margin-bottom: 35px;
         }
 
-        .feature {
-            background-color: #FFF3BF;
-            padding: 10px 18px;
-            border-radius: 20px;
-            font-size: 15px;
-            color: #5D4037;
-        }
+        /* ΚΟΥΜΠΙ ΕΝΑΡΞΗΣ */
 
-        /* Κουμπί έναρξης */
         .start-button {
             display: inline-block;
-            background-color: #E5B93F;
-            color: #3E2F20;
+            background: #2563EB;
+            color: white;
+            padding: 17px 32px;
+            border-radius: 10px;
             text-decoration: none;
-            padding: 16px 32px;
-            border-radius: 12px;
-            font-size: 18px;
+            font-size: 17px;
             font-weight: bold;
             transition: 0.2s;
         }
 
-        /* Αλλαγή εμφάνισης όταν περνάει το ποντίκι */
         .start-button:hover {
-            background-color: #D4A72C;
-            transform: translateY(-2px);
+            background: #1D4ED8;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
         }
 
-        .message {
-            margin-top: 25px;
-            color: #777;
+        .hero-note {
+            margin-top: 22px;
+            color: #94A3B8;
             font-size: 14px;
+        }
+
+        /* ΔΕΞΙΟ ΜΕΡΟΣ - ΠΑΡΑΔΕΙΓΜΑ ΚΩΔΙΚΑ */
+
+        .code-window {
+            background: #0F172A;
+            border: 1px solid #334155;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+        }
+
+        .code-header {
+            background: #16243A;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+        }
+
+        .red {
+            background: #EF4444;
+        }
+
+        .yellow {
+            background: #F59E0B;
+        }
+
+        .green {
+            background: #10B981;
+        }
+
+        .filename {
+            color: #94A3B8;
+            font-family: Consolas, monospace;
+            font-size: 13px;
+        }
+
+        .code-body {
+            padding: 28px;
+            overflow-x: auto;
+        }
+
+        .code-body pre {
+            margin: 0;
+            color: #E2E8F0;
+            font-family: Consolas, monospace;
+            font-size: 15px;
+            line-height: 1.9;
+        }
+
+        .code-blue {
+            color: #60A5FA;
+        }
+
+        .code-cyan {
+            color: #22D3EE;
+        }
+
+        .code-green {
+            color: #34D399;
+        }
+
+        .code-purple {
+            color: #C4B5FD;
+        }
+
+        .code-comment {
+            color: #94A3B8;
+        }
+
+        .code-output {
+            border-top: 1px solid #334155;
+            padding: 18px 28px;
+            color: #10B981;
+            font-family: Consolas, monospace;
+            font-size: 14px;
+        }
+
+        /* ΕΝΟΤΗΤΑ ΧΑΡΑΚΤΗΡΙΣΤΙΚΩΝ */
+
+        .features-section {
+            padding: 80px 7%;
+            background: #F1F5F9;
+        }
+
+        .section-heading {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 45px;
+        }
+
+        .section-heading h2 {
+            font-size: 32px;
+            color: #0F172A;
+            margin-bottom: 15px;
+        }
+
+        .section-heading p {
+            color: #64748B;
+            font-size: 17px;
+            line-height: 1.7;
+        }
+
+        .features {
+            max-width: 1150px;
+            margin: auto;
+
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .feature-card {
+            background: white;
+            border: 1px solid #E2E8F0;
+            border-radius: 16px;
+            padding: 35px 28px;
+            text-align: left;
+            transition: 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: #93C5FD;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.07);
+        }
+
+        .feature-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            width: 55px;
+            height: 55px;
+
+            background: #EFF6FF;
+            border-radius: 12px;
+
+            font-size: 26px;
+            margin-bottom: 25px;
+        }
+
+        .feature-card h3 {
+            color: #0F172A;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: #64748B;
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        /* ΤΕΛΙΚΗ ΠΡΟΣΚΛΗΣΗ */
+
+        .bottom-section {
+            padding: 75px 20px;
+            text-align: center;
+            background: white;
+        }
+
+        .bottom-section h2 {
+            font-size: 30px;
+            color: #0F172A;
+            margin-bottom: 15px;
+        }
+
+        .bottom-section p {
+            color: #64748B;
+            font-size: 17px;
+            margin-bottom: 30px;
+        }
+
+        /* FOOTER */
+
+        .footer {
+            background: #0B1220;
+            color: #94A3B8;
+            text-align: center;
+            padding: 25px;
+            font-size: 14px;
+        }
+
+        /* ΕΜΦΑΝΙΣΗ ΣΕ ΚΙΝΗΤΑ */
+
+        @media (max-width: 900px) {
+
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 45px;
+            }
+
+            .hero {
+                padding: 65px 6%;
+            }
+
+            h1 {
+                font-size: 38px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+                max-width: 550px;
+            }
+
+            .hero-content {
+                text-align: center;
+            }
+
+            .subtitle {
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            .navbar {
+                padding: 18px 5%;
+            }
+
+            .logo {
+                font-size: 18px;
+            }
+
+            .nav-link {
+                font-size: 13px;
+            }
+
+            h1 {
+                font-size: 31px;
+            }
+
+            .subtitle {
+                font-size: 16px;
+            }
+
+            .code-body {
+                padding: 20px 15px;
+            }
+
+            .code-body pre {
+                font-size: 12px;
+            }
+
+            .section-heading h2 {
+                font-size: 26px;
+            }
         }
 
     </style>
@@ -100,52 +407,218 @@
 
 <body>
 
-<!-- Κεντρική περιοχή της αρχικής σελίδας -->
-<div class="container">
+    <!-- ΕΠΑΝΩ ΜΕΝΟΥ -->
 
-    <div class="hero">
+    <nav class="navbar">
 
-        <div class="icon">💻🌱</div>
+        <a href="/" class="logo">
+            C<span>Learning</span>
+        </a>
 
-        <h1>Μάθε C με Microlearning</h1>
+        <a href="/skills" class="nav-link">
+            Επίπεδα εκμάθησης
+        </a>
 
-        <p class="subtitle">
-            Μάθε τη γλώσσα προγραμματισμού C βήμα-βήμα,
-            μέσα από μικρά μαθήματα, παραδείγματα και
-            διαδραστικές ερωτήσεις.
-        </p>
+    </nav>
 
 
-        <!-- Βασικά χαρακτηριστικά της εφαρμογής -->
-        <div class="features">
+    <!-- ΚΕΝΤΡΙΚΗ ΠΕΡΙΟΧΗ -->
 
-            <div class="feature">
-                ⏱️ Μικρά μαθήματα
+    <section class="hero">
+
+        <div class="hero-container">
+
+            <!-- ΑΡΙΣΤΕΡΟ ΜΕΡΟΣ -->
+
+            <div class="hero-content">
+
+                <div class="tag">
+                    MICROlearning • Γλώσσα C
+                </div>
+
+                <h1>
+                    Μάθε προγραμματισμό
+                    <span>στη C</span>,
+                    βήμα-βήμα.
+                </h1>
+
+                <p class="subtitle">
+                    Ξεκίνα το ταξίδι σου στον προγραμματισμό
+                    με μικρά, οργανωμένα μαθήματα,
+                    πρακτικά παραδείγματα και
+                    διαδραστικές ασκήσεις.
+                </p>
+
+                <a href="/skills" class="start-button">
+                    Ξεκίνα την εκμάθηση →
+                </a>
+
+                <p class="hero-note">
+                    Δεν απαιτείται προηγούμενη εμπειρία
+                    στον προγραμματισμό.
+                </p>
+
             </div>
 
-            <div class="feature">
-                🧠 Διαδραστικά Quiz
-            </div>
 
-            <div class="feature">
-                🚀 Βήμα-βήμα
+            <!-- ΔΕΞΙΟ ΜΕΡΟΣ: ΠΑΡΑΔΕΙΓΜΑ C -->
+
+            <div class="code-window">
+
+                <div class="code-header">
+
+                    <div class="dots">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                    </div>
+
+                    <span class="filename">
+                        hello_world.c
+                    </span>
+
+                </div>
+
+                <div class="code-body">
+
+<pre><span class="code-blue">#include</span> <span class="code-green">&lt;stdio.h&gt;</span>
+
+<span class="code-purple">int</span> <span class="code-cyan">main</span>() {
+
+    <span class="code-comment">// Το πρώτο σου πρόγραμμα</span>
+
+    <span class="code-cyan">printf</span>(<span class="code-green">"Hello World!"</span>);
+
+    <span class="code-purple">return</span> 0;
+}</pre>
+
+                </div>
+
+                <div class="code-output">
+                    ✓ Output: Hello World!
+                </div>
+
             </div>
 
         </div>
 
+    </section>
 
-        <!-- Μετάβαση στο Skill Tree -->
-        <a class="start-button" href="/skills">
-            Ξεκίνα την εκμάθηση 🚀
-        </a>
 
-        <p class="message">
-            Δεν χρειάζεται προηγούμενη εμπειρία στον προγραμματισμό.
+    <!-- ΧΑΡΑΚΤΗΡΙΣΤΙΚΑ -->
+
+    <section class="features-section">
+
+        <div class="section-heading">
+
+            <h2>
+                Γιατί να μάθεις C μαζί μας;
+            </h2>
+
+            <p>
+                Μια απλή και διαδραστική προσέγγιση
+                για να κατανοήσεις τις βασικές έννοιες
+                του προγραμματισμού.
+            </p>
+
+        </div>
+
+
+        <div class="features">
+
+            <!-- ΧΑΡΑΚΤΗΡΙΣΤΙΚΟ 1 -->
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    ⏱️
+                </div>
+
+                <h3>
+                    Μικρά μαθήματα
+                </h3>
+
+                <p>
+                    Μάθε μία έννοια κάθε φορά,
+                    μέσα από σύντομη θεωρία
+                    και κατανοητά παραδείγματα.
+                </p>
+
+            </div>
+
+
+            <!-- ΧΑΡΑΚΤΗΡΙΣΤΙΚΟ 2 -->
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🧠
+                </div>
+
+                <h3>
+                    Διαδραστικά Quiz
+                </h3>
+
+                <p>
+                    Έλεγξε τις γνώσεις σου με ερωτήσεις,
+                    άμεση ανατροφοδότηση και
+                    παρακολούθηση της προόδου σου.
+                </p>
+
+            </div>
+
+
+            <!-- ΧΑΡΑΚΤΗΡΙΣΤΙΚΟ 3 -->
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    💻
+                </div>
+
+                <h3>
+                    Πρακτική στον κώδικα
+                </h3>
+
+                <p>
+                    Γράψε κώδικα C μέσα από
+                    ενσωματωμένες ασκήσεις και
+                    έλεγξε αν περιλαμβάνει
+                    τα ζητούμενα στοιχεία.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ΤΕΛΙΚΟ ΚΟΥΜΠΙ -->
+
+    <section class="bottom-section">
+
+        <h2>
+            Έτοιμος να γράψεις το πρώτο σου πρόγραμμα;
+        </h2>
+
+        <p>
+            Ξεκίνα από τα βασικά και προχώρησε
+            σταδιακά στον κόσμο της C.
         </p>
 
-    </div>
+        <a href="/skills" class="start-button">
+            Δες τα επίπεδα →
+        </a>
 
-</div>
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+        C Learning App • Microlearning για τη γλώσσα C
+    </footer>
 
 </body>
 

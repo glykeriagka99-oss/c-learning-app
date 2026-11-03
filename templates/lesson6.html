@@ -1,0 +1,1986 @@
+
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Επίπεδο 6 | Πίνακες στη C</title>
+
+<style>
+:root {
+    --navy: #0b1220;
+    --navy-light: #16243a;
+    --blue: #2563eb;
+    --cyan: #22d3ee;
+    --green: #059669;
+    --red: #dc2626;
+    --bg: #f1f5f9;
+    --text: #0f172a;
+    --muted: #64748b;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+nav {
+    background: var(--navy);
+    padding: 20px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo {
+    color: white;
+    text-decoration: none;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.logo span {
+    color: var(--cyan);
+}
+
+.nav-link {
+    color: #cbd5e1;
+    text-decoration: none;
+}
+
+header {
+    background: linear-gradient(
+        135deg,
+        var(--navy),
+        var(--navy-light)
+    );
+    color: white;
+    text-align: center;
+    padding: 55px 20px;
+}
+
+header h1 {
+    margin: 0 0 15px;
+    font-size: 36px;
+}
+
+header p {
+    color: #cbd5e1;
+    line-height: 1.7;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 35px auto;
+    padding: 0 20px;
+}
+
+.card {
+    background: white;
+    padding: 28px;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+}
+
+.card h2 {
+    margin-top: 0;
+}
+
+.description {
+    color: var(--muted);
+    line-height: 1.8;
+}
+
+.theory {
+    background: #eff6ff;
+    border-left: 4px solid var(--blue);
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    line-height: 1.8;
+}
+
+.theory p {
+    margin: 10px 0;
+}
+
+pre {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 20px;
+    border-radius: 10px;
+    overflow-x: auto;
+    line-height: 1.7;
+}
+
+code,
+textarea {
+    font-family: Consolas, monospace;
+}
+
+.progress {
+    background: #e2e8f0;
+    height: 12px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 15px 0;
+}
+
+.progress-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--green);
+    transition: width 0.3s;
+}
+
+.score-number {
+    font-size: 30px;
+    font-weight: bold;
+    color: var(--blue);
+}
+
+.section-score {
+    background: #f1f5f9;
+    border-radius: 8px;
+    padding: 14px;
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+.question {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 18px 0;
+}
+
+.question h3 {
+    font-size: 17px;
+    line-height: 1.6;
+    margin-top: 0;
+}
+
+.option {
+    display: block;
+    width: 100%;
+    background: white;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 13px 15px;
+    margin: 9px 0;
+    text-align: left;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.option:hover:not(:disabled) {
+    background: #dbeafe;
+    border-color: var(--blue);
+}
+
+.option.correct-option {
+    background: #d1fae5;
+    border-color: var(--green);
+}
+
+.option.wrong-option {
+    background: #fee2e2;
+    border-color: var(--red);
+}
+
+.answer-input {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    font-size: 16px;
+}
+
+.primary-button {
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.primary-button:hover:not(:disabled) {
+    background: #1d4ed8;
+}
+
+button:disabled {
+    cursor: default;
+    opacity: 0.8;
+}
+
+.reset-button {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 12px 18px;
+    cursor: pointer;
+}
+
+.feedback {
+    margin-top: 12px;
+    font-weight: bold;
+    line-height: 1.6;
+}
+
+.correct {
+    color: #047857;
+}
+
+.wrong {
+    color: #b91c1c;
+}
+
+.editor-section {
+    border-top: 5px solid var(--cyan);
+}
+
+.editor-score {
+    background: #dbeafe;
+    color: #1e40af;
+    border-radius: 10px;
+    padding: 16px;
+    font-weight: bold;
+}
+
+.editor-exercise {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 22px;
+    margin: 25px 0;
+}
+
+.editor-exercise p {
+    line-height: 1.7;
+}
+
+.editor-label {
+    display: block;
+    background: var(--navy-light);
+    color: var(--cyan);
+    padding: 12px 16px;
+    border-radius: 10px 10px 0 0;
+    font-family: Consolas, monospace;
+}
+
+.code-editor {
+    display: block;
+    width: 100%;
+    min-height: 260px;
+    background: #0f172a;
+    color: #e2e8f0;
+    border: 1px solid #334155;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 18px;
+    font-size: 14px;
+    line-height: 1.6;
+    resize: vertical;
+    tab-size: 4;
+}
+
+.code-editor:focus {
+    outline: 2px solid var(--blue);
+}
+
+.back-button {
+    display: inline-block;
+    background: var(--navy);
+    color: white;
+    text-decoration: none;
+    padding: 14px 24px;
+    border-radius: 8px;
+    margin-bottom: 40px;
+}
+
+.completion {
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    border-radius: 12px;
+    padding: 18px;
+    margin-top: 20px;
+    display: none;
+}
+
+footer {
+    background: var(--navy);
+    color: #94a3b8;
+    padding: 25px;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 27px;
+    }
+
+    .container {
+        padding: 0 12px;
+    }
+
+    .card {
+        padding: 18px;
+    }
+
+    .editor-exercise {
+        padding: 14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <a href="/" class="logo">
+        C<span>Learning</span>
+    </a>
+
+    <a href="/skills" class="nav-link">
+        Skill Tree
+    </a>
+</nav>
+
+<header>
+    <h1>Επίπεδο 6: Πίνακες στη C</h1>
+
+    <p>
+        Εισαγωγή - Πρόσβαση - for - scanf - Επεξεργασία
+    </p>
+
+    <p>
+        5 ενότητες - 30 ερωτήσεις - 3 ασκήσεις κώδικα
+    </p>
+</header>
+
+<main class="container">
+
+<section class="card">
+    <h2>Η πρόοδός σου</h2>
+
+    <div class="score-number">
+        <span id="total-score">0</span> / 30
+    </div>
+
+    <p id="progress-text">
+        Έχεις ολοκληρώσει 0 από τις 30 ερωτήσεις.
+    </p>
+
+    <div class="progress">
+        <div class="progress-fill" id="progress-fill"></div>
+    </div>
+
+    <p>
+        Πρακτικές ασκήσεις:
+        <strong id="editor-progress">0 / 3</strong>
+    </p>
+
+    <div id="completion-message" class="completion">
+        <strong>Συγχαρητήρια!</strong>
+        Ολοκλήρωσες το Επίπεδο 6!
+    </div>
+
+    <button class="reset-button" onclick="resetProgress()">
+        Επαναφορά όλης της προόδου
+    </button>
+</section>
+
+<div id="sections-container"></div>
+
+<section class="card editor-section">
+
+    <h2>Τελική επανάληψη – Γράψε κώδικα C</h2>
+
+    <p class="description">
+        Λύσε τις τρεις ασκήσεις γράφοντας κώδικα C.
+        Ο έλεγχος εξετάζει τη δομή του κώδικα,
+        χωρίς πραγματική μεταγλώττιση ή εκτέλεση.
+    </p>
+
+    <div class="editor-score">
+        Ολοκληρωμένες ασκήσεις:
+        <span id="editor-score">0</span> / 3
+    </div>
+
+    <div class="editor-exercise">
+        <h3>Άσκηση 1: Δημιουργία και εμφάνιση πίνακα</h3>
+
+        <p>
+            Δημιούργησε έναν πίνακα
+            <code>int numbers[5]</code>
+            με τιμές 10, 20, 30, 40, 50.
+            Χρησιμοποίησε <code>for</code> και
+            <code>printf</code> για να εμφανίσεις
+            όλα τα στοιχεία του.
+        </p>
+
+        <label class="editor-label" for="editor1">
+            main.c — Άσκηση 1
+        </label>
+
+        <textarea id="editor1" class="code-editor" spellcheck="false">#include <stdio.h>
+
+int main(void) {
+
+    // Δημιούργησε τον πίνακα numbers[5]
+
+    // Εμφάνισε τα στοιχεία με for
+
+    return 0;
+}</textarea>
+
+        <button class="primary-button" onclick="checkEditor(1)">
+            Έλεγχος κώδικα
+        </button>
+
+        <p id="editor-feedback1" class="feedback" aria-live="polite"></p>
+    </div>
+
+    <div class="editor-exercise">
+        <h3>Άσκηση 2: Εισαγωγή στοιχείων σε πίνακα</h3>
+
+        <p>
+            Δημιούργησε έναν πίνακα
+            <code>int numbers[5]</code>.
+            Χρησιμοποίησε έναν βρόχο
+            <code>for</code> και τη
+            <code>scanf</code> για να διαβάσεις
+            πέντε ακέραιους από τον χρήστη.
+        </p>
+
+        <label class="editor-label" for="editor2">
+            main.c — Άσκηση 2
+        </label>
+
+        <textarea id="editor2" class="code-editor" spellcheck="false">#include <stdio.h>
+
+int main(void) {
+
+    int numbers[5];
+
+    // Διάβασε 5 αριθμούς με for και scanf
+
+    return 0;
+}</textarea>
+
+        <button class="primary-button" onclick="checkEditor(2)">
+            Έλεγχος κώδικα
+        </button>
+
+        <p id="editor-feedback2" class="feedback" aria-live="polite"></p>
+    </div>
+
+    <div class="editor-exercise">
+        <h3>Άσκηση 3: Άθροισμα στοιχείων πίνακα</h3>
+
+        <p>
+            Δημιούργησε έναν πίνακα
+            <code>int numbers[5]</code>
+            με τιμές 1, 2, 3, 4, 5.
+            Δήλωσε μια μεταβλητή
+            <code>sum = 0</code>.
+            Χρησιμοποίησε <code>for</code>
+            για να προσθέσεις όλα τα στοιχεία
+            και εμφάνισε το αποτέλεσμα με
+            <code>printf</code>.
+        </p>
+
+        <label class="editor-label" for="editor3">
+            main.c — Άσκηση 3
+        </label>
+
+        <textarea id="editor3" class="code-editor" spellcheck="false">#include <stdio.h>
+
+int main(void) {
+
+    int numbers[5] = {1, 2, 3, 4, 5};
+    int sum = 0;
+
+    // Υπολόγισε το άθροισμα με for
+
+    // Εμφάνισε το sum
+
+    return 0;
+}</textarea>
+
+        <button class="primary-button" onclick="checkEditor(3)">
+            Έλεγχος κώδικα
+        </button>
+
+        <p id="editor-feedback3" class="feedback" aria-live="polite"></p>
+    </div>
+
+</section>
+
+<a href="/skills" class="back-button">
+    ← Επιστροφή στο Skill Tree
+</a>
+
+</main>
+
+<footer>
+    C Learning App • Επίπεδο 6: Πίνακες στη C
+</footer>
+
+<script>
+"use strict";
+
+/* ==========================================
+   ΕΠΙΠΕΔΟ 6 - ΠΙΝΑΚΕΣ ΣΤΗ C
+   5 ΕΝΟΤΗΤΕΣ x 6 ΕΡΩΤΗΣΕΙΣ = 30
+========================================== */
+
+const sections = [
+
+    /* ΕΝΟΤΗΤΑ 1 */
+
+    {
+        title: "1. Εισαγωγή στους πίνακες",
+
+        description:
+            "Μάθε τι είναι ένας πίνακας και πώς τον δηλώνουμε στη C.",
+
+        theory: `
+            <p>
+                Ένας <strong>πίνακας (array)</strong>
+                αποθηκεύει πολλά στοιχεία
+                <strong>του ίδιου τύπου</strong>
+                κάτω από ένα κοινό όνομα.
+            </p>
+
+            <p>
+                Αν θέλουμε να αποθηκεύσουμε
+                πέντε βαθμούς, αντί για πέντε
+                διαφορετικές μεταβλητές,
+                μπορούμε να χρησιμοποιήσουμε
+                έναν πίνακα.
+            </p>
+
+            <pre><code>int grades[5];</code></pre>
+
+            <p>
+                Το <code>int</code> δηλώνει
+                τον τύπο των στοιχείων,
+                το <code>grades</code> είναι
+                το όνομα και το <code>[5]</code>
+                δηλώνει ότι ο πίνακας έχει
+                πέντε θέσεις.
+            </p>
+
+            <p>
+                Μπορούμε να δώσουμε αρχικές τιμές:
+            </p>
+
+            <pre><code>int grades[5] = {10, 15, 18, 20, 17};</code></pre>
+
+            <p>
+                Οι θέσεις ενός πίνακα στη C
+                ξεκινούν από το <strong>0</strong>.
+                Άρα ένας πίνακας πέντε στοιχείων
+                έχει δείκτες 0, 1, 2, 3 και 4.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main(void) {
+    int numbers[3] = {10, 20, 30};
+
+    printf("%d\\n", numbers[0]);
+    printf("%d\\n", numbers[1]);
+    printf("%d\\n", numbers[2]);
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Ποια δήλωση δημιουργεί πίνακα 5 ακεραίων στη C;",
+                options: [
+                    "int numbers[5];",
+                    "int numbers;",
+                    "array numbers(5);"
+                ],
+                correct: 0,
+                explanation:
+                    "Το int numbers[5]; δηλώνει πίνακα πέντε ακεραίων."
+            },
+            {
+                type: "choice",
+                text: "Από ποιον δείκτη ξεκινούν οι πίνακες στη C;",
+                options: ["1", "0", "5"],
+                correct: 1,
+                explanation:
+                    "Ο πρώτος δείκτης είναι πάντα 0."
+            },
+            {
+                type: "choice",
+                text: "Ποια αρχικοποίηση είναι σωστή;",
+                options: [
+                    "int a[3] = {1, 2, 3};",
+                    "int a[3] = (1, 2, 3);",
+                    "int a[3] = [1, 2, 3];"
+                ],
+                correct: 0,
+                explanation:
+                    "Στη C χρησιμοποιούμε άγκιστρα { } για αρχικοποίηση πίνακα."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε το μέγεθος ώστε να δημιουργηθεί πίνακας τεσσάρων ακεραίων:",
+                code: `int values[___];`,
+                correct: ["4"],
+                explanation:
+                    "Το [4] δεσμεύει χώρο για τέσσερις ακέραιους."
+            },
+            {
+                type: "choice",
+                text: "Ποιος είναι ο τελευταίος έγκυρος δείκτης του int x[6];",
+                options: ["6", "5", "7"],
+                correct: 1,
+                explanation:
+                    "Οι έγκυροι δείκτες είναι 0 έως 5."
+            },
+            {
+                type: "choice",
+                text: "Τι τύπο δεδομένων περιέχει ο πίνακας;",
+                code: `float prices[4];`,
+                options: [
+                    "Ακέραιους int",
+                    "Χαρακτήρες char",
+                    "Δεκαδικούς float"
+                ],
+                correct: 2,
+                explanation:
+                    "Ο τύπος float δηλώνει δεκαδικούς αριθμούς."
+            }
+        ]
+    },
+
+    /* ΕΝΟΤΗΤΑ 2 */
+
+    {
+        title: "2. Πρόσβαση και αλλαγή στοιχείων",
+
+        description:
+            "Μάθε να διαβάζεις και να τροποποιείς στοιχεία με δείκτες.",
+
+        theory: `
+            <p>
+                Για να χρησιμοποιήσουμε ένα
+                συγκεκριμένο στοιχείο,
+                γράφουμε το όνομα του πίνακα
+                και τον δείκτη του.
+            </p>
+
+            <pre><code>int numbers[3] = {10, 20, 30};
+
+printf("%d", numbers[0]);</code></pre>
+
+            <p>
+                Η εντολή εμφανίζει <strong>10</strong>,
+                επειδή το <code>numbers[0]</code>
+                είναι το πρώτο στοιχείο.
+            </p>
+
+            <p>
+                Μπορούμε επίσης να αλλάξουμε
+                την τιμή ενός στοιχείου:
+            </p>
+
+            <pre><code>numbers[1] = 50;</code></pre>
+
+            <p>
+                Τώρα ο πίνακας περιέχει
+                τις τιμές <strong>10, 50, 30</strong>.
+            </p>
+
+            <p>
+                Προσοχή: Σε έναν πίνακα
+                <code>int numbers[3]</code>,
+                οι έγκυροι δείκτες είναι
+                <code>0</code>, <code>1</code>
+                και <code>2</code>.
+            </p>
+
+            <p>
+                Η πρόσβαση σε θέση εκτός
+                των ορίων του πίνακα
+                προκαλεί <strong>μη ορισμένη
+                συμπεριφορά</strong> στη C.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main(void) {
+    int numbers[3] = {10, 20, 30};
+
+    numbers[1] = 50;
+
+    printf("%d\\n", numbers[0]);
+    printf("%d\\n", numbers[1]);
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int a[3] = {5, 10, 15};
+printf("%d", a[0]);`,
+                options: ["5", "10", "15"],
+                correct: 0,
+                explanation:
+                    "Ο δείκτης 0 αναφέρεται στο πρώτο στοιχείο."
+            },
+            {
+                type: "choice",
+                text: "Ποια εντολή αλλάζει το τρίτο στοιχείο σε 99;",
+                code: `int a[4] = {1, 2, 3, 4};`,
+                options: [
+                    "a[3] = 99;",
+                    "a[2] = 99;",
+                    "a(2) = 99;"
+                ],
+                correct: 1,
+                explanation:
+                    "Το τρίτο στοιχείο βρίσκεται στη θέση 2."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει το πρόγραμμα;",
+                code: `int a[3] = {2, 4, 6};
+a[0] = 8;
+printf("%d", a[0]);`,
+                options: ["2", "4", "8"],
+                correct: 2,
+                explanation:
+                    "Η ανάθεση a[0] = 8 αλλάζει το πρώτο στοιχείο."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τον δείκτη για να εμφανιστεί το δεύτερο στοιχείο:",
+                code: `int a[3] = {10, 20, 30};
+printf("%d", a[___]);`,
+                correct: ["1"],
+                explanation:
+                    "Το δεύτερο στοιχείο βρίσκεται στον δείκτη 1."
+            },
+            {
+                type: "choice",
+                text: "Ποια πρόσβαση είναι εκτός ορίων;",
+                code: `int values[4] = {1, 2, 3, 4};`,
+                options: [
+                    "values[0]",
+                    "values[3]",
+                    "values[4]"
+                ],
+                correct: 2,
+                explanation:
+                    "Ο πίνακας έχει έγκυρους δείκτες 0 έως 3."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int x[3] = {3, 6, 9};
+x[2] = x[0];
+printf("%d", x[2]);`,
+                options: ["3", "6", "9"],
+                correct: 0,
+                explanation:
+                    "Το x[2] παίρνει την τιμή του x[0], δηλαδή 3."
+            }
+        ]
+    },
+
+    /* ΕΝΟΤΗΤΑ 3 */
+
+    {
+        title: "3. Πίνακες και βρόχος for",
+
+        description:
+            "Μάθε να διατρέχεις όλα τα στοιχεία ενός πίνακα.",
+
+        theory: `
+            <p>
+                Ο βρόχος <code>for</code>
+                είναι ιδιαίτερα χρήσιμος
+                όταν εργαζόμαστε με πίνακες.
+            </p>
+
+            <p>
+                Αν έχουμε πέντε στοιχεία,
+                δεν χρειάζεται να γράψουμε
+                πέντε διαφορετικές
+                εντολές <code>printf</code>.
+            </p>
+
+            <pre><code>int numbers[5] = {1, 2, 3, 4, 5};
+
+for (int i = 0; i < 5; i++) {
+    printf("%d\\n", numbers[i]);
+}</code></pre>
+
+            <p>
+                Ο μετρητής <code>i</code>
+                ξεκινά από το <code>0</code>
+                και φτάνει μέχρι το <code>4</code>.
+            </p>
+
+            <p>
+                Σε κάθε επανάληψη,
+                η έκφραση <code>numbers[i]</code>
+                επιλέγει το αντίστοιχο στοιχείο.
+            </p>
+
+            <p>
+                Η συνθήκη <code>i &lt; 5</code>
+                είναι σημαντική, επειδή
+                το <code>numbers[5]</code>
+                βρίσκεται εκτός ορίων.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main(void) {
+    int numbers[5] = {2, 4, 6, 8, 10};
+
+    for (int i = 0; i < 5; i++) {
+        printf("%d\\n", numbers[i]);
+    }
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Ποιος βρόχος διατρέχει σωστά πίνακα πέντε στοιχείων;",
+                options: [
+                    "for (int i = 0; i < 5; i++)",
+                    "for (int i = 1; i <= 5; i++)",
+                    "for (int i = 0; i <= 5; i++)"
+                ],
+                correct: 0,
+                explanation:
+                    "Οι δείκτες του πίνακα είναι 0 έως 4."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int a[3] = {2, 4, 6};
+for (int i = 0; i < 3; i++) {
+    printf("%d ", a[i]);
+}`,
+                options: [
+                    "0 1 2",
+                    "2 4 6",
+                    "2 4"
+                ],
+                correct: 1,
+                explanation:
+                    "Το a[i] προσπελαύνει διαδοχικά όλα τα στοιχεία."
+            },
+            {
+                type: "choice",
+                text: "Γιατί ο μετρητής ξεκινά από 0;",
+                options: [
+                    "Επειδή οι δείκτες πινάκων ξεκινούν από 0",
+                    "Επειδή η printf απαιτεί το 0",
+                    "Επειδή οι πίνακες έχουν πάντα μηδενικές τιμές"
+                ],
+                correct: 0,
+                explanation:
+                    "Το πρώτο στοιχείο κάθε πίνακα βρίσκεται στη θέση 0."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τη συνθήκη ώστε να διατρέξουμε πίνακα 8 στοιχείων:",
+                code: `for (int i = 0; i < ___; i++) {
+    printf("%d", a[i]);
+}`,
+                correct: ["8"],
+                explanation:
+                    "Για πίνακα 8 στοιχείων χρησιμοποιούμε i < 8."
+            },
+            {
+                type: "choice",
+                text: "Τι κάνει ο παρακάτω βρόχος;",
+                code: `for (int i = 0; i < 4; i++) {
+    a[i] = 0;
+}`,
+                options: [
+                    "Διαγράφει τον πίνακα",
+                    "Θέτει τα πρώτα 4 στοιχεία σε 0",
+                    "Εμφανίζει 4 αριθμούς"
+                ],
+                correct: 1,
+                explanation:
+                    "Η ανάθεση a[i] = 0 μηδενίζει κάθε αντίστοιχο στοιχείο."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int a[4] = {1, 3, 5, 7};
+for (int i = 3; i >= 0; i--) {
+    printf("%d ", a[i]);
+}`,
+                options: [
+                    "1 3 5 7",
+                    "3 2 1 0",
+                    "7 5 3 1"
+                ],
+                correct: 2,
+                explanation:
+                    "Ο βρόχος διατρέχει τον πίνακα από το τέλος προς την αρχή."
+            }
+        ]
+    },
+
+    /* ΕΝΟΤΗΤΑ 4 */
+
+    {
+        title: "4. Εισαγωγή δεδομένων σε πίνακα",
+
+        description:
+            "Μάθε να γεμίζεις έναν πίνακα με τιμές από τον χρήστη.",
+
+        theory: `
+            <p>
+                Μπορούμε να χρησιμοποιήσουμε
+                τη <code>scanf</code> για να
+                αποθηκεύσουμε τιμές σε έναν πίνακα.
+            </p>
+
+            <pre><code>int numbers[3];
+
+scanf("%d", &numbers[0]);</code></pre>
+
+            <p>
+                Το <code>&amp;numbers[0]</code>
+                δίνει τη διεύθυνση του
+                πρώτου στοιχείου.
+            </p>
+
+            <p>
+                Για να διαβάσουμε πολλά
+                στοιχεία, χρησιμοποιούμε
+                έναν βρόχο <code>for</code>.
+            </p>
+
+            <pre><code>int numbers[3];
+
+for (int i = 0; i < 3; i++) {
+    scanf("%d", &numbers[i]);
+}</code></pre>
+
+            <p>
+                Σε κάθε επανάληψη,
+                η <code>scanf</code> αποθηκεύει
+                έναν νέο ακέραιο
+                στο <code>numbers[i]</code>.
+            </p>
+
+            <p>
+                Για ακέραιους χρησιμοποιούμε
+                <code>%d</code>.
+                Για στοιχεία τύπου
+                <code>float</code>,
+                χρησιμοποιούμε <code>%f</code>.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main(void) {
+    int numbers[3];
+
+    for (int i = 0; i < 3; i++) {
+        printf("Δώσε αριθμό: ");
+        scanf("%d", &numbers[i]);
+    }
+
+    for (int i = 0; i < 3; i++) {
+        printf("%d\\n", numbers[i]);
+    }
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Ποια scanf διαβάζει ακέραιο στο πρώτο στοιχείο;",
+                options: [
+                    "scanf(\"%d\", numbers[0]);",
+                    "scanf(\"%d\", &numbers[0]);",
+                    "scanf(\"%f\", &numbers[0]);"
+                ],
+                correct: 1,
+                explanation:
+                    "Χρειαζόμαστε %d και τη διεύθυνση &numbers[0]."
+            },
+            {
+                type: "choice",
+                text: "Τι κάνει ο κώδικας;",
+                code: `int a[3];
+for (int i = 0; i < 3; i++) {
+    scanf("%d", &a[i]);
+}`,
+                options: [
+                    "Διαβάζει τρεις ακεραίους στον πίνακα",
+                    "Εμφανίζει τρεις ακεραίους",
+                    "Δημιουργεί τρεις πίνακες"
+                ],
+                correct: 0,
+                explanation:
+                    "Κάθε επανάληψη διαβάζει ένα στοιχείο."
+            },
+            {
+                type: "choice",
+                text: "Ποιος προσδιοριστής μορφής χρησιμοποιείται στη scanf για float;",
+                options: ["%d", "%c", "%f"],
+                correct: 2,
+                explanation:
+                    "Η scanf χρησιμοποιεί %f για μεταβλητές float."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τον τελεστή που λείπει:",
+                code: `scanf("%d", ___numbers[i]);`,
+                correct: ["&"],
+                explanation:
+                    "Ο τελεστής & δίνει τη διεύθυνση του στοιχείου."
+            },
+            {
+                type: "choice",
+                text: "Ποια δήλωση και scanf είναι συμβατές;",
+                options: [
+                    "float a[3]; scanf(\"%d\", &a[0]);",
+                    "float a[3]; scanf(\"%f\", &a[0]);",
+                    "int a[3]; scanf(\"%f\", &a[0]);"
+                ],
+                correct: 1,
+                explanation:
+                    "Ο τύπος float συνδυάζεται με %f στη scanf."
+            },
+            {
+                type: "choice",
+                text: "Ποια έκφραση διαβάζει το τελευταίο στοιχείο του int a[5];",
+                options: [
+                    "scanf(\"%d\", &a[5]);",
+                    "scanf(\"%d\", a[4]);",
+                    "scanf(\"%d\", &a[4]);"
+                ],
+                correct: 2,
+                explanation:
+                    "Ο τελευταίος έγκυρος δείκτης είναι 4."
+            }
+        ]
+    },
+
+    /* ΕΝΟΤΗΤΑ 5 */
+
+    {
+        title: "5. Επεξεργασία στοιχείων πίνακα",
+
+        description:
+            "Μάθε να υπολογίζεις άθροισμα, μέσο όρο και μέγιστο με κώδικα C.",
+
+        theory: `
+            <p>
+                Οι πίνακες μάς επιτρέπουν
+                να επεξεργαζόμαστε
+                πολλά δεδομένα με βρόχους.
+            </p>
+
+            <p>
+                Για να υπολογίσουμε
+                το άθροισμα των στοιχείων,
+                δημιουργούμε μια μεταβλητή
+                <code>sum</code> με αρχική τιμή 0.
+            </p>
+
+            <pre><code>int a[3] = {10, 20, 30};
+int sum = 0;
+
+for (int i = 0; i < 3; i++) {
+    sum += a[i];
+}</code></pre>
+
+            <p>
+                Για να υπολογίσουμε
+                τον μέσο όρο, μπορούμε
+                να χρησιμοποιήσουμε:
+            </p>
+
+            <pre><code>float average = (float)sum / 3;</code></pre>
+
+            <p>
+                Η μετατροπή <code>(float)</code>
+                αποτρέπει την ακέραια διαίρεση.
+            </p>
+
+            <p>
+                Για να βρούμε το μέγιστο
+                ενός μη κενού πίνακα,
+                αρχικοποιούμε το <code>max</code>
+                με το πρώτο στοιχείο.
+            </p>
+
+            <pre><code>int max = a[0];
+
+for (int i = 1; i < 3; i++) {
+    if (a[i] > max) {
+        max = a[i];
+    }
+}</code></pre>
+
+            <p>
+                Με αυτόν τον τρόπο
+                ο κώδικας λειτουργεί
+                ακόμη κι αν όλα
+                τα στοιχεία είναι αρνητικά.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main(void) {
+    int numbers[5] = {4, 8, 2, 10, 6};
+    int sum = 0;
+    int max = numbers[0];
+
+    for (int i = 0; i < 5; i++) {
+        sum += numbers[i];
+
+        if (numbers[i] > max) {
+            max = numbers[i];
+        }
+    }
+
+    printf("Sum: %d\\n", sum);
+    printf("Max: %d\\n", max);
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Ποια εντολή προσθέτει το τρέχον στοιχείο στο sum;",
+                options: [
+                    "sum += a[i];",
+                    "sum = i;",
+                    "a[i] = sum;"
+                ],
+                correct: 0,
+                explanation:
+                    "Το sum += a[i] προσθέτει την τιμή του στοιχείου."
+            },
+            {
+                type: "choice",
+                text: "Γιατί γράφουμε int sum = 0; πριν από τον βρόχο;",
+                options: [
+                    "Για να μη χρησιμοποιήσουμε πίνακα",
+                    "Για να ξεκινήσει το άθροισμα από γνωστή τιμή",
+                    "Για να σταματήσει ο βρόχος"
+                ],
+                correct: 1,
+                explanation:
+                    "Ο συσσωρευτής sum πρέπει να αρχικοποιηθεί."
+            },
+            {
+                type: "choice",
+                text: "Ποια αρχικοποίηση του max είναι σωστή για μη κενό πίνακα που μπορεί να περιέχει αρνητικούς αριθμούς;",
+                options: [
+                    "int max = 0;",
+                    "int max = 100;",
+                    "int max = a[0];"
+                ],
+                correct: 2,
+                explanation:
+                    "Η αρχικοποίηση από το πρώτο στοιχείο καλύπτει και αρνητικές τιμές."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τον τελεστή για να εντοπίσουμε μεγαλύτερη τιμή:",
+                code: `if (a[i] ___ max) {
+    max = a[i];
+}`,
+                correct: [">"],
+                explanation:
+                    "Ο τελεστής > ελέγχει αν το στοιχείο είναι μεγαλύτερο."
+            },
+            {
+                type: "choice",
+                text: "Γιατί χρησιμοποιούμε (float)sum / 5 αντί για sum / 5 όταν το sum είναι int;",
+                options: [
+                    "Για να έχουμε δεκαδικό αποτέλεσμα",
+                    "Για να δημιουργήσουμε νέο πίνακα",
+                    "Για να αλλάξουμε το μέγεθος του πίνακα"
+                ],
+                correct: 0,
+                explanation:
+                    "Η μετατροπή σε float επιτρέπει δεκαδική διαίρεση."
+            },
+            {
+                type: "choice",
+                text: "Ποιος κώδικας μετρά τα θετικά στοιχεία του πίνακα;",
+                options: [
+                    "if (a[i] > 0) count++;",
+                    "if (i > 0) a[i]++;",
+                    "if (a[i] == 0) count = 0;"
+                ],
+                correct: 0,
+                explanation:
+                    "Αυξάνουμε τον μετρητή όταν η τιμή του στοιχείου είναι θετική."
+            }
+        ]
+    }
+];
+
+/* ==========================================
+   ΑΠΟΘΗΚΕΥΣΗ ΠΡΟΟΔΟΥ
+========================================== */
+
+const QUIZ_KEY = "c_learning_lesson6_quiz_v2";
+const EDITOR_KEY = "c_learning_lesson6_editors_v2";
+const COMPLETION_KEY = "c_learning_level6_completed";
+
+const totalQuestions = sections.reduce(
+    (sum, section) => sum + section.questions.length,
+    0
+);
+
+function readStorage(key) {
+    try {
+        const data = JSON.parse(localStorage.getItem(key));
+
+        if (
+            data &&
+            typeof data === "object" &&
+            !Array.isArray(data)
+        ) {
+            return data;
+        }
+    } catch (error) {
+        console.warn("Πρόβλημα ανάγνωσης προόδου.");
+    }
+
+    return {};
+}
+
+let answeredQuestions = readStorage(QUIZ_KEY);
+let completedEditors = readStorage(EDITOR_KEY);
+
+/* ==========================================
+   ΑΣΦΑΛΗΣ ΕΜΦΑΝΙΣΗ ΚΕΙΜΕΝΟΥ
+========================================== */
+
+function escapeHTML(value) {
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+/* ==========================================
+   ΔΗΜΙΟΥΡΓΙΑ ΕΝΟΤΗΤΩΝ
+========================================== */
+
+function createSections() {
+    const container =
+        document.getElementById("sections-container");
+
+    container.innerHTML = "";
+
+    sections.forEach((section, sectionIndex) => {
+        const sectionElement =
+            document.createElement("section");
+
+        sectionElement.className = "card";
+
+        sectionElement.innerHTML = `
+            <h2>${escapeHTML(section.title)}</h2>
+
+            <p class="description">
+                ${escapeHTML(section.description)}
+            </p>
+
+            <div class="theory">
+                ${section.theory}
+            </div>
+
+            <h3>Παράδειγμα κώδικα C</h3>
+
+            <pre><code>${escapeHTML(section.example)}</code></pre>
+
+            <div class="section-score">
+                Ολοκληρωμένες ερωτήσεις:
+                <span id="section-score-${sectionIndex}">0</span>
+                / ${section.questions.length}
+            </div>
+
+            <h3>Quiz ενότητας</h3>
+
+            <div id="questions-${sectionIndex}"></div>
+        `;
+
+        container.appendChild(sectionElement);
+
+        const questionsContainer =
+            document.getElementById(
+                `questions-${sectionIndex}`
+            );
+
+        section.questions.forEach((question, questionIndex) => {
+            const element = document.createElement("div");
+            element.className = "question";
+
+            let html = `
+                <h3>
+                    Ερώτηση ${questionIndex + 1}:
+                    ${escapeHTML(question.text)}
+                </h3>
+            `;
+
+            if (question.code) {
+                html += `
+                    <pre><code>${escapeHTML(question.code)}</code></pre>
+                `;
+            }
+
+            if (question.type === "choice") {
+                question.options.forEach((option, optionIndex) => {
+                    html += `
+                        <button
+                            class="option"
+                            onclick="checkChoice(
+                                this,
+                                ${sectionIndex},
+                                ${questionIndex},
+                                ${optionIndex}
+                            )">
+                            ${escapeHTML(option)}
+                        </button>
+                    `;
+                });
+            } else {
+                html += `
+                    <input
+                        class="answer-input"
+                        type="text"
+                        placeholder="Γράψε την απάντησή σου"
+                        autocomplete="off">
+
+                    <button
+                        class="primary-button"
+                        onclick="checkInput(
+                            this,
+                            ${sectionIndex},
+                            ${questionIndex}
+                        )">
+                        Έλεγχος
+                    </button>
+                `;
+            }
+
+            html += `
+                <p class="feedback" aria-live="polite"></p>
+            `;
+
+            element.innerHTML = html;
+            questionsContainer.appendChild(element);
+        });
+    });
+}
+
+/* ==========================================
+   ΕΛΕΓΧΟΣ ΕΡΩΤΗΣΕΩΝ
+========================================== */
+
+function questionKey(sectionIndex, questionIndex) {
+    return `${sectionIndex}-${questionIndex}`;
+}
+
+function getQuestionElement(sectionIndex, questionIndex) {
+    return document.getElementById(
+        `questions-${sectionIndex}`
+    ).children[questionIndex];
+}
+
+function saveAnswer(sectionIndex, questionIndex) {
+    const key = questionKey(sectionIndex, questionIndex);
+
+    if (answeredQuestions[key]) {
+        return;
+    }
+
+    answeredQuestions[key] = true;
+
+    try {
+        localStorage.setItem(
+            QUIZ_KEY,
+            JSON.stringify(answeredQuestions)
+        );
+    } catch (error) {
+        console.warn("Δεν αποθηκεύτηκε η πρόοδος.");
+    }
+
+    refreshScore();
+}
+
+function checkChoice(button, sectionIndex, questionIndex, optionIndex) {
+    const question =
+        sections[sectionIndex].questions[questionIndex];
+
+    const element =
+        getQuestionElement(sectionIndex, questionIndex);
+
+    const feedback = element.querySelector(".feedback");
+
+    if (answeredQuestions[questionKey(sectionIndex, questionIndex)]) {
+        return;
+    }
+
+    if (optionIndex === question.correct) {
+        button.classList.add("correct-option");
+
+        element.querySelectorAll(".option").forEach(btn => {
+            btn.disabled = true;
+        });
+
+        feedback.textContent =
+            "✓ Σωστά! " + question.explanation;
+
+        feedback.className = "feedback correct";
+
+        saveAnswer(sectionIndex, questionIndex);
+    } else {
+        button.classList.add("wrong-option");
+        button.disabled = true;
+
+        feedback.textContent =
+            "✗ Λάθος απάντηση. Προσπάθησε ξανά.";
+
+        feedback.className = "feedback wrong";
+    }
+}
+
+function checkInput(button, sectionIndex, questionIndex) {
+    const question =
+        sections[sectionIndex].questions[questionIndex];
+
+    const element =
+        getQuestionElement(sectionIndex, questionIndex);
+
+    const input = element.querySelector(".answer-input");
+    const feedback = element.querySelector(".feedback");
+
+    if (answeredQuestions[questionKey(sectionIndex, questionIndex)]) {
+        return;
+    }
+
+    const answer = input.value.trim();
+
+    const isCorrect = question.correct.some(
+        correctAnswer => answer === correctAnswer
+    );
+
+    if (isCorrect) {
+        input.disabled = true;
+        button.disabled = true;
+
+        feedback.textContent =
+            "✓ Σωστά! " + question.explanation;
+
+        feedback.className = "feedback correct";
+
+        saveAnswer(sectionIndex, questionIndex);
+    } else {
+        feedback.textContent =
+            "✗ Έλεγξε την απάντησή σου και προσπάθησε ξανά.";
+
+        feedback.className = "feedback wrong";
+    }
+}
+
+/* ==========================================
+   ΒΑΘΜΟΛΟΓΙΑ
+========================================== */
+
+function refreshScore() {
+    let total = 0;
+
+    sections.forEach((section, sectionIndex) => {
+        let sectionScore = 0;
+
+        section.questions.forEach((question, questionIndex) => {
+            if (
+                answeredQuestions[
+                    questionKey(sectionIndex, questionIndex)
+                ]
+            ) {
+                sectionScore++;
+                total++;
+            }
+        });
+
+        document.getElementById(
+            `section-score-${sectionIndex}`
+        ).textContent = sectionScore;
+    });
+
+    document.getElementById("total-score").textContent = total;
+
+    document.getElementById("progress-text").textContent =
+        `Έχεις ολοκληρώσει ${total} από τις ${totalQuestions} ερωτήσεις.`;
+
+    document.getElementById("progress-fill").style.width =
+        (total / totalQuestions * 100) + "%";
+
+    checkCompletion();
+}
+
+/* ==========================================
+   ΕΠΑΝΑΦΟΡΑ ΑΠΑΝΤΗΣΕΩΝ
+========================================== */
+
+function restoreProgress() {
+    sections.forEach((section, sectionIndex) => {
+        section.questions.forEach((question, questionIndex) => {
+            if (
+                !answeredQuestions[
+                    questionKey(sectionIndex, questionIndex)
+                ]
+            ) {
+                return;
+            }
+
+            const element =
+                getQuestionElement(sectionIndex, questionIndex);
+
+            const feedback = element.querySelector(".feedback");
+
+            feedback.textContent =
+                "✓ Έχεις ήδη απαντήσει σωστά!";
+
+            feedback.className = "feedback correct";
+
+            if (question.type === "choice") {
+                element.querySelectorAll(".option").forEach(
+                    (button, optionIndex) => {
+                        button.disabled = true;
+
+                        if (optionIndex === question.correct) {
+                            button.classList.add("correct-option");
+                        }
+                    }
+                );
+            } else {
+                const input =
+                    element.querySelector(".answer-input");
+
+                const button =
+                    element.querySelector("button");
+
+                input.value = question.correct[0];
+                input.disabled = true;
+                button.disabled = true;
+            }
+        });
+    });
+
+    refreshScore();
+}
+
+/* ==========================================
+   ΕΛΕΓΧΟΣ CODE EDITORS
+========================================== */
+
+function removeComments(code) {
+    return code
+        .replace(/\/\*[\s\S]*?\*\//g, "")
+        .replace(/\/\/[^\n]*/g, "");
+}
+
+function checkEditor(number) {
+    if (completedEditors[number]) {
+        return;
+    }
+
+    const textarea =
+        document.getElementById("editor" + number);
+
+    const feedback =
+        document.getElementById("editor-feedback" + number);
+
+    const code = removeComments(textarea.value);
+    const missing = [];
+
+    if (!/#\s*include\s*<stdio\.h>/.test(code)) {
+        missing.push("Πρόσθεσε #include <stdio.h>.");
+    }
+
+    if (!/\bint\s+main\s*\(\s*(?:void\s*)?\)/.test(code)) {
+        missing.push("Χρειάζεται η συνάρτηση int main().");
+    }
+
+    if (!/\breturn\s+0\s*;/.test(code)) {
+        missing.push("Πρόσθεσε return 0;.");
+    }
+
+    /* ΑΣΚΗΣΗ 1: ΔΗΜΙΟΥΡΓΙΑ ΚΑΙ ΕΜΦΑΝΙΣΗ */
+
+    if (number === 1) {
+        if (!/\bint\s+numbers\s*\[\s*5\s*\]/.test(code)) {
+            missing.push("Δήλωσε πίνακα int numbers[5].");
+        }
+
+        if (!/\{\s*10\s*,\s*20\s*,\s*30\s*,\s*40\s*,\s*50\s*\}/.test(code)) {
+            missing.push("Αρχικοποίησε τον πίνακα με 10, 20, 30, 40, 50.");
+        }
+
+        if (!/\bfor\s*\(/.test(code)) {
+            missing.push("Χρησιμοποίησε βρόχο for.");
+        }
+
+        if (!/\bi\s*=\s*0\b/.test(code)) {
+            missing.push("Ξεκίνα τον μετρητή i από το 0.");
+        }
+
+        if (!/\bi\s*<\s*5\b/.test(code)) {
+            missing.push("Χρησιμοποίησε τη συνθήκη i < 5.");
+        }
+
+        if (!/\bnumbers\s*\[\s*i\s*\]/.test(code)) {
+            missing.push("Προσπέλασε τα στοιχεία με numbers[i].");
+        }
+
+        if (!/printf\s*\(\s*"[^"]*%d[^"]*"\s*,\s*numbers\s*\[\s*i\s*\]\s*\)/.test(code)) {
+            missing.push("Εμφάνισε τα στοιχεία με printf και %d.");
+        }
+    }
+
+    /* ΑΣΚΗΣΗ 2: ΕΙΣΑΓΩΓΗ ΜΕ SCANF */
+
+    if (number === 2) {
+        if (!/\bint\s+numbers\s*\[\s*5\s*\]/.test(code)) {
+            missing.push("Δήλωσε int numbers[5].");
+        }
+
+        if (!/\bfor\s*\(/.test(code)) {
+            missing.push("Χρησιμοποίησε βρόχο for.");
+        }
+
+        if (!/\bi\s*=\s*0\b/.test(code)) {
+            missing.push("Ξεκίνα τον μετρητή i από το 0.");
+        }
+
+        if (!/\bi\s*<\s*5\b/.test(code)) {
+            missing.push("Χρησιμοποίησε τη συνθήκη i < 5.");
+        }
+
+        if (!/scanf\s*\(\s*"%d"\s*,\s*&\s*numbers\s*\[\s*i\s*\]\s*\)/.test(code)) {
+            missing.push("Χρησιμοποίησε scanf(\"%d\", &numbers[i]);.");
+        }
+    }
+
+    /* ΑΣΚΗΣΗ 3: ΑΘΡΟΙΣΜΑ */
+
+    if (number === 3) {
+        if (!/\bint\s+numbers\s*\[\s*5\s*\]/.test(code)) {
+            missing.push("Δήλωσε int numbers[5].");
+        }
+
+        if (!/\{\s*1\s*,\s*2\s*,\s*3\s*,\s*4\s*,\s*5\s*\}/.test(code)) {
+            missing.push("Χρησιμοποίησε τις τιμές 1, 2, 3, 4, 5.");
+        }
+
+        if (!/\bint\s+sum\s*=\s*0\s*;/.test(code)) {
+            missing.push("Δήλωσε int sum = 0;.");
+        }
+
+        if (!/\bfor\s*\(/.test(code)) {
+            missing.push("Χρησιμοποίησε βρόχο for.");
+        }
+
+        if (!/\bi\s*=\s*0\b/.test(code)) {
+            missing.push("Ξεκίνα τον μετρητή i από το 0.");
+        }
+
+        if (!/\bi\s*<\s*5\b/.test(code)) {
+            missing.push("Χρησιμοποίησε τη συνθήκη i < 5.");
+        }
+
+        if (!/sum\s*\+=\s*numbers\s*\[\s*i\s*\]/.test(code) &&
+            !/sum\s*=\s*sum\s*\+\s*numbers\s*\[\s*i\s*\]/.test(code)) {
+            missing.push("Πρόσθεσε κάθε στοιχείο στο sum.");
+        }
+
+        if (!/printf\s*\(\s*"[^"]*%d[^"]*"\s*,\s*sum\s*\)/.test(code)) {
+            missing.push("Εμφάνισε το sum με printf.");
+        }
+    }
+
+    if (missing.length === 0) {
+        completedEditors[number] = textarea.value;
+
+        try {
+            localStorage.setItem(
+                EDITOR_KEY,
+                JSON.stringify(completedEditors)
+            );
+        } catch (error) {
+            console.warn("Δεν αποθηκεύτηκε η άσκηση.");
+        }
+
+        textarea.disabled = true;
+
+        textarea.parentElement.querySelector(
+            ".primary-button"
+        ).disabled = true;
+
+        feedback.textContent =
+            "✓ Μπράβο! Ο κώδικας περιλαμβάνει τα ζητούμενα στοιχεία. Δεν εκτελέστηκε σε compiler.";
+
+        feedback.className = "feedback correct";
+
+        refreshEditorScore();
+    } else {
+        feedback.textContent =
+            "Χρειάζονται διορθώσεις: " + missing.join(" ");
+
+        feedback.className = "feedback wrong";
+    }
+}
+
+/* ==========================================
+   ΠΡΟΟΔΟΣ EDITORS
+========================================== */
+
+function refreshEditorScore() {
+    let score = 0;
+
+    for (let number = 1; number <= 3; number++) {
+        if (completedEditors[number]) {
+            score++;
+        }
+    }
+
+    document.getElementById("editor-score").textContent = score;
+
+    document.getElementById("editor-progress").textContent =
+        score + " / 3";
+
+    checkCompletion();
+}
+
+function restoreEditors() {
+    for (let number = 1; number <= 3; number++) {
+        if (!completedEditors[number]) {
+            continue;
+        }
+
+        const textarea =
+            document.getElementById("editor" + number);
+
+        const feedback =
+            document.getElementById("editor-feedback" + number);
+
+        textarea.value = completedEditors[number];
+        textarea.disabled = true;
+
+        textarea.parentElement.querySelector(
+            ".primary-button"
+        ).disabled = true;
+
+        feedback.textContent =
+            "✓ Έχεις ήδη ολοκληρώσει αυτή την άσκηση.";
+
+        feedback.className = "feedback correct";
+    }
+
+    refreshEditorScore();
+}
+
+/* ==========================================
+   ΟΛΟΚΛΗΡΩΣΗ ΕΠΙΠΕΔΟΥ
+========================================== */
+
+function checkCompletion() {
+    const answered = sections.reduce(
+        (total, section, sectionIndex) => {
+            return total + section.questions.filter(
+                (question, questionIndex) =>
+                    answeredQuestions[
+                        questionKey(sectionIndex, questionIndex)
+                    ] === true
+            ).length;
+        },
+        0
+    );
+
+    const editorsDone = [1, 2, 3].filter(
+        number => Boolean(completedEditors[number])
+    ).length;
+
+    const completed =
+        answered === totalQuestions &&
+        editorsDone === 3;
+
+    document.getElementById(
+        "completion-message"
+    ).style.display = completed ? "block" : "none";
+
+    try {
+        if (completed) {
+            localStorage.setItem(COMPLETION_KEY, "true");
+        } else {
+            localStorage.removeItem(COMPLETION_KEY);
+        }
+    } catch (error) {
+        console.warn("Δεν ενημερώθηκε η ολοκλήρωση.");
+    }
+}
+
+/* ==========================================
+   ΑΡΧΙΚΟΣ ΚΩΔΙΚΑΣ EDITORS
+========================================== */
+
+const initialCode = [
+    "",
+
+    `#include <stdio.h>
+
+int main(void) {
+
+    // Δημιούργησε τον πίνακα numbers[5]
+
+    // Εμφάνισε τα στοιχεία με for
+
+    return 0;
+}`,
+
+    `#include <stdio.h>
+
+int main(void) {
+
+    int numbers[5];
+
+    // Διάβασε 5 αριθμούς με for και scanf
+
+    return 0;
+}`,
+
+    `#include <stdio.h>
+
+int main(void) {
+
+    int numbers[5] = {1, 2, 3, 4, 5};
+    int sum = 0;
+
+    // Υπολόγισε το άθροισμα με for
+
+    // Εμφάνισε το sum
+
+    return 0;
+}`
+];
+
+/* ==========================================
+   ΕΠΑΝΑΦΟΡΑ ΟΛΗΣ ΤΗΣ ΠΡΟΟΔΟΥ
+========================================== */
+
+function resetProgress() {
+    const confirmed = confirm(
+        "Θέλεις να μηδενίσεις τις 30 ερωτήσεις και τις 3 ασκήσεις;"
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+        localStorage.removeItem(QUIZ_KEY);
+        localStorage.removeItem(EDITOR_KEY);
+        localStorage.removeItem(COMPLETION_KEY);
+    } catch (error) {
+        console.warn("Δεν διαγράφηκε η πρόοδος.");
+    }
+
+    answeredQuestions = {};
+    completedEditors = {};
+
+    createSections();
+    refreshScore();
+
+    for (let number = 1; number <= 3; number++) {
+        const textarea =
+            document.getElementById("editor" + number);
+
+        const feedback =
+            document.getElementById(
+                "editor-feedback" + number
+            );
+
+        textarea.value = initialCode[number];
+        textarea.disabled = false;
+
+        textarea.parentElement.querySelector(
+            ".primary-button"
+        ).disabled = false;
+
+        feedback.textContent = "";
+        feedback.className = "feedback";
+    }
+
+    refreshEditorScore();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+/* ==========================================
+   ΕΚΚΙΝΗΣΗ
+========================================== */
+
+createSections();
+restoreProgress();
+restoreEditors();
+
+</script>
+
+</body>
+</html>

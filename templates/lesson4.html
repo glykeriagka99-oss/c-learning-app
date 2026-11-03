@@ -1,0 +1,1841 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Επίπεδο 4 - Συνθήκες στη C</title>
+
+<style>
+:root {
+    --navy: #0B1220;
+    --slate: #16243A;
+    --blue: #2563EB;
+    --cyan: #22D3EE;
+    --green: #10B981;
+    --bg: #F1F5F9;
+    --text: #1E293B;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+nav {
+    background: var(--navy);
+    padding: 20px 7%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    color: white;
+    text-decoration: none;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.logo span { color: var(--cyan); }
+
+.nav-link {
+    color: #CBD5E1;
+    text-decoration: none;
+}
+
+header {
+    background: linear-gradient(135deg, var(--navy), var(--slate));
+    color: white;
+    padding: 55px 20px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 35px;
+    margin: 0 0 15px;
+}
+
+header p {
+    color: #CBD5E1;
+    line-height: 1.7;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 35px auto;
+    padding: 0 20px;
+}
+
+.card {
+    background: white;
+    padding: 28px;
+    margin-bottom: 30px;
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+}
+
+.card h2 {
+    margin-top: 0;
+    color: #0F172A;
+}
+
+.description {
+    color: #64748B;
+    line-height: 1.8;
+}
+
+.theory {
+    background: #EFF6FF;
+    border-left: 4px solid var(--blue);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    line-height: 1.8;
+}
+
+pre {
+    background: #0F172A;
+    color: #E2E8F0;
+    padding: 20px;
+    border-radius: 10px;
+    overflow-x: auto;
+    line-height: 1.7;
+}
+
+code, textarea {
+    font-family: Consolas, monospace;
+}
+
+.score-number {
+    color: var(--blue);
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.progress {
+    height: 12px;
+    background: #E2E8F0;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 15px 0;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--green);
+    transition: width 0.3s;
+}
+
+.section-score {
+    background: #F1F5F9;
+    border-radius: 8px;
+    padding: 14px;
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+.question {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 18px 0;
+}
+
+.question h3 {
+    font-size: 17px;
+    line-height: 1.6;
+    margin-top: 0;
+}
+
+.option {
+    display: block;
+    width: 100%;
+    background: white;
+    border: 1px solid #CBD5E1;
+    border-radius: 8px;
+    padding: 13px 15px;
+    margin: 9px 0;
+    text-align: left;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.option:hover:not(:disabled) {
+    background: #DBEAFE;
+    border-color: var(--blue);
+}
+
+.option.correct-option {
+    background: #D1FAE5;
+    border-color: var(--green);
+}
+
+.option.wrong-option {
+    background: #FEE2E2;
+    border-color: #EF4444;
+}
+
+.answer-input {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    margin-bottom: 12px;
+    border: 1px solid #CBD5E1;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+button {
+    font-family: inherit;
+}
+
+.primary-button {
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.primary-button:hover:not(:disabled) {
+    background: #1D4ED8;
+}
+
+button:disabled {
+    opacity: 0.8;
+    cursor: default;
+}
+
+.reset-button {
+    background: #FEE2E2;
+    color: #B91C1C;
+    border: 1px solid #FECACA;
+    border-radius: 8px;
+    padding: 12px 18px;
+    cursor: pointer;
+}
+
+.feedback {
+    margin-top: 12px;
+    font-weight: bold;
+    line-height: 1.6;
+}
+
+.correct { color: #047857; }
+.wrong { color: #B91C1C; }
+
+.editor-section {
+    border-top: 5px solid var(--cyan);
+}
+
+.editor-score {
+    background: #DBEAFE;
+    color: #1E40AF;
+    border-radius: 10px;
+    padding: 16px;
+    font-weight: bold;
+}
+
+.editor-exercise {
+    background: #F8FAFC;
+    border: 1px solid #CBD5E1;
+    border-radius: 12px;
+    padding: 22px;
+    margin: 25px 0;
+}
+
+.editor-exercise p { line-height: 1.7; }
+
+.editor-label {
+    display: block;
+    background: var(--slate);
+    color: var(--cyan);
+    padding: 12px 16px;
+    border-radius: 10px 10px 0 0;
+    font-family: Consolas, monospace;
+}
+
+.code-editor {
+    display: block;
+    width: 100%;
+    min-height: 270px;
+    background: #0F172A;
+    color: #E2E8F0;
+    border: 1px solid #334155;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 18px;
+    font-size: 14px;
+    line-height: 1.6;
+    resize: vertical;
+    tab-size: 4;
+}
+
+.code-editor:focus {
+    outline: 2px solid var(--blue);
+}
+
+.back-button {
+    display: inline-block;
+    background: var(--navy);
+    color: white;
+    text-decoration: none;
+    padding: 14px 24px;
+    border-radius: 8px;
+    margin-bottom: 40px;
+}
+
+footer {
+    background: var(--navy);
+    color: #94A3B8;
+    padding: 25px;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    header h1 { font-size: 27px; }
+    .container { padding: 0 12px; }
+    .card { padding: 18px; }
+    .editor-exercise { padding: 14px; }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <a href="/" class="logo">C<span>Learning</span></a>
+    <a href="/skills" class="nav-link">Skill Tree</a>
+</nav>
+
+<header>
+    <h1>Επίπεδο 4: Συνθήκες στη C</h1>
+    <p>
+        if - else - else if -Εμφωλευμένες συνθήκες • switch
+    </p>
+    <p>5 ενότητες - 30 ερωτήσεις - 3 ασκήσεις με editor</p>
+</header>
+
+<main class="container">
+
+<section class="card">
+    <h2>Η πρόοδός σου</h2>
+
+    <div class="score-number">
+        <span id="total-score">0</span> / 30
+    </div>
+
+    <p id="progress-text">
+        Έχεις ολοκληρώσει 0 από τις 30 ερωτήσεις.
+    </p>
+
+    <div class="progress">
+        <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <p>
+    Πρακτικές ασκήσεις:
+    <strong id="editor-progress">0 / 3</strong>
+</p>
+
+    <button class="reset-button" onclick="resetProgress()">
+        Επαναφορά όλης της προόδου
+    </button>
+</section>
+
+<div id="sections-container"></div>
+
+<section class="card editor-section">
+
+    <h2>Τελική Επανάληψη – Γράψε κώδικα C</h2>
+
+    <p class="description">
+        Λύσε τις τρεις ασκήσεις στον editor.
+        Ο έλεγχος εξετάζει συγκεκριμένα στοιχεία
+        του κώδικα χωρίς να τον εκτελεί.
+    </p>
+
+    <div class="editor-score">
+        Ολοκληρωμένες ασκήσεις:
+        <span id="editor-score">0</span> / 3
+    </div>
+
+    <!-- EDITOR 1 -->
+
+    <div class="editor-exercise">
+
+        <h3>Άσκηση 1: Έλεγχος ενηλικίωσης</h3>
+
+        <p>
+            Γράψε πρόγραμμα που δηλώνει
+            <code>int age = 20;</code>.
+            Με <code>if / else</code> έλεγξε αν
+            <code>age &gt;= 18</code>.
+            Αν ισχύει, εμφάνισε
+            <code>Adult</code>, αλλιώς
+            <code>Minor</code>.
+        </p>
+
+        <label class="editor-label" for="editor1">
+            main.c — Άσκηση 1
+        </label>
+
+        <textarea id="editor1" class="code-editor"
+                  spellcheck="false">#include <stdio.h>
+
+int main() {
+
+    // Δήλωσε int age = 20;
+    // Γράψε if (age >= 18)
+    // Γράψε else
+    // Εμφάνισε Adult ή Minor
+
+    return 0;
+}</textarea>
+
+        <button class="primary-button"
+                onclick="checkEditor(1)">
+            Έλεγχος κώδικα
+        </button>
+
+        <p id="editor-feedback1"
+           class="feedback"
+           aria-live="polite"></p>
+    </div>
+
+    <!-- EDITOR 2 -->
+
+    <div class="editor-exercise">
+
+        <h3>Άσκηση 2: Θετικός, αρνητικός ή μηδέν</h3>
+
+        <p>
+            Δήλωσε <code>int number = -5;</code>.
+            Χρησιμοποίησε <code>if</code>,
+            <code>else if</code> και <code>else</code>.
+            Αν ο αριθμός είναι μεγαλύτερος από 0,
+            εμφάνισε <code>Positive</code>.
+            Αν είναι μικρότερος από 0,
+            εμφάνισε <code>Negative</code>.
+            Διαφορετικά εμφάνισε <code>Zero</code>.
+        </p>
+
+        <label class="editor-label" for="editor2">
+            main.c — Άσκηση 2
+        </label>
+
+        <textarea id="editor2" class="code-editor"
+                  spellcheck="false">#include <stdio.h>
+
+int main() {
+
+    // Δήλωσε int number = -5;
+    // Έλεγξε number > 0
+    // Έλεγξε number < 0
+    // Χρησιμοποίησε else
+
+    return 0;
+}</textarea>
+
+        <button class="primary-button"
+                onclick="checkEditor(2)">
+            Έλεγχος κώδικα
+        </button>
+
+        <p id="editor-feedback2"
+           class="feedback"
+           aria-live="polite"></p>
+    </div>
+
+    <!-- EDITOR 3 -->
+
+    <div class="editor-exercise">
+
+        <h3>Άσκηση 3: Επιλογή με switch</h3>
+
+        <p>
+            Δήλωσε <code>int choice = 2;</code>.
+            Χρησιμοποίησε
+            <code>switch (choice)</code>.
+            Στο <code>case 1</code> εμφάνισε
+            <code>One</code>, στο
+            <code>case 2</code> εμφάνισε
+            <code>Two</code> και στο
+            <code>default</code> εμφάνισε
+            <code>Unknown</code>.
+            Βάλε <code>break;</code> μετά
+            από κάθε case.
+        </p>
+
+        <label class="editor-label" for="editor3">
+            main.c — Άσκηση 3
+        </label>
+
+        <textarea id="editor3" class="code-editor"
+                  spellcheck="false">#include <stdio.h>
+
+int main() {
+
+    // Δήλωσε int choice = 2;
+    // Χρησιμοποίησε switch
+    // Γράψε case 1, case 2 και default
+    // Μην ξεχάσεις τα break
+
+    return 0;
+}</textarea>
+
+        <button class="primary-button"
+                onclick="checkEditor(3)">
+            Έλεγχος κώδικα
+        </button>
+
+        <p id="editor-feedback3"
+           class="feedback"
+           aria-live="polite"></p>
+    </div>
+
+</section>
+
+<a href="/skills" class="back-button">
+    ← Επιστροφή στο Skill Tree
+</a>
+
+</main>
+
+<footer>
+    C Learning App • Microlearning για τη γλώσσα C
+</footer>
+
+<script>
+
+/*
+    ΕΠΙΠΕΔΟ 4
+    5 ενότητες × 6 ερωτήσεις = 30
+*/
+
+const sections = [
+
+    // ==========================================
+    // ΕΝΟΤΗΤΑ 1: IF
+    // ==========================================
+
+    {
+        title: "1. Η εντολή if",
+
+        description:
+            "Μάθε πώς εκτελούμε εντολές όταν ισχύει μια συνθήκη.",
+
+        theory: `
+            <p>
+                Η εντολή <code>if</code> επιτρέπει
+                σε ένα πρόγραμμα να εκτελεί
+                κώδικα μόνο όταν μια συνθήκη
+                είναι αληθής.
+            </p>
+
+            <p>
+                Η συνθήκη γράφεται μέσα
+                σε παρενθέσεις:
+                <code>if (x &gt; 0)</code>.
+            </p>
+
+            <p>
+                Όταν η συνθήκη είναι ψευδής,
+                οι εντολές μέσα στο σώμα
+                του <code>if</code> παραλείπονται.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main() {
+    int age = 20;
+
+    if (age >= 18) {
+        printf("Adult");
+    }
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Ποια εντολή χρησιμοποιούμε για έλεγχο συνθήκης;",
+                options: ["if", "printf", "include"],
+                correct: 0,
+                explanation:
+                    "Η if ελέγχει αν μια συνθήκη είναι αληθής."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int x = 10;
+if (x > 5) {
+    printf("YES");
+}`,
+                options: ["YES", "NO", "Τίποτα"],
+                correct: 0,
+                explanation:
+                    "Η συνθήκη 10 > 5 είναι αληθής."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int x = 3;
+if (x > 10) {
+    printf("Hello");
+}`,
+                options: ["Hello", "3", "Τίποτα"],
+                correct: 2,
+                explanation:
+                    "Η συνθήκη είναι ψευδής, άρα δεν εκτελείται η printf."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τη λέξη για τον έλεγχο συνθήκης:",
+                code: `___ (x == 5) {
+    printf("Equal");
+}`,
+                correct: ["if"],
+                explanation:
+                    "Η εντολή αρχίζει με if."
+            },
+            {
+                type: "choice",
+                text: "Ποια σύνταξη είναι σωστή;",
+                options: [
+                    "if (x > 0) { printf(\"OK\"); }",
+                    "if x > 0 { printf(\"OK\"); }",
+                    "if [x > 0] { printf(\"OK\"); }"
+                ],
+                correct: 0,
+                explanation:
+                    "Η συνθήκη της if μπαίνει σε παρενθέσεις."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int x = 0;
+if (x == 0) {
+    printf("Zero");
+}`,
+                options: ["Zero", "0", "Τίποτα"],
+                correct: 0,
+                explanation:
+                    "Το x == 0 είναι αληθές."
+            }
+        ]
+    },
+
+    // ==========================================
+    // ΕΝΟΤΗΤΑ 2: IF / ELSE
+    // ==========================================
+
+    {
+        title: "2. Η εντολή if / else",
+
+        description:
+            "Μάθε να επιλέγεις ανάμεσα σε δύο διαφορετικές ενέργειες.",
+
+        theory: `
+            <p>
+                Η <code>if / else</code>
+                χρησιμοποιείται όταν θέλουμε
+                να εκτελέσουμε διαφορετικό κώδικα
+                ανάλογα με το αποτέλεσμα
+                μιας συνθήκης.
+            </p>
+
+            <p>
+                Αν η συνθήκη είναι αληθής,
+                εκτελείται το σώμα του
+                <code>if</code>.
+            </p>
+
+            <p>
+                Αν είναι ψευδής,
+                εκτελείται το σώμα του
+                <code>else</code>.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main() {
+    int number = 7;
+
+    if (number % 2 == 0) {
+        printf("Even");
+    } else {
+        printf("Odd");
+    }
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Πότε εκτελείται το else;",
+                options: [
+                    "Όταν η συνθήκη if είναι ψευδής",
+                    "Πάντα",
+                    "Όταν η συνθήκη if είναι αληθής"
+                ],
+                correct: 0,
+                explanation:
+                    "Το else εκτελείται όταν αποτύχει η συνθήκη if."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int age = 15;
+if (age >= 18) {
+    printf("Adult");
+} else {
+    printf("Minor");
+}`,
+                options: ["Adult", "Minor", "Τίποτα"],
+                correct: 1,
+                explanation:
+                    "Η ηλικία 15 είναι μικρότερη από 18."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int x = 4;
+if (x % 2 == 0) {
+    printf("Even");
+} else {
+    printf("Odd");
+}`,
+                options: ["Even", "Odd", "4"],
+                correct: 0,
+                explanation:
+                    "Το 4 είναι άρτιος αριθμός."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τη λέξη για την εναλλακτική περίπτωση:",
+                code: `if (x > 0) {
+    printf("Positive");
+} ___ {
+    printf("Other");
+}`,
+                correct: ["else"],
+                explanation:
+                    "Η εναλλακτική διαδρομή γράφεται με else."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int a = 5;
+int b = 9;
+if (a > b) {
+    printf("A");
+} else {
+    printf("B");
+}`,
+                options: ["A", "B", "AB"],
+                correct: 1,
+                explanation:
+                    "Το 5 > 9 είναι ψευδές."
+            },
+            {
+                type: "choice",
+                text: "Ποια πρόταση είναι σωστή;",
+                options: [
+                    "Σε ένα απλό if / else εκτελείται ένα από τα δύο σώματα",
+                    "Εκτελούνται πάντα και τα δύο",
+                    "Το else χρειάζεται δική του συνθήκη"
+                ],
+                correct: 0,
+                explanation:
+                    "Το if / else επιλέγει μία από δύο διαδρομές."
+            }
+        ]
+    },
+
+    // ==========================================
+    // ΕΝΟΤΗΤΑ 3: ELSE IF
+    // ==========================================
+
+    {
+        title: "3. Πολλαπλές συνθήκες με else if",
+
+        description:
+            "Έλεγξε περισσότερες από δύο περιπτώσεις.",
+
+        theory: `
+            <p>
+                Όταν υπάρχουν πολλές επιλογές,
+                μπορούμε να χρησιμοποιήσουμε
+                <code>else if</code>.
+            </p>
+
+            <p>
+                Οι συνθήκες ελέγχονται
+                με τη σειρά.
+                Μόλις βρεθεί μια αληθής,
+                εκτελείται το αντίστοιχο σώμα
+                και παραλείπονται τα επόμενα
+                μέρη της ίδιας αλυσίδας.
+            </p>
+
+            <p>
+                Το τελικό <code>else</code>
+                είναι προαιρετικό.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main() {
+    int score = 75;
+
+    if (score >= 90) {
+        printf("Excellent");
+    } else if (score >= 50) {
+        printf("Pass");
+    } else {
+        printf("Fail");
+    }
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Ποια σύνταξη χρησιμοποιούμε για επιπλέον συνθήκη;",
+                options: ["else if", "if else", "elif"],
+                correct: 0,
+                explanation:
+                    "Στη C χρησιμοποιούμε else if."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int x = 0;
+if (x > 0) {
+    printf("Positive");
+} else if (x < 0) {
+    printf("Negative");
+} else {
+    printf("Zero");
+}`,
+                options: ["Positive", "Negative", "Zero"],
+                correct: 2,
+                explanation:
+                    "Το x είναι 0."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int score = 80;
+if (score >= 90) {
+    printf("A");
+} else if (score >= 70) {
+    printf("B");
+} else {
+    printf("C");
+}`,
+                options: ["A", "B", "C"],
+                correct: 1,
+                explanation:
+                    "Το 80 είναι τουλάχιστον 70 αλλά μικρότερο από 90."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τη σύνταξη για τη δεύτερη συνθήκη:",
+                code: `if (x > 0) {
+    printf("Positive");
+} ___ (x < 0) {
+    printf("Negative");
+}`,
+                correct: ["else if"],
+                explanation:
+                    "Η σωστή σύνταξη είναι else if."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int x = 100;
+if (x > 50) {
+    printf("High");
+} else if (x > 10) {
+    printf("Medium");
+} else {
+    printf("Low");
+}`,
+                options: ["High", "Medium", "HighMedium"],
+                correct: 0,
+                explanation:
+                    "Η πρώτη συνθήκη είναι αληθής, οπότε δεν εξετάζεται η επόμενη."
+            },
+            {
+                type: "choice",
+                text: "Ποιο μέρος μιας αλυσίδας if / else if είναι προαιρετικό;",
+                options: [
+                    "Το τελικό else",
+                    "Οι παρενθέσεις του if",
+                    "Η συνθήκη του if"
+                ],
+                correct: 0,
+                explanation:
+                    "Δεν είναι απαραίτητο να υπάρχει τελικό else."
+            }
+        ]
+    },
+
+    // ==========================================
+    // ΕΝΟΤΗΤΑ 4: ΣΥΝΔΥΑΣΜΕΝΕΣ ΣΥΝΘΗΚΕΣ
+    // ==========================================
+
+    {
+        title: "4. Συνδυασμένες και εμφωλευμένες συνθήκες",
+
+        description:
+            "Χρησιμοποίησε λογικούς τελεστές και if μέσα σε if.",
+
+        theory: `
+            <p>
+                Μπορούμε να συνδυάσουμε
+                συνθήκες με λογικούς τελεστές.
+            </p>
+
+            <p>
+                Το <code>&amp;&amp;</code>
+                απαιτεί και οι δύο συνθήκες
+                να είναι αληθείς.
+            </p>
+
+            <p>
+                Το <code>||</code>
+                απαιτεί τουλάχιστον μία
+                συνθήκη να είναι αληθής.
+            </p>
+
+            <p>
+                Μπορούμε επίσης να γράψουμε
+                μια <code>if</code> μέσα
+                σε μια άλλη <code>if</code>.
+                Αυτό ονομάζεται εμφωλευμένη συνθήκη.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main() {
+    int age = 20;
+    int hasTicket = 1;
+
+    if (age >= 18 && hasTicket == 1) {
+        printf("Entry allowed");
+    }
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int age = 20;
+int ticket = 1;
+if (age >= 18 && ticket == 1) {
+    printf("Enter");
+}`,
+                options: ["Enter", "Exit", "Τίποτα"],
+                correct: 0,
+                explanation:
+                    "Και οι δύο συνθήκες είναι αληθείς."
+            },
+            {
+                type: "choice",
+                text: "Ποιος τελεστής αρκεί να έχει μία αληθή συνθήκη;",
+                options: ["&&", "||", "=="],
+                correct: 1,
+                explanation:
+                    "Ο λογικός τελεστής Ή είναι ||."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int x = 5;
+if (x > 0) {
+    if (x < 10) {
+        printf("Inside");
+    }
+}`,
+                options: ["Inside", "Outside", "Τίποτα"],
+                correct: 0,
+                explanation:
+                    "Και η εξωτερική και η εσωτερική συνθήκη είναι αληθείς."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τον τελεστή ώστε να ισχύουν και οι δύο συνθήκες:",
+                code: "if (age >= 18 ___ hasTicket == 1)",
+                correct: ["&&"],
+                explanation:
+                    "Χρησιμοποιούμε && για λογικό ΚΑΙ."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int x = 12;
+if (x < 0 || x > 10) {
+    printf("Outside");
+} else {
+    printf("Inside");
+}`,
+                options: ["Outside", "Inside", "Τίποτα"],
+                correct: 0,
+                explanation:
+                    "Το 12 > 10 είναι αληθές."
+            },
+            {
+                type: "choice",
+                text: "Τι είναι εμφωλευμένη if;",
+                options: [
+                    "Μια if μέσα σε άλλη if",
+                    "Μια if χωρίς συνθήκη",
+                    "Μια if που εκτελείται πάντα"
+                ],
+                correct: 0,
+                explanation:
+                    "Η εμφώλευση σημαίνει ότι μία if βρίσκεται μέσα σε άλλη."
+            }
+        ]
+    },
+
+    // ==========================================
+    // ΕΝΟΤΗΤΑ 5: SWITCH / CASE
+    // ==========================================
+
+    {
+        title: "5. Η εντολή switch / case",
+
+        description:
+            "Μάθε να επιλέγεις ανάμεσα σε πολλές σταθερές τιμές.",
+
+        theory: `
+            <p>
+                Η <code>switch</code>
+                επιλέγει ποιο τμήμα κώδικα
+                θα εκτελεστεί με βάση
+                την τιμή μιας έκφρασης.
+            </p>
+
+            <p>
+                Κάθε <code>case</code>
+                αντιστοιχεί σε μία σταθερή τιμή.
+            </p>
+
+            <p>
+                Η εντολή <code>break;</code>
+                σταματά την εκτέλεση
+                της switch, ώστε να μην
+                συνεχίσει στο επόμενο case.
+            </p>
+
+            <p>
+                Το <code>default</code>
+                εκτελείται όταν δεν ταιριάζει
+                κανένα case.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main() {
+    int day = 2;
+
+    switch (day) {
+        case 1:
+            printf("Monday");
+            break;
+        case 2:
+            printf("Tuesday");
+            break;
+        default:
+            printf("Unknown");
+    }
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Ποια εντολή χρησιμοποιείται για επιλογή ανάμεσα σε διαφορετικές σταθερές τιμές;",
+                options: ["switch", "printf", "return"],
+                correct: 0,
+                explanation:
+                    "Η switch επιλέγει ανάμεσα σε case."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int x = 2;
+switch (x) {
+    case 1:
+        printf("One");
+        break;
+    case 2:
+        printf("Two");
+        break;
+    default:
+        printf("Other");
+}`,
+                options: ["One", "Two", "Other"],
+                correct: 1,
+                explanation:
+                    "Η τιμή 2 ταιριάζει με το case 2."
+            },
+            {
+                type: "choice",
+                text: "Ποιος είναι ο ρόλος του break μέσα σε ένα case;",
+                options: [
+                    "Τερματίζει τη switch",
+                    "Αρχίζει ξανά τη switch",
+                    "Αλλάζει την τιμή της μεταβλητής"
+                ],
+                correct: 0,
+                explanation:
+                    "Το break σταματά την εκτέλεση της switch."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τη λέξη για την προεπιλεγμένη περίπτωση:",
+                code: `switch (x) {
+    case 1:
+        break;
+    ___:
+        printf("Other");
+}`,
+                correct: ["default"],
+                explanation:
+                    "Η προεπιλεγμένη περίπτωση είναι default."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int x = 5;
+switch (x) {
+    case 1:
+        printf("A");
+        break;
+    case 2:
+        printf("B");
+        break;
+    default:
+        printf("C");
+}`,
+                options: ["A", "B", "C"],
+                correct: 2,
+                explanation:
+                    "Δεν υπάρχει case 5, οπότε εκτελείται το default."
+            },
+            {
+                type: "choice",
+                text: "Τι μπορεί να συμβεί αν λείπει το break από ένα case;",
+                options: [
+                    "Η εκτέλεση μπορεί να συνεχιστεί στο επόμενο case",
+                    "Το πρόγραμμα δεν μεταγλωττίζεται ποτέ",
+                    "Η switch επαναλαμβάνεται για πάντα"
+                ],
+                correct: 0,
+                explanation:
+                    "Χωρίς break μπορεί να υπάρξει fall-through."
+            }
+        ]
+    }
+];
+
+
+/*
+    ΑΠΟΘΗΚΕΥΣΗ ΠΡΟΟΔΟΥ
+*/
+
+const STORAGE_KEY = "c_learning_lesson4_quiz_v1";
+const EDITOR_KEY = "c_learning_lesson4_editors_v1";
+
+const totalQuestions = sections.reduce(
+    (sum, section) => sum + section.questions.length,
+    0
+);
+
+function readStorage(key) {
+    try {
+        const data = JSON.parse(localStorage.getItem(key));
+        return data && typeof data === "object" ? data : {};
+    } catch (error) {
+        return {};
+    }
+}
+
+let answeredQuestions = readStorage(STORAGE_KEY);
+let completedEditors = readStorage(EDITOR_KEY);
+
+
+/*
+    ΑΣΦΑΛΗΣ ΕΜΦΑΝΙΣΗ HTML
+*/
+
+function escapeHTML(value) {
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+
+/*
+    ΔΗΜΙΟΥΡΓΙΑ ΕΝΟΤΗΤΩΝ
+*/
+
+function createSections() {
+
+    const container =
+        document.getElementById("sections-container");
+
+    container.innerHTML = "";
+
+    sections.forEach((section, sectionIndex) => {
+
+        const sectionElement = document.createElement("section");
+        sectionElement.className = "card";
+
+        sectionElement.innerHTML = `
+            <h2>${escapeHTML(section.title)}</h2>
+
+            <p class="description">
+                ${escapeHTML(section.description)}
+            </p>
+
+            <div class="theory">
+                ${section.theory}
+            </div>
+
+            <h3>Παράδειγμα κώδικα C</h3>
+
+            <pre><code>${escapeHTML(section.example)}</code></pre>
+
+            <div class="section-score">
+                Ολοκληρωμένες ερωτήσεις:
+                <span id="section-score-${sectionIndex}">0</span>
+                / ${section.questions.length}
+            </div>
+
+            <h3>Quiz ενότητας</h3>
+
+            <div id="questions-${sectionIndex}"></div>
+        `;
+
+        container.appendChild(sectionElement);
+
+        const questionsContainer =
+            document.getElementById(
+                `questions-${sectionIndex}`
+            );
+
+        section.questions.forEach((question, questionIndex) => {
+
+            const element = document.createElement("div");
+            element.className = "question";
+
+            let html = `
+                <h3>
+                    ${questionIndex + 1}.
+                    ${escapeHTML(question.text)}
+                </h3>
+            `;
+
+            if (question.code) {
+                html += `
+                    <pre><code>${escapeHTML(question.code)}</code></pre>
+                `;
+            }
+
+            if (question.type === "choice") {
+
+                question.options.forEach((option, optionIndex) => {
+
+                    html += `
+                        <button class="option"
+                            onclick="checkChoice(
+                                this,
+                                ${sectionIndex},
+                                ${questionIndex},
+                                ${optionIndex}
+                            )">
+                            ${escapeHTML(option)}
+                        </button>
+                    `;
+                });
+
+            } else {
+
+                html += `
+                    <input class="answer-input"
+                        type="text"
+                        placeholder="Γράψε την απάντησή σου"
+                        autocomplete="off">
+
+                    <button class="primary-button"
+                        onclick="checkInput(
+                            this,
+                            ${sectionIndex},
+                            ${questionIndex}
+                        )">
+                        Έλεγχος
+                    </button>
+                `;
+            }
+
+            html += `
+                <p class="feedback" aria-live="polite"></p>
+            `;
+
+            element.innerHTML = html;
+            questionsContainer.appendChild(element);
+        });
+    });
+}
+
+
+/*
+    ΕΛΕΓΧΟΣ ΕΡΩΤΗΣΕΩΝ
+*/
+
+function questionKey(sectionIndex, questionIndex) {
+    return `${sectionIndex}-${questionIndex}`;
+}
+
+function getQuestionElement(sectionIndex, questionIndex) {
+    return document.getElementById(
+        `questions-${sectionIndex}`
+    ).children[questionIndex];
+}
+
+function saveAnswer(sectionIndex, questionIndex) {
+
+    const key = questionKey(sectionIndex, questionIndex);
+
+    if (answeredQuestions[key]) return;
+
+    answeredQuestions[key] = true;
+
+    try {
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(answeredQuestions)
+        );
+    } catch (error) {
+        console.warn("Δεν αποθηκεύτηκε η πρόοδος.");
+    }
+
+    refreshScore();
+}
+
+function checkChoice(button, sectionIndex, questionIndex, optionIndex) {
+
+    const question =
+        sections[sectionIndex].questions[questionIndex];
+
+    const element =
+        getQuestionElement(sectionIndex, questionIndex);
+
+    const feedback = element.querySelector(".feedback");
+
+    if (answeredQuestions[questionKey(sectionIndex, questionIndex)]) {
+        return;
+    }
+
+    if (optionIndex === question.correct) {
+
+        button.classList.add("correct-option");
+
+        element.querySelectorAll(".option").forEach(
+            btn => btn.disabled = true
+        );
+
+        feedback.textContent =
+            "✓ Σωστά! " + question.explanation;
+
+        feedback.className = "feedback correct";
+
+        saveAnswer(sectionIndex, questionIndex);
+
+    } else {
+
+        button.classList.add("wrong-option");
+        button.disabled = true;
+
+        feedback.textContent =
+            "✗ Λάθος απάντηση. Προσπάθησε ξανά.";
+
+        feedback.className = "feedback wrong";
+    }
+}
+
+function checkInput(button, sectionIndex, questionIndex) {
+
+    const question =
+        sections[sectionIndex].questions[questionIndex];
+
+    const element =
+        getQuestionElement(sectionIndex, questionIndex);
+
+    const input = element.querySelector(".answer-input");
+    const feedback = element.querySelector(".feedback");
+
+    if (answeredQuestions[questionKey(sectionIndex, questionIndex)]) {
+        return;
+    }
+
+    const answer = input.value.trim();
+
+    const isCorrect = question.correct.some(
+        correctAnswer => answer === correctAnswer
+    );
+
+    if (isCorrect) {
+
+        input.disabled = true;
+        button.disabled = true;
+
+        feedback.textContent =
+            "✓ Σωστά! " + question.explanation;
+
+        feedback.className = "feedback correct";
+
+        saveAnswer(sectionIndex, questionIndex);
+
+    } else {
+
+        feedback.textContent =
+            "✗ Έλεγξε την απάντησή σου και προσπάθησε ξανά.";
+
+        feedback.className = "feedback wrong";
+    }
+}
+
+
+/*
+    ΒΑΘΜΟΛΟΓΙΑ
+*/
+
+function refreshScore() {
+
+    let total = 0;
+
+    sections.forEach((section, sectionIndex) => {
+
+        let sectionScore = 0;
+
+        section.questions.forEach((question, questionIndex) => {
+
+            if (answeredQuestions[questionKey(sectionIndex, questionIndex)]) {
+                sectionScore++;
+                total++;
+            }
+        });
+
+        document.getElementById(
+            `section-score-${sectionIndex}`
+        ).textContent = sectionScore;
+    });
+
+    document.getElementById("total-score").textContent = total;
+
+    document.getElementById("progress-text").textContent =
+        `Έχεις ολοκληρώσει ${total} από τις ${totalQuestions} ερωτήσεις.`;
+
+    document.getElementById("progress-fill").style.width =
+        (total / totalQuestions * 100) + "%";
+}
+
+
+/*
+    ΕΠΑΝΑΦΟΡΑ ΑΠΟΘΗΚΕΥΜΕΝΩΝ ΑΠΑΝΤΗΣΕΩΝ
+*/
+
+function restoreProgress() {
+
+    sections.forEach((section, sectionIndex) => {
+
+        section.questions.forEach((question, questionIndex) => {
+
+            if (!answeredQuestions[questionKey(sectionIndex, questionIndex)]) {
+                return;
+            }
+
+            const element =
+                getQuestionElement(sectionIndex, questionIndex);
+
+            const feedback = element.querySelector(".feedback");
+
+            feedback.textContent =
+                "✓ Έχεις ήδη απαντήσει σωστά!";
+
+            feedback.className = "feedback correct";
+
+            if (question.type === "choice") {
+
+                element.querySelectorAll(".option").forEach(
+                    (button, optionIndex) => {
+
+                        button.disabled = true;
+
+                        if (optionIndex === question.correct) {
+                            button.classList.add("correct-option");
+                        }
+                    }
+                );
+
+            } else {
+
+                const input = element.querySelector(".answer-input");
+                const button = element.querySelector("button");
+
+                input.value = question.correct[0];
+                input.disabled = true;
+                button.disabled = true;
+            }
+        });
+    });
+
+    refreshScore();
+}
+
+
+/*
+    ONLINE EDITOR
+
+    ΣΗΜΑΝΤΙΚΟ:
+    Ο έλεγχος βασίζεται σε μοτίβα.
+    Δεν μεταγλωττίζει ούτε εκτελεί κώδικα C.
+*/
+
+function removeComments(code) {
+    return code
+        .replace(/\/\*[\s\S]*?\*\//g, "")
+        .replace(/\/\/[^\n]*/g, "");
+}
+
+function checkEditor(number) {
+
+    if (completedEditors[number]) return;
+
+    const textarea =
+        document.getElementById("editor" + number);
+
+    const feedback =
+        document.getElementById("editor-feedback" + number);
+
+    const code = removeComments(textarea.value);
+    const missing = [];
+
+    if (!/#\s*include\s*<stdio\.h>/.test(code)) {
+        missing.push("Πρόσθεσε #include <stdio.h>.");
+    }
+
+    if (!/\bint\s+main\s*\(\s*(?:void\s*)?\)/.test(code)) {
+        missing.push("Χρειάζεται η συνάρτηση int main().");
+    }
+
+    if (!/\breturn\s+0\s*;/.test(code)) {
+        missing.push("Πρόσθεσε return 0;.");
+    }
+
+    // ==================================
+    // EDITOR 1: IF / ELSE
+    // ==================================
+
+    if (number === 1) {
+
+        if (!/\bint\s+age\s*=\s*20\s*;/.test(code)) {
+            missing.push("Δήλωσε int age = 20;.");
+        }
+
+        const validIf =
+            /\bif\s*\(\s*age\s*>=\s*18\s*\)/.test(code);
+
+        if (!validIf) {
+            missing.push("Γράψε if (age >= 18).");
+        }
+
+        if (!/\belse\b/.test(code)) {
+            missing.push("Πρόσθεσε else.");
+        }
+
+        if (!/\bprintf\s*\(\s*"Adult"\s*\)\s*;/.test(code)) {
+            missing.push('Εμφάνισε printf("Adult");.');
+        }
+
+        if (!/\bprintf\s*\(\s*"Minor"\s*\)\s*;/.test(code)) {
+            missing.push('Εμφάνισε printf("Minor");.');
+        }
+
+        const expected =
+            /if\s*\(\s*age\s*>=\s*18\s*\)\s*\{\s*printf\s*\(\s*"Adult"\s*\)\s*;\s*\}\s*else\s*\{\s*printf\s*\(\s*"Minor"\s*\)\s*;\s*\}/;
+
+        if (!expected.test(code)) {
+            missing.push(
+                "Χρησιμοποίησε δύο σώματα με { } και τις σωστές printf μέσα σε if και else."
+            );
+        }
+    }
+
+    // ==================================
+    // EDITOR 2: ELSE IF
+    // ==================================
+
+    if (number === 2) {
+
+        if (!/\bint\s+number\s*=\s*-5\s*;/.test(code)) {
+            missing.push("Δήλωσε int number = -5;.");
+        }
+
+        const expected =
+            /if\s*\(\s*number\s*>\s*0\s*\)\s*\{\s*printf\s*\(\s*"Positive"\s*\)\s*;\s*\}\s*else\s+if\s*\(\s*number\s*<\s*0\s*\)\s*\{\s*printf\s*\(\s*"Negative"\s*\)\s*;\s*\}\s*else\s*\{\s*printf\s*\(\s*"Zero"\s*\)\s*;\s*\}/;
+
+        if (!expected.test(code)) {
+            missing.push(
+                "Γράψε if (number > 0), else if (number < 0) και else με printf για Positive, Negative και Zero αντίστοιχα."
+            );
+        }
+    }
+
+    // ==================================
+    // EDITOR 3: SWITCH
+    // ==================================
+
+    if (number === 3) {
+
+        if (!/\bint\s+choice\s*=\s*2\s*;/.test(code)) {
+            missing.push("Δήλωσε int choice = 2;.");
+        }
+
+        const expected =
+            /switch\s*\(\s*choice\s*\)\s*\{\s*case\s+1\s*:\s*printf\s*\(\s*"One"\s*\)\s*;\s*break\s*;\s*case\s+2\s*:\s*printf\s*\(\s*"Two"\s*\)\s*;\s*break\s*;\s*default\s*:\s*printf\s*\(\s*"Unknown"\s*\)\s*;\s*(?:break\s*;)?\s*\}/;
+
+        if (!expected.test(code)) {
+            missing.push(
+                "Γράψε switch (choice) με case 1, case 2, default, τις σωστές printf και break."
+            );
+        }
+    }
+
+    if (missing.length === 0) {
+
+        completedEditors[number] = textarea.value;
+
+        try {
+            localStorage.setItem(
+                EDITOR_KEY,
+                JSON.stringify(completedEditors)
+            );
+        } catch (error) {
+            console.warn("Δεν αποθηκεύτηκε η πρόοδος.");
+        }
+
+        textarea.disabled = true;
+
+        textarea.parentElement.querySelector(
+            ".primary-button"
+        ).disabled = true;
+
+        feedback.textContent =
+            "✓ Μπράβο! Ο κώδικας περιλαμβάνει τα ζητούμενα στοιχεία. Δεν εκτελέστηκε σε compiler.";
+
+        feedback.className = "feedback correct";
+
+        refreshEditorScore();
+
+    } else {
+
+        feedback.textContent =
+            "Χρειάζονται διορθώσεις: " + missing.join(" ");
+
+        feedback.className = "feedback wrong";
+    }
+}
+
+
+/*
+    ΒΑΘΜΟΛΟΓΙΑ EDITORS
+*/
+
+function refreshEditorScore() {
+
+    let score = 0;
+
+    for (let number = 1; number <= 3; number++) {
+        if (completedEditors[number]) {
+            score++;
+        }
+    }
+
+    document.getElementById("editor-score").textContent =
+        score;
+}
+
+
+/*
+    ΕΠΑΝΑΦΟΡΑ EDITORS
+*/
+
+function restoreEditors() {
+
+    for (let number = 1; number <= 3; number++) {
+
+        if (!completedEditors[number]) continue;
+
+        const textarea =
+            document.getElementById("editor" + number);
+
+        const feedback =
+            document.getElementById("editor-feedback" + number);
+
+        textarea.value = completedEditors[number];
+        textarea.disabled = true;
+
+        textarea.parentElement.querySelector(
+            ".primary-button"
+        ).disabled = true;
+
+        feedback.textContent =
+            "✓ Έχεις ήδη ολοκληρώσει αυτή την άσκηση.";
+
+        feedback.className = "feedback correct";
+    }
+
+    refreshEditorScore();
+}
+
+
+/*
+    ΑΡΧΙΚΟΣ ΚΩΔΙΚΑΣ EDITORS
+*/
+
+const initialCode = [
+    "",
+    `#include <stdio.h>
+
+int main() {
+
+    // Δήλωσε int age = 20;
+    // Γράψε if (age >= 18)
+    // Γράψε else
+    // Εμφάνισε Adult ή Minor
+
+    return 0;
+}`,
+    `#include <stdio.h>
+
+int main() {
+
+    // Δήλωσε int number = -5;
+    // Έλεγξε number > 0
+    // Έλεγξε number < 0
+    // Χρησιμοποίησε else
+
+    return 0;
+}`,
+    `#include <stdio.h>
+
+int main() {
+
+    // Δήλωσε int choice = 2;
+    // Χρησιμοποίησε switch
+    // Γράψε case 1, case 2 και default
+    // Μην ξεχάσεις τα break
+
+    return 0;
+}`
+];
+
+
+/*
+    ΕΠΑΝΑΦΟΡΑ ΟΛΗΣ ΤΗΣ ΠΡΟΟΔΟΥ
+*/
+
+function resetProgress() {
+
+    const confirmed = confirm(
+        "Θέλεις να μηδενίσεις τις 30 ερωτήσεις και τις 3 ασκήσεις;"
+    );
+
+    if (!confirmed) return;
+
+    try {
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(EDITOR_KEY);
+    } catch (error) {
+        console.warn("Δεν διαγράφηκε η πρόοδος.");
+    }
+
+    answeredQuestions = {};
+    completedEditors = {};
+
+    createSections();
+    refreshScore();
+
+    for (let number = 1; number <= 3; number++) {
+
+        const textarea =
+            document.getElementById("editor" + number);
+
+        const feedback =
+            document.getElementById("editor-feedback" + number);
+
+        textarea.value = initialCode[number];
+        textarea.disabled = false;
+
+        textarea.parentElement.querySelector(
+            ".primary-button"
+        ).disabled = false;
+
+        feedback.textContent = "";
+        feedback.className = "feedback";
+    }
+
+    refreshEditorScore();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/*
+    ΕΚΚΙΝΗΣΗ
+*/
+
+createSections();
+restoreProgress();
+restoreEditors();
+
+</script>
+
+</body>
+</html>
+

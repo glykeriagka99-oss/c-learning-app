@@ -1,509 +1,1891 @@
+
 <!DOCTYPE html>
 <html lang="el">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Επίπεδο 1 - Βασικά της C</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Επίπεδο 1 | Εισαγωγή στη C</title>
 
-    <style>
 
-        /* Βασική εμφάνιση της σελίδας */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #FFF8DC;
-            margin: 0;
-            color: #222;
-        }
+<style>
+:root {
+    --navy: #0b1220;
+    --navy-light: #16243a;
+    --blue: #2563eb;
+    --cyan: #22d3ee;
+    --green: #059669;
+    --red: #dc2626;
+    --bg: #f1f5f9;
+    --text: #0f172a;
+    --muted: #64748b;
+}
 
-        /* Κεντρικό πλαίσιο περιεχομένου */
-        .container {
-            max-width: 900px;
-            margin: 40px auto;
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
+* {
+    box-sizing: border-box;
+}
 
-        h1 {
-            color: #174ea6;
-        }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
 
-        h2 {
-            color: #285ea8;
-            margin-top: 35px;
-        }
+nav {
+    background: var(--navy);
+    padding: 20px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
 
-        p {
-            line-height: 1.7;
-        }
+.logo {
+    color: white;
+    text-decoration: none;
+    font-size: 22px;
+    font-weight: bold;
+}
 
-        pre {
-            background: #1e1e1e;
-            color: white;
-            padding: 18px;
-            border-radius: 10px;
-            overflow-x: auto;
-        }
+.logo span {
+    color: var(--cyan);
+}
 
-        code {
-            font-family: Consolas, monospace;
-        }
+.nav-link {
+    color: #cbd5e1;
+    text-decoration: none;
+}
 
-        /* Εμφάνιση των ερωτήσεων του Quiz */
-        .question {
-            background: #f7f9fc;
-            border: 1px solid #ddd;
-            padding: 20px;
-            margin-top: 25px;
-            border-radius: 10px;
-        }
+header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-light));
+    color: white;
+    text-align: center;
+    padding: 55px 20px;
+}
 
-        button {
-            display: block;
-            width: 100%;
-            text-align: left;
-            padding: 12px;
-            margin: 8px 0;
-            border: 1px solid #bbb;
-            border-radius: 8px;
-            background: white;
-            cursor: pointer;
-            font-size: 15px;
-        }
+header h1 {
+    margin: 0 0 15px;
+    font-size: 36px;
+}
 
-        button:hover {
-            background: #e9f1ff;
-        }
+header p {
+    color: #cbd5e1;
+    line-height: 1.7;
+}
 
-        input {
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 6px;
-            border: 1px solid #aaa;
-        }
+.container {
+    max-width: 1000px;
+    margin: 35px auto;
+    padding: 0 20px;
+}
 
-        .check-button {
-            width: auto;
-            display: inline-block;
-            background: #174ea6;
-            color: white;
-            margin-left: 10px;
-        }
+.card {
+    background: white;
+    padding: 28px;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+}
 
-        /* Μηνύματα σωστής και λάθος απάντησης */
-        .feedback {
-            font-weight: bold;
-            margin-top: 10px;
-        }
+.card h2 {
+    margin-top: 0;
+}
 
-        .correct {
-            color: green;
-        }
+.description {
+    color: var(--muted);
+    line-height: 1.8;
+}
 
-        .wrong {
-            color: #c62828;
-        }
+.theory {
+    background: #eff6ff;
+    border-left: 4px solid var(--blue);
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    line-height: 1.8;
+}
 
-        /* Πλαίσιο εμφάνισης βαθμολογίας */
-        .score-box {
-            background: #e8f0fe;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            font-weight: bold;
-        }
+.theory p {
+    margin: 10px 0;
+}
 
-        .back {
-            display: inline-block;
-            margin-top: 30px;
-            text-decoration: none;
-            color: #174ea6;
-        }
+pre {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 20px;
+    border-radius: 10px;
+    overflow-x: auto;
+    line-height: 1.7;
+}
 
-    </style>
+code, textarea {
+    font-family: Consolas, monospace;
+}
+
+.progress {
+    background: #e2e8f0;
+    height: 12px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 15px 0;
+}
+
+.progress-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--green);
+    transition: width 0.3s;
+}
+
+.score-number {
+    font-size: 30px;
+    font-weight: bold;
+    color: var(--blue);
+}
+
+.section-score {
+    background: #f1f5f9;
+    border-radius: 8px;
+    padding: 14px;
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+.question {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 18px 0;
+}
+
+.question h3 {
+    font-size: 17px;
+    line-height: 1.6;
+    margin-top: 0;
+}
+
+.option {
+    display: block;
+    width: 100%;
+    background: white;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 13px 15px;
+    margin: 9px 0;
+    text-align: left;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.option:hover:not(:disabled) {
+    background: #dbeafe;
+    border-color: var(--blue);
+}
+
+.option.correct-option {
+    background: #d1fae5;
+    border-color: var(--green);
+}
+
+.option.wrong-option {
+    background: #fee2e2;
+    border-color: var(--red);
+}
+
+.answer-input {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    font-size: 16px;
+}
+
+.primary-button {
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.primary-button:hover:not(:disabled) {
+    background: #1d4ed8;
+}
+
+button:disabled {
+    cursor: default;
+    opacity: 0.8;
+}
+
+.reset-button {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 12px 18px;
+    cursor: pointer;
+}
+
+.feedback {
+    margin-top: 12px;
+    font-weight: bold;
+    line-height: 1.6;
+}
+
+.correct {
+    color: #047857;
+}
+
+.wrong {
+    color: #b91c1c;
+}
+
+.editor-section {
+    border-top: 5px solid var(--cyan);
+}
+
+.editor-score {
+    background: #dbeafe;
+    color: #1e40af;
+    border-radius: 10px;
+    padding: 16px;
+    font-weight: bold;
+}
+
+.editor-exercise {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 22px;
+    margin: 25px 0;
+}
+
+.editor-exercise p {
+    line-height: 1.7;
+}
+
+.editor-label {
+    display: block;
+    background: var(--navy-light);
+    color: var(--cyan);
+    padding: 12px 16px;
+    border-radius: 10px 10px 0 0;
+    font-family: Consolas, monospace;
+}
+
+.code-editor {
+    display: block;
+    width: 100%;
+    min-height: 260px;
+    background: #0f172a;
+    color: #e2e8f0;
+    border: 1px solid #334155;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 18px;
+    font-size: 14px;
+    line-height: 1.6;
+    resize: vertical;
+    tab-size: 4;
+}
+
+.code-editor:focus {
+    outline: 2px solid var(--blue);
+}
+
+.back-button {
+    display: inline-block;
+    background: var(--navy);
+    color: white;
+    text-decoration: none;
+    padding: 14px 24px;
+    border-radius: 8px;
+    margin-bottom: 40px;
+}
+
+.completion {
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    border-radius: 12px;
+    padding: 18px;
+    margin-top: 20px;
+    display: none;
+}
+
+footer {
+    background: var(--navy);
+    color: #94a3b8;
+    padding: 25px;
+    text-align: center;
+}
+
+/* ==========================================
+   ΜΕΓΑΛΥΤΕΡΑ ΓΡΑΜΜΑΤΑ ΓΙΑ ΚΙΝΗΤΑ
+========================================== */
+
+@media screen and (max-width: 768px) {
+
+    body {
+        font-size: 19px;
+        line-height: 1.7;
+    }
+
+    nav {
+        padding: 18px 5%;
+    }
+
+    .logo {
+        font-size: 24px;
+    }
+
+    .nav-link {
+        font-size: 18px;
+    }
+
+    header {
+        padding: 40px 18px;
+    }
+
+    header h1 {
+        font-size: 30px;
+        line-height: 1.3;
+    }
+
+    header p {
+        font-size: 19px;
+        line-height: 1.7;
+    }
+
+    .container {
+        padding: 0 12px;
+        margin: 22px auto;
+    }
+
+    .card {
+        padding: 18px;
+        margin-bottom: 22px;
+    }
+
+    .card h2 {
+        font-size: 26px;
+        line-height: 1.4;
+    }
+
+    .card h3 {
+        font-size: 22px;
+        line-height: 1.5;
+    }
+
+    .description {
+        font-size: 19px;
+        line-height: 1.8;
+    }
+
+    .theory {
+        font-size: 19px;
+        line-height: 1.8;
+        padding: 18px;
+    }
+
+    .theory p {
+        font-size: 19px;
+    }
+
+    .question {
+        padding: 16px;
+    }
+
+    .question h3 {
+        font-size: 21px;
+        line-height: 1.6;
+    }
+
+    .option {
+        font-size: 19px;
+        padding: 17px;
+        line-height: 1.5;
+    }
+
+    .answer-input {
+        font-size: 19px;
+        padding: 16px;
+        max-width: 100%;
+    }
+
+    .primary-button {
+        font-size: 18px;
+        padding: 16px 22px;
+    }
+
+    .reset-button {
+        font-size: 17px;
+        padding: 15px 18px;
+    }
+
+    .back-button {
+        font-size: 18px;
+        padding: 16px 22px;
+    }
+
+    .feedback {
+        font-size: 18px;
+        line-height: 1.7;
+    }
+
+    .score-number {
+        font-size: 36px;
+    }
+
+    .section-score {
+        font-size: 19px;
+    }
+
+    .editor-score {
+        font-size: 19px;
+    }
+
+    .editor-exercise {
+        padding: 14px;
+    }
+
+    .editor-exercise p {
+        font-size: 19px;
+        line-height: 1.8;
+    }
+
+    .editor-label {
+        font-size: 17px;
+    }
+
+    .code-editor {
+        font-size: 16px;
+        line-height: 1.7;
+        min-height: 300px;
+    }
+
+    pre {
+        font-size: 16px;
+        line-height: 1.7;
+        padding: 15px;
+        overflow-x: auto;
+    }
+
+    footer {
+        font-size: 17px;
+    }
+}
+</style>
 </head>
-
 
 <body>
 
-<div class="container">
+<nav>
+    <a href="/" class="logo">C<span>Learning</span></a>
+    <a href="/skills" class="nav-link">Skill Tree</a>
+</nav>
 
-    <h1>🌱 Επίπεδο 1: Τα βασικά της C</h1>
+<header>
+    <h1>Επίπεδο 1: Εισαγωγή στη C</h1>
+    <p>
+        Το πρώτο πρόγραμμα - printf - scanf -
+        Πρώτες μεταβλητές - Διαδραστικά προγράμματα
+    </p>
+    <p>5 ενότητες - 30 ερωτήσεις - 3 ασκήσεις κώδικα</p>
+</header>
 
-    <div class="score-box">
-        Σωστές απαντήσεις:
-        <span id="score">0</span> / 15
+<main class="container">
+
+<section class="card">
+    <h2>Η πρόοδός σου</h2>
+
+    <div class="score-number">
+        <span id="total-score">0</span> / 30
     </div>
 
-
-    <!-- Θεωρία του επιπέδου -->
-
-    <h2>📖 Σύνοψη</h2>
-
-    <p>
-        Η C είναι μια γλώσσα προγραμματισμού γενικού σκοπού και αποτελεί
-        μία από τις σημαντικότερες γλώσσες για την κατανόηση των βασικών
-        αρχών του προγραμματισμού. Ένα απλό πρόγραμμα C ξεκινά συνήθως
-        με την οδηγία <code>#include &lt;stdio.h&gt;</code>, η οποία μας
-        επιτρέπει να χρησιμοποιούμε λειτουργίες εισόδου και εξόδου όπως
-        τις <code>printf()</code> και <code>scanf()</code>. Η εκτέλεση
-        ενός προγράμματος ξεκινά από τη συνάρτηση <code>main()</code>.
-        Με την <code>printf()</code> μπορούμε να εμφανίζουμε πληροφορίες
-        στην οθόνη, ενώ με τη <code>scanf()</code> μπορούμε να λαμβάνουμε
-        δεδομένα που πληκτρολογεί ο χρήστης. Για την αποθήκευση δεδομένων
-        χρησιμοποιούμε μεταβλητές. Ο τύπος <code>int</code> χρησιμοποιείται
-        για ακέραιους αριθμούς, ο <code>float</code> για αριθμούς με
-        δεκαδικό μέρος και ο <code>char</code> για έναν χαρακτήρα.
-        Για παράδειγμα, <code>int age = 20;</code> δημιουργεί μία
-        μεταβλητή με όνομα age και τιμή 20. Στη C οι περισσότερες απλές
-        εντολές ολοκληρώνονται με ελληνικό ερωτηματικό
-        <code>;</code>. Μπορούμε επίσης να πραγματοποιούμε αριθμητικές
-        πράξεις χρησιμοποιώντας τους τελεστές <code>+</code>,
-        <code>-</code>, <code>*</code>, <code>/</code> και
-        <code>%</code>. Όταν το πρόγραμμα πρέπει να πάρει μια απόφαση,
-        χρησιμοποιούμε την <code>if</code> και προαιρετικά την
-        <code>else</code>. Για επαναλαμβανόμενες ενέργειες μπορούμε να
-        χρησιμοποιήσουμε βρόχους όπως <code>for</code> και
-        <code>while</code>. Τα σχόλια μιας γραμμής γράφονται με
-        <code>//</code> και βοηθούν τον προγραμματιστή να εξηγεί τον
-        κώδικα χωρίς να εκτελούνται από τον υπολογιστή. Τέλος, η εντολή
-        <code>return 0;</code> στο τέλος της <code>main()</code>
-        χρησιμοποιείται συνήθως για να δηλώσει ότι το πρόγραμμα
-        ολοκληρώθηκε επιτυχώς.
+    <p id="progress-text">
+        Έχεις ολοκληρώσει 0 από τις 30 ερωτήσεις.
     </p>
 
+    <div class="progress">
+        <div class="progress-fill" id="progress-fill"></div>
+    </div>
 
-    <!-- Παράδειγμα κώδικα C -->
+    <p>
+        Πρακτικές ασκήσεις:
+        <strong id="editor-progress">0 / 3</strong>
+    </p>
 
-    <h2>💻 Παράδειγμα</h2>
+    <div id="completion-message" class="completion">
+        <strong>Συγχαρητήρια!</strong>
+        Ολοκλήρωσες το Επίπεδο 1!
+    </div>
 
-<pre><code>#include &lt;stdio.h&gt;
+    <button class="reset-button" onclick="resetProgress()">
+        Επαναφορά όλης της προόδου
+    </button>
+</section>
 
-int main() {
+<div id="sections-container"></div>
 
-    int age = 20;
+<section class="card editor-section">
+    <h2>Τελική επανάληψη – Γράψε κώδικα C</h2>
 
-    printf("Hello!");
-    printf("Age: %d", age);
+    <p class="description">
+        Λύσε τις τρεις ασκήσεις γράφοντας κώδικα.
+        Ο έλεγχος εξετάζει τη δομή του κώδικα,
+        χωρίς πραγματική μεταγλώττιση ή εκτέλεση.
+    </p>
+
+    <div class="editor-score">
+        Ολοκληρωμένες ασκήσεις:
+        <span id="editor-score">0</span> / 3
+    </div>
+
+    <div class="editor-exercise">
+        <h3>Άσκηση 1: Hello World</h3>
+
+        <p>
+            Γράψε ένα πρόγραμμα C που εμφανίζει
+            <strong>Hello World!</strong>
+            χρησιμοποιώντας τη συνάρτηση
+            <code>printf()</code>.
+        </p>
+
+        <label class="editor-label" for="editor1">
+            main.c — Άσκηση 1
+        </label>
+
+        <textarea id="editor1" class="code-editor" spellcheck="false">#include <stdio.h>
+
+int main(void) {
+
+    // Εμφάνισε το μήνυμα Hello World!
 
     return 0;
-}</code></pre>
+}</textarea>
 
-    <p>
-        Μην ανησυχείς αν δεν θυμάσαι ακόμα όλα τα παραπάνω.
-        Στόχος αυτού του επιπέδου είναι να εξοικειωθείς με τις βασικές
-        έννοιες. Θα τις συναντήσουμε ξανά στα επόμενα επίπεδα.
-    </p>
-
-
-    <!-- Διαδραστικό Quiz -->
-
-    <h2>🧠 Quiz — 15 ερωτήσεις</h2>
-
-
-    <!-- 1 -->
-    <div class="question">
-        <h3>1. Από ποια συνάρτηση ξεκινά η εκτέλεση ενός προγράμματος C;</h3>
-
-        <button onclick="answer(this, false)">printf()</button>
-        <button onclick="answer(this, true)">main()</button>
-        <button onclick="answer(this, false)">scanf()</button>
-
-        <p class="feedback"></p>
-    </div>
-
-
-    <!-- 2 -->
-    <div class="question">
-        <h3>2. Ποια συνάρτηση εμφανίζει κείμενο στην οθόνη;</h3>
-
-        <button onclick="answer(this, false)">scanf()</button>
-        <button onclick="answer(this, false)">main()</button>
-        <button onclick="answer(this, true)">printf()</button>
-
-        <p class="feedback"></p>
-    </div>
-
-
-    <!-- 3 -->
-    <div class="question">
-        <h3>3. Ποιος τύπος χρησιμοποιείται για ακέραιους αριθμούς;</h3>
-
-        <button onclick="answer(this, true)">int</button>
-        <button onclick="answer(this, false)">char</button>
-        <button onclick="answer(this, false)">float</button>
-
-        <p class="feedback"></p>
-    </div>
-
-
-    <!-- 4 -->
-    <div class="question">
-        <h3>4. Ποιος τύπος είναι κατάλληλος για τον αριθμό 3.14;</h3>
-
-        <button onclick="answer(this, false)">int</button>
-        <button onclick="answer(this, true)">float</button>
-        <button onclick="answer(this, false)">char</button>
-
-        <p class="feedback"></p>
-    </div>
-
-
-    <!-- 5 -->
-    <div class="question">
-        <h3>5. Ποιος τύπος χρησιμοποιείται για έναν χαρακτήρα;</h3>
-
-        <button onclick="answer(this, false)">int</button>
-        <button onclick="answer(this, false)">float</button>
-        <button onclick="answer(this, true)">char</button>
-
-        <p class="feedback"></p>
-    </div>
-
-
-    <!-- 6 -->
-    <div class="question">
-        <h3>6. Συμπλήρωσε το κενό:</h3>
-
-        <pre>___ age = 20;</pre>
-
-        <input type="text" id="q6">
-
-        <button class="check-button"
-                onclick="checkInput('q6','int',this)">
-            Έλεγχος
+        <button class="primary-button" onclick="checkEditor(1)">
+            Έλεγχος κώδικα
         </button>
 
-        <p class="feedback"></p>
+        <p id="editor-feedback1" class="feedback" aria-live="polite"></p>
     </div>
 
+    <div class="editor-exercise">
+        <h3>Άσκηση 2: Πώς σε λένε;</h3>
 
-    <!-- 7 -->
-    <div class="question">
-        <h3>7. Ποιο σύμβολο βάζουμε συνήθως στο τέλος μιας εντολής;</h3>
+        <p>
+            Δήλωσε έναν πίνακα χαρακτήρων
+            <code>char name[50];</code>.
+            Διάβασε ένα όνομα με
+            <code>scanf("%49s", name);</code>
+            και εμφάνισέ το με
+            <code>printf("Hello %s", name);</code>.
+        </p>
 
-        <button onclick="answer(this, false)">:</button>
-        <button onclick="answer(this, true)">;</button>
-        <button onclick="answer(this, false)">,</button>
+        <label class="editor-label" for="editor2">
+            main.c — Άσκηση 2
+        </label>
 
-        <p class="feedback"></p>
-    </div>
+        <textarea id="editor2" class="code-editor" spellcheck="false">#include <stdio.h>
 
+int main(void) {
 
-    <!-- 8 -->
-    <div class="question">
-        <h3>8. Τι κάνει η scanf();</h3>
+    // Δήλωσε char name[50];
+    // Διάβασε ένα όνομα με scanf
+    // Εμφάνισε το όνομα με printf
 
-        <button onclick="answer(this, false)">
-            Εμφανίζει μόνο κείμενο
+    return 0;
+}</textarea>
+
+        <button class="primary-button" onclick="checkEditor(2)">
+            Έλεγχος κώδικα
         </button>
 
-        <button onclick="answer(this, true)">
-            Διαβάζει δεδομένα από τον χρήστη
+        <p id="editor-feedback2" class="feedback" aria-live="polite"></p>
+    </div>
+
+    <div class="editor-exercise">
+        <h3>Άσκηση 3: Πόσο χρονών είσαι;</h3>
+
+        <p>
+            Δήλωσε τη μεταβλητή <code>int age;</code>.
+            Ζήτησε από τον χρήστη την ηλικία του,
+            διάβασέ την με <code>scanf("%d", &amp;age);</code>
+            και εμφάνισέ την με <code>printf()</code>.
+        </p>
+
+        <label class="editor-label" for="editor3">
+            main.c — Άσκηση 3
+        </label>
+
+        <textarea id="editor3" class="code-editor" spellcheck="false">#include <stdio.h>
+
+int main(void) {
+
+    // Δήλωσε int age;
+    // Ζήτησε την ηλικία με printf
+    // Διάβασε την ηλικία με scanf
+    // Εμφάνισε την ηλικία με printf
+
+    return 0;
+}</textarea>
+
+        <button class="primary-button" onclick="checkEditor(3)">
+            Έλεγχος κώδικα
         </button>
 
-        <button onclick="answer(this, false)">
-            Τερματίζει το πρόγραμμα
-        </button>
-
-        <p class="feedback"></p>
+        <p id="editor-feedback3" class="feedback" aria-live="polite"></p>
     </div>
 
+</section>
 
-    <!-- 9 -->
-    <div class="question">
-        <h3>9. Συμπλήρωσε την εντολή:</h3>
+<a href="/skills" class="back-button">
+    ← Επιστροφή στο Skill Tree
+</a>
 
-        <pre>___("Hello World!");</pre>
+</main>
 
-        <input type="text" id="q9">
-
-        <button class="check-button"
-                onclick="checkInput('q9','printf',this)">
-            Έλεγχος
-        </button>
-
-        <p class="feedback"></p>
-    </div>
-
-
-    <!-- 10 -->
-    <div class="question">
-        <h3>10. Ποιος τελεστής χρησιμοποιείται για πρόσθεση;</h3>
-
-        <button onclick="answer(this, true)">+</button>
-        <button onclick="answer(this, false)">*</button>
-        <button onclick="answer(this, false)">%</button>
-
-        <p class="feedback"></p>
-    </div>
-
-
-    <!-- 11 -->
-    <div class="question">
-        <h3>11. Ποια εντολή χρησιμοποιούμε για μια απόφαση;</h3>
-
-        <button onclick="answer(this, false)">printf</button>
-        <button onclick="answer(this, true)">if</button>
-        <button onclick="answer(this, false)">include</button>
-
-        <p class="feedback"></p>
-    </div>
-
-
-    <!-- 12 -->
-    <div class="question">
-        <h3>12. Ποιο από τα παρακάτω είναι loop;</h3>
-
-        <button onclick="answer(this, false)">char</button>
-        <button onclick="answer(this, true)">for</button>
-        <button onclick="answer(this, false)">return</button>
-
-        <p class="feedback"></p>
-    </div>
-
-
-    <!-- 13 -->
-    <div class="question">
-        <h3>13. Με ποια σύμβολα ξεκινά ένα σχόλιο μιας γραμμής;</h3>
-
-        <button onclick="answer(this, false)">##</button>
-        <button onclick="answer(this, true)">//</button>
-        <button onclick="answer(this, false)">**</button>
-
-        <p class="feedback"></p>
-    </div>
-
-
-    <!-- 14 -->
-    <div class="question">
-        <h3>14. Συμπλήρωσε το κενό:</h3>
-
-<pre>int main() {
-
-    printf("Hello");
-
-    return __;
-}</pre>
-
-        <input type="text" id="q14">
-
-        <button class="check-button"
-                onclick="checkInput('q14','0',this)">
-            Έλεγχος
-        </button>
-
-        <p class="feedback"></p>
-    </div>
-
-
-    <!-- 15 -->
-    <div class="question">
-        <h3>15. Τι κάνει το return 0; στο τέλος της main();</h3>
-
-        <button onclick="answer(this, false)">
-            Εμφανίζει τον αριθμό 0
-        </button>
-
-        <button onclick="answer(this, false)">
-            Δημιουργεί μια μεταβλητή
-        </button>
-
-        <button onclick="answer(this, true)">
-            Δηλώνει ότι το πρόγραμμα ολοκληρώθηκε επιτυχώς
-        </button>
-
-        <p class="feedback"></p>
-    </div>
-
-
-    <br>
-
-    <a class="back" href="/skills">
-        ← Επιστροφή στο Skill Tree
-    </a>
-
-</div>
-
+<footer>
+    C Learning App • Επίπεδο 1: Εισαγωγή στη C
+</footer>
 
 <script>
+"use strict";
 
-    // Αρχική βαθμολογία
+/*
+    ΕΠΙΠΕΔΟ 1
+    5 ενότητες x 6 ερωτήσεις = 30
+*/
+
+const sections = [
+
+    {
+        title: "1. Το πρώτο πρόγραμμα στη C",
+
+        description:
+            "Μάθε πώς ξεκινά ένα πρόγραμμα C και ποια είναι τα βασικά του μέρη.",
+
+        theory: `
+            <p>
+                Η C είναι μια γλώσσα προγραμματισμού
+                που χρησιμοποιείται για τη δημιουργία
+                πολλών διαφορετικών εφαρμογών.
+            </p>
+
+            <p>
+                Η οδηγία <code>#include &lt;stdio.h&gt;</code>
+                επιτρέπει τη χρήση συναρτήσεων
+                εισόδου και εξόδου, όπως
+                <code>printf()</code> και
+                <code>scanf()</code>.
+            </p>
+
+            <p>
+                Η <code>main()</code> είναι η συνάρτηση
+                από την οποία ξεκινά η εκτέλεση
+                ενός προγράμματος C.
+            </p>
+
+            <p>
+                Οι εντολές γράφονται μέσα στα
+                άγκιστρα <code>{ }</code>.
+                Πολλές εντολές ολοκληρώνονται
+                με το σύμβολο <code>;</code>.
+            </p>
+
+            <p>
+                Η εντολή <code>return 0;</code>
+                δηλώνει επιτυχημένο τερματισμό
+                της συνάρτησης <code>main()</code>.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main(void) {
+    printf("Hello World!\\n");
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Από ποια συνάρτηση ξεκινά η εκτέλεση ενός προγράμματος C;",
+                options: ["printf()", "main()", "scanf()"],
+                correct: 1,
+                explanation: "Η εκτέλεση ξεκινά από τη main()."
+            },
+            {
+                type: "choice",
+                text: "Ποια οδηγία χρησιμοποιούμε για τις printf και scanf;",
+                options: [
+                    "#include <stdio.h>",
+                    "#include <math.h>",
+                    "#start"
+                ],
+                correct: 0,
+                explanation: "Η stdio.h περιέχει δηλώσεις για βασική είσοδο και έξοδο."
+            },
+            {
+                type: "choice",
+                text: "Ποιο σύμβολο ολοκληρώνει μια απλή εντολή C;",
+                options: [":", ";", "#"],
+                correct: 1,
+                explanation: "Οι περισσότερες απλές εντολές τελειώνουν με ;."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε το όνομα της συνάρτησης:",
+                code: `int ___(void) {
+    return 0;
+}`,
+                correct: ["main"],
+                explanation: "Η βασική συνάρτηση ονομάζεται main."
+            },
+            {
+                type: "choice",
+                text: "Ποια σύμβολα περικλείουν το σώμα μιας συνάρτησης;",
+                options: ["( )", "[ ]", "{ }"],
+                correct: 2,
+                explanation: "Το σώμα μιας συνάρτησης βρίσκεται μέσα σε { }."
+            },
+            {
+                type: "choice",
+                text: "Τι σημαίνει το return 0; στη main;",
+                options: [
+                    "Επιτυχημένος τερματισμός",
+                    "Εμφάνιση του 0",
+                    "Ανάγνωση αριθμού"
+                ],
+                correct: 0,
+                explanation: "Το return 0 δηλώνει επιτυχημένο τερματισμό."
+            }
+        ]
+    },
+
+    {
+        title: "2. Εμφάνιση δεδομένων με printf()",
+
+        description:
+            "Μάθε να εμφανίζεις μηνύματα, αριθμούς και αλλαγές γραμμής.",
+
+        theory: `
+            <p>
+                Η συνάρτηση <code>printf()</code>
+                χρησιμοποιείται για να εμφανίζουμε
+                πληροφορίες στην οθόνη.
+            </p>
+
+            <p>
+                Το κείμενο γράφεται μέσα σε
+                διπλά εισαγωγικά:
+                <code>printf("Hello");</code>.
+            </p>
+
+            <p>
+                Ο ειδικός χαρακτήρας <code>\\n</code>
+                μεταφέρει την εμφάνιση
+                στην επόμενη γραμμή.
+            </p>
+
+            <p>
+                Για να εμφανίσουμε έναν ακέραιο
+                χρησιμοποιούμε τον προσδιοριστή
+                <code>%d</code>.
+            </p>
+
+            <p>
+                Μπορούμε να εμφανίσουμε
+                πολλές διαφορετικές πληροφορίες
+                με διαδοχικές κλήσεις της
+                <code>printf()</code>.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main(void) {
+    printf("Welcome to C!\\n");
+    printf("My age is %d\\n", 20);
+    printf("Learning is fun!\\n");
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Ποια συνάρτηση εμφανίζει κείμενο;",
+                options: ["scanf()", "printf()", "main()"],
+                correct: 1,
+                explanation: "Η printf εμφανίζει δεδομένα."
+            },
+            {
+                type: "choice",
+                text: "Ποια εντολή εμφανίζει Hello;",
+                options: [
+                    'printf("Hello");',
+                    'scanf("Hello");',
+                    'print("Hello");'
+                ],
+                correct: 0,
+                explanation: "Η σωστή σύνταξη είναι printf με διπλά εισαγωγικά."
+            },
+            {
+                type: "choice",
+                text: "Τι κάνει το \\n μέσα σε μια συμβολοσειρά;",
+                options: [
+                    "Αλλάζει γραμμή",
+                    "Τερματίζει το πρόγραμμα",
+                    "Διαβάζει αριθμό"
+                ],
+                correct: 0,
+                explanation: "Το \\n μεταφέρει την εμφάνιση σε νέα γραμμή."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε το όνομα της συνάρτησης εμφάνισης:",
+                code: `___("Hello C!");`,
+                correct: ["printf"],
+                explanation: "Η συνάρτηση εμφάνισης είναι η printf."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `printf("%d", 15);`,
+                options: ["%d", "15", "d15"],
+                correct: 1,
+                explanation: "Το %d αντικαθίσταται από τον ακέραιο 15."
+            },
+            {
+                type: "choice",
+                text: "Ποια εντολή εμφανίζει δύο λέξεις σε διαφορετικές γραμμές;",
+                options: [
+                    'printf("One Two");',
+                    'printf("One\\nTwo");',
+                    'printf("One, Two");'
+                ],
+                correct: 1,
+                explanation: "Το \\n χωρίζει τις δύο λέξεις σε γραμμές."
+            }
+        ]
+    },
+
+    {
+        title: "3. Εισαγωγή δεδομένων με scanf()",
+
+        description:
+            "Μάθε πώς ένα πρόγραμμα διαβάζει δεδομένα από τον χρήστη.",
+
+        theory: `
+            <p>
+                Η συνάρτηση <code>scanf()</code>
+                διαβάζει δεδομένα από την είσοδο
+                του προγράμματος.
+            </p>
+
+            <p>
+                Πρώτα δημιουργούμε μια μεταβλητή
+                στην οποία θα αποθηκευτεί η τιμή.
+                Για παράδειγμα:
+                <code>int age;</code>.
+            </p>
+
+            <p>
+                Για να διαβάσουμε έναν ακέραιο:
+                <code>scanf("%d", &amp;age);</code>.
+            </p>
+
+            <p>
+                Το <code>%d</code> δηλώνει ότι
+                περιμένουμε έναν ακέραιο αριθμό.
+            </p>
+
+            <p>
+                Το σύμβολο <code>&amp;</code>
+                δίνει στη <code>scanf()</code>
+                τη διεύθυνση της μεταβλητής,
+                ώστε να αποθηκευτεί εκεί η τιμή.
+            </p>
+
+            <p>
+                Σε πραγματικά προγράμματα
+                ελέγχουμε και αν η
+                <code>scanf()</code> διάβασε
+                επιτυχώς τα δεδομένα.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main(void) {
+    int age;
+
+    printf("Give your age: ");
+
+    if (scanf("%d", &age) == 1) {
+        printf("Your age is %d\\n", age);
+    } else {
+        printf("Invalid input\\n");
+    }
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Ποια συνάρτηση χρησιμοποιούμε για είσοδο δεδομένων;",
+                options: ["printf()", "scanf()", "return"],
+                correct: 1,
+                explanation: "Η scanf διαβάζει δεδομένα."
+            },
+            {
+                type: "choice",
+                text: "Ποια εντολή διαβάζει έναν ακέραιο;",
+                options: [
+                    'scanf("%d", &age);',
+                    'printf("%d", age);',
+                    'scanf("%d", age);'
+                ],
+                correct: 0,
+                explanation: "Η scanf χρειάζεται τη διεύθυνση της age."
+            },
+            {
+                type: "choice",
+                text: "Τι σημαίνει το %d στη scanf;",
+                options: [
+                    "Ανάγνωση ακεραίου",
+                    "Ανάγνωση χαρακτήρα",
+                    "Αλλαγή γραμμής"
+                ],
+                correct: 0,
+                explanation: "Το %d χρησιμοποιείται για ακέραιο int."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε το σύμβολο πριν από τη μεταβλητή:",
+                code: `scanf("%d", ___age);`,
+                correct: ["&"],
+                explanation: "Το & δίνει τη διεύθυνση της μεταβλητής."
+            },
+            {
+                type: "choice",
+                text: "Γιατί δηλώνουμε int age; πριν από τη scanf;",
+                options: [
+                    "Για να υπάρχει μεταβλητή αποθήκευσης",
+                    "Για να εμφανιστεί αυτόματα η ηλικία",
+                    "Για να κλείσει το πρόγραμμα"
+                ],
+                correct: 0,
+                explanation: "Η scanf χρειάζεται μεταβλητή για την αποθήκευση."
+            },
+            {
+                type: "choice",
+                text: 'Τι ελέγχει η συνθήκη scanf("%d", &age) == 1;',
+                options: [
+                    "Ότι διαβάστηκε επιτυχώς ένας ακέραιος",
+                    "Ότι η ηλικία είναι πάντα 1",
+                    "Ότι εμφανίστηκε ένα μήνυμα"
+                ],
+                correct: 0,
+                explanation: "Η scanf επιστρέφει τον αριθμό επιτυχών αναθέσεων."
+            }
+        ]
+    },
+
+    {
+        title: "4. Πρώτη γνωριμία με τις μεταβλητές",
+
+        description:
+            "Μάθε να αποθηκεύεις τιμές και να τις χρησιμοποιείς.",
+
+        theory: `
+            <p>
+                Μια <strong>μεταβλητή</strong>
+                είναι μια ονομασμένη θέση
+                αποθήκευσης δεδομένων.
+            </p>
+
+            <p>
+                Για παράδειγμα,
+                <code>int age = 20;</code>
+                δημιουργεί μια μεταβλητή
+                με όνομα <code>age</code>
+                και τιμή <code>20</code>.
+            </p>
+
+            <p>
+                Μπορούμε να αλλάξουμε
+                την τιμή μιας μεταβλητής:
+                <code>age = 21;</code>.
+            </p>
+
+            <p>
+                Μπορούμε επίσης να εμφανίσουμε
+                την τιμή της με
+                <code>printf("%d", age);</code>.
+            </p>
+
+            <p>
+                Σε αυτό το επίπεδο χρησιμοποιούμε
+                κυρίως τον τύπο <code>int</code>.
+                Στο Επίπεδο 2 θα μάθεις αναλυτικά
+                τους τύπους <code>int</code>,
+                <code>float</code>, <code>double</code>
+                και <code>char</code>.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main(void) {
+    int age = 20;
+
+    printf("Age: %d\\n", age);
+
+    age = 21;
+
+    printf("New age: %d\\n", age);
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Τι είναι μια μεταβλητή;",
+                options: [
+                    "Μια ονομασμένη θέση αποθήκευσης",
+                    "Μια βιβλιοθήκη",
+                    "Μια εντολή εξόδου"
+                ],
+                correct: 0,
+                explanation: "Οι μεταβλητές αποθηκεύουν τιμές."
+            },
+            {
+                type: "choice",
+                text: "Ποια δήλωση είναι σωστή;",
+                options: [
+                    "int age = 20;",
+                    "age int = 20;",
+                    "variable age = 20;"
+                ],
+                correct: 0,
+                explanation: "Γράφουμε τύπο, όνομα και προαιρετικά αρχική τιμή."
+            },
+            {
+                type: "choice",
+                text: "Τι τιμή έχει η age;",
+                code: `int age = 20;`,
+                options: ["0", "20", "age"],
+                correct: 1,
+                explanation: "Η αρχική τιμή είναι 20."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τον βασικό τύπο για ακέραιο:",
+                code: `___ score = 10;`,
+                correct: ["int"],
+                explanation: "Ο int αποθηκεύει ακέραιους."
+            },
+            {
+                type: "choice",
+                text: "Ποια εντολή αλλάζει την τιμή της age σε 25;",
+                options: [
+                    "age = 25;",
+                    "age == 25;",
+                    "25 = age;"
+                ],
+                correct: 0,
+                explanation: "Ο τελεστής = αναθέτει νέα τιμή."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int x = 5;
+x = 8;
+printf("%d", x);`,
+                options: ["5", "8", "13"],
+                correct: 1,
+                explanation: "Η νέα τιμή του x είναι 8."
+            }
+        ]
+    },
+
+    {
+        title: "5. Τα πρώτα διαδραστικά προγράμματα",
+
+        description:
+            "Συνδύασε printf, scanf και μεταβλητές σε ολοκληρωμένα παραδείγματα.",
+
+        theory: `
+            <p>
+                Ένα διαδραστικό πρόγραμμα
+                μπορεί να ζητά πληροφορίες
+                από τον χρήστη και στη συνέχεια
+                να εμφανίζει αποτελέσματα.
+            </p>
+
+            <p>
+                Συνήθως ακολουθούμε τρία βήματα:
+                εμφανίζουμε μια οδηγία με
+                <code>printf()</code>,
+                διαβάζουμε την τιμή με
+                <code>scanf()</code> και
+                εμφανίζουμε το αποτέλεσμα.
+            </p>
+
+            <p>
+                Οι μεταβλητές κρατούν τις τιμές
+                που πληκτρολογεί ο χρήστης.
+            </p>
+
+            <p>
+                Για παράδειγμα, μπορούμε
+                να ζητήσουμε έναν αριθμό
+                και να εμφανίσουμε
+                τον ίδιο αριθμό.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main(void) {
+    int number;
+
+    printf("Give a number: ");
+
+    if (scanf("%d", &number) == 1) {
+        printf("You entered: %d\\n", number);
+    } else {
+        printf("Invalid number\\n");
+    }
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Ποια συνάρτηση χρησιμοποιούμε για να ζητήσουμε οπτικά μια τιμή;",
+                options: ["printf()", "return", "main()"],
+                correct: 0,
+                explanation: "Η printf εμφανίζει το μήνυμα προς τον χρήστη."
+            },
+            {
+                type: "choice",
+                text: "Ποια συνάρτηση διαβάζει την απάντηση του χρήστη;",
+                options: ["printf()", "scanf()", "include"],
+                correct: 1,
+                explanation: "Η scanf διαβάζει την τιμή."
+            },
+            {
+                type: "choice",
+                text: "Ποια είναι η σωστή σειρά;",
+                options: [
+                    "Δήλωση μεταβλητής → printf → scanf → printf",
+                    "scanf → δήλωση μεταβλητής → return",
+                    "return → printf → scanf"
+                ],
+                correct: 0,
+                explanation: "Πρώτα δημιουργούμε τη μεταβλητή και μετά τη χρησιμοποιούμε."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τη συνάρτηση που διαβάζει αριθμό:",
+                code: `___("%d", &number);`,
+                correct: ["scanf"],
+                explanation: "Η scanf διαβάζει δεδομένα εισόδου."
+            },
+            {
+                type: "choice",
+                text: "Αν ο χρήστης πληκτρολογήσει 7, τι εμφανίζει το πρόγραμμα;",
+                code: `int number;
+scanf("%d", &number);
+printf("%d", number);`,
+                options: ["0", "7", "number"],
+                correct: 1,
+                explanation: "Η scanf αποθηκεύει το 7 στη number."
+            },
+            {
+                type: "choice",
+                text: "Γιατί είναι χρήσιμο να ελέγχουμε την τιμή επιστροφής της scanf;",
+                options: [
+                    "Για να ξέρουμε αν η ανάγνωση πέτυχε",
+                    "Για να αλλάζει το χρώμα της οθόνης",
+                    "Για να εκτελείται δύο φορές η main"
+                ],
+                correct: 0,
+                explanation: "Έτσι αποφεύγουμε να χρησιμοποιούμε μη έγκυρα δεδομένα."
+            }
+        ]
+    }
+];
+
+
+/*
+    ΑΠΟΘΗΚΕΥΣΗ ΠΡΟΟΔΟΥ
+*/
+
+const STORAGE_KEY = "c_learning_lesson1_quiz_v2";
+const EDITOR_KEY = "c_learning_lesson1_editors_v2";
+
+const totalQuestions = sections.reduce(
+    (sum, section) => sum + section.questions.length,
+    0
+);
+
+function readStorage(key) {
+    try {
+        const data = JSON.parse(localStorage.getItem(key));
+        return data && typeof data === "object" ? data : {};
+    } catch (error) {
+        return {};
+    }
+}
+
+let answeredQuestions = readStorage(STORAGE_KEY);
+let completedEditors = readStorage(EDITOR_KEY);
+
+
+/*
+    ΑΣΦΑΛΗΣ ΕΜΦΑΝΙΣΗ ΚΕΙΜΕΝΟΥ
+*/
+
+function escapeHTML(value) {
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+
+/*
+    ΔΗΜΙΟΥΡΓΙΑ ΕΝΟΤΗΤΩΝ
+*/
+
+function createSections() {
+    const container =
+        document.getElementById("sections-container");
+
+    container.innerHTML = "";
+
+    sections.forEach((section, sectionIndex) => {
+        const sectionElement = document.createElement("section");
+        sectionElement.className = "card";
+
+        sectionElement.innerHTML = `
+            <h2>${escapeHTML(section.title)}</h2>
+
+            <p class="description">
+                ${escapeHTML(section.description)}
+            </p>
+
+            <div class="theory">
+                ${section.theory}
+            </div>
+
+            <h3>Παράδειγμα κώδικα C</h3>
+
+            <pre><code>${escapeHTML(section.example)}</code></pre>
+
+            <div class="section-score">
+                Ολοκληρωμένες ερωτήσεις:
+                <span id="section-score-${sectionIndex}">0</span>
+                / ${section.questions.length}
+            </div>
+
+            <h3>Quiz ενότητας</h3>
+            <div id="questions-${sectionIndex}"></div>
+        `;
+
+        container.appendChild(sectionElement);
+
+        const questionsContainer =
+            document.getElementById(
+                `questions-${sectionIndex}`
+            );
+
+        section.questions.forEach((question, questionIndex) => {
+            const element = document.createElement("div");
+            element.className = "question";
+
+            let html = `
+                <h3>
+                    ${questionIndex + 1}.
+                    ${escapeHTML(question.text)}
+                </h3>
+            `;
+
+            if (question.code) {
+                html += `
+                    <pre><code>${escapeHTML(question.code)}</code></pre>
+                `;
+            }
+
+            if (question.type === "choice") {
+                question.options.forEach((option, optionIndex) => {
+                    html += `
+                        <button class="option"
+                            onclick="checkChoice(
+                                this,
+                                ${sectionIndex},
+                                ${questionIndex},
+                                ${optionIndex}
+                            )">
+                            ${escapeHTML(option)}
+                        </button>
+                    `;
+                });
+            } else {
+                html += `
+                    <input class="answer-input"
+                        type="text"
+                        placeholder="Γράψε την απάντησή σου"
+                        autocomplete="off">
+
+                    <button class="primary-button"
+                        onclick="checkInput(
+                            this,
+                            ${sectionIndex},
+                            ${questionIndex}
+                        )">
+                        Έλεγχος
+                    </button>
+                `;
+            }
+
+            html += `
+                <p class="feedback" aria-live="polite"></p>
+            `;
+
+            element.innerHTML = html;
+            questionsContainer.appendChild(element);
+        });
+    });
+}
+
+
+/*
+    ΕΛΕΓΧΟΣ ΕΡΩΤΗΣΕΩΝ
+*/
+
+function questionKey(sectionIndex, questionIndex) {
+    return `${sectionIndex}-${questionIndex}`;
+}
+
+function getQuestionElement(sectionIndex, questionIndex) {
+    return document.getElementById(
+        `questions-${sectionIndex}`
+    ).children[questionIndex];
+}
+
+function saveAnswer(sectionIndex, questionIndex) {
+    const key = questionKey(sectionIndex, questionIndex);
+
+    if (answeredQuestions[key]) {
+        return;
+    }
+
+    answeredQuestions[key] = true;
+
+    try {
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(answeredQuestions)
+        );
+    } catch (error) {
+        console.warn("Δεν αποθηκεύτηκε η πρόοδος.");
+    }
+
+    refreshScore();
+}
+
+function checkChoice(button, sectionIndex, questionIndex, optionIndex) {
+    const question =
+        sections[sectionIndex].questions[questionIndex];
+
+    const element =
+        getQuestionElement(sectionIndex, questionIndex);
+
+    const feedback = element.querySelector(".feedback");
+
+    if (answeredQuestions[questionKey(sectionIndex, questionIndex)]) {
+        return;
+    }
+
+    if (optionIndex === question.correct) {
+        button.classList.add("correct-option");
+
+        element.querySelectorAll(".option").forEach(
+            btn => btn.disabled = true
+        );
+
+        feedback.textContent =
+            "✓ Σωστά! " + question.explanation;
+
+        feedback.className = "feedback correct";
+
+        saveAnswer(sectionIndex, questionIndex);
+    } else {
+        button.classList.add("wrong-option");
+        button.disabled = true;
+
+        feedback.textContent =
+            "✗ Λάθος απάντηση. Προσπάθησε ξανά.";
+
+        feedback.className = "feedback wrong";
+    }
+}
+
+function checkInput(button, sectionIndex, questionIndex) {
+    const question =
+        sections[sectionIndex].questions[questionIndex];
+
+    const element =
+        getQuestionElement(sectionIndex, questionIndex);
+
+    const input = element.querySelector(".answer-input");
+    const feedback = element.querySelector(".feedback");
+
+    if (answeredQuestions[questionKey(sectionIndex, questionIndex)]) {
+        return;
+    }
+
+    const answer = input.value.trim();
+
+    const isCorrect = question.correct.some(
+        correctAnswer => answer === correctAnswer
+    );
+
+    if (isCorrect) {
+        input.disabled = true;
+        button.disabled = true;
+
+        feedback.textContent =
+            "✓ Σωστά! " + question.explanation;
+
+        feedback.className = "feedback correct";
+
+        saveAnswer(sectionIndex, questionIndex);
+    } else {
+        feedback.textContent =
+            "✗ Έλεγξε την απάντησή σου και προσπάθησε ξανά.";
+
+        feedback.className = "feedback wrong";
+    }
+}
+
+
+/*
+    ΒΑΘΜΟΛΟΓΙΑ
+*/
+
+function refreshScore() {
+    let total = 0;
+
+    sections.forEach((section, sectionIndex) => {
+        let sectionScore = 0;
+
+        section.questions.forEach((question, questionIndex) => {
+            if (answeredQuestions[questionKey(sectionIndex, questionIndex)]) {
+                sectionScore++;
+                total++;
+            }
+        });
+
+        document.getElementById(
+            `section-score-${sectionIndex}`
+        ).textContent = sectionScore;
+    });
+
+    document.getElementById("total-score").textContent = total;
+
+    document.getElementById("progress-text").textContent =
+        `Έχεις ολοκληρώσει ${total} από τις ${totalQuestions} ερωτήσεις.`;
+
+    document.getElementById("progress-fill").style.width =
+        (total / totalQuestions * 100) + "%";
+
+    checkCompletion();
+}
+
+
+/*
+    ΕΠΑΝΑΦΟΡΑ ΑΠΑΝΤΗΣΕΩΝ
+*/
+
+function restoreProgress() {
+    sections.forEach((section, sectionIndex) => {
+        section.questions.forEach((question, questionIndex) => {
+            if (!answeredQuestions[questionKey(sectionIndex, questionIndex)]) {
+                return;
+            }
+
+            const element =
+                getQuestionElement(sectionIndex, questionIndex);
+
+            const feedback = element.querySelector(".feedback");
+
+            feedback.textContent =
+                "✓ Έχεις ήδη απαντήσει σωστά!";
+
+            feedback.className = "feedback correct";
+
+            if (question.type === "choice") {
+                element.querySelectorAll(".option").forEach(
+                    (button, optionIndex) => {
+                        button.disabled = true;
+
+                        if (optionIndex === question.correct) {
+                            button.classList.add("correct-option");
+                        }
+                    }
+                );
+            } else {
+                const input = element.querySelector(".answer-input");
+                const button = element.querySelector("button");
+
+                input.value = question.correct[0];
+                input.disabled = true;
+                button.disabled = true;
+            }
+        });
+    });
+
+    refreshScore();
+}
+
+
+/*
+    EDITORS
+
+    Ο έλεγχος είναι εκπαιδευτικός.
+    Δεν μεταγλωττίζει ούτε εκτελεί κώδικα C.
+*/
+
+function removeComments(code) {
+    return code
+        .replace(/\/\*[\s\S]*?\*\//g, "")
+        .replace(/\/\/[^\n]*/g, "");
+}
+
+function checkEditor(number) {
+    if (completedEditors[number]) {
+        return;
+    }
+
+    const textarea =
+        document.getElementById("editor" + number);
+
+    const feedback =
+        document.getElementById("editor-feedback" + number);
+
+    const code = removeComments(textarea.value);
+    const missing = [];
+
+    if (!/#\s*include\s*<stdio\.h>/.test(code)) {
+        missing.push("Πρόσθεσε #include <stdio.h>.");
+    }
+
+    if (!/\bint\s+main\s*\(\s*(?:void\s*)?\)/.test(code)) {
+        missing.push("Χρειάζεται η συνάρτηση int main().");
+    }
+
+    if (!/\breturn\s+0\s*;/.test(code)) {
+        missing.push("Πρόσθεσε return 0;.");
+    }
+
+    if (number === 1) {
+        if (!/\bprintf\s*\(\s*"Hello World!(?:\\n)?"\s*\)\s*;/.test(code)) {
+            missing.push(
+                'Γράψε printf("Hello World!");'
+            );
+        }
+    }
+
+    if (number === 2) {
+        if (!/\bchar\s+name\s*\[\s*50\s*\]\s*;/.test(code)) {
+            missing.push("Δήλωσε char name[50];.");
+        }
+
+        if (!/\bscanf\s*\(\s*"%49s"\s*,\s*name\s*\)\s*;/.test(code)) {
+            missing.push(
+                'Διάβασε το όνομα με scanf("%49s", name);'
+            );
+        }
+
+        if (!/\bprintf\s*\(\s*"Hello %s(?:\\n)?"\s*,\s*name\s*\)\s*;/.test(code)) {
+            missing.push(
+                'Εμφάνισε το όνομα με printf("Hello %s", name);'
+            );
+        }
+    }
+
+    if (number === 3) {
+        if (!/\bint\s+age\s*;/.test(code)) {
+            missing.push("Δήλωσε int age;.");
+        }
+
+        if (!/\bprintf\s*\(\s*"[^"]+"\s*\)\s*;/.test(code)) {
+            missing.push(
+                "Εμφάνισε ένα μήνυμα που ζητά την ηλικία."
+            );
+        }
+
+        if (!/\bscanf\s*\(\s*"%d"\s*,\s*&age\s*\)\s*;/.test(code)) {
+            missing.push(
+                'Διάβασε την ηλικία με scanf("%d", &age);'
+            );
+        }
+
+        if (!/\bprintf\s*\(\s*"[^"]*%d[^"]*"\s*,\s*age\s*\)\s*;/.test(code)) {
+            missing.push(
+                "Εμφάνισε την ηλικία με printf και %d."
+            );
+        }
+    }
+
+    if (missing.length === 0) {
+        completedEditors[number] = textarea.value;
+
+        try {
+            localStorage.setItem(
+                EDITOR_KEY,
+                JSON.stringify(completedEditors)
+            );
+        } catch (error) {
+            console.warn("Δεν αποθηκεύτηκε η άσκηση.");
+        }
+
+        textarea.disabled = true;
+
+        textarea.parentElement.querySelector(
+            ".primary-button"
+        ).disabled = true;
+
+        feedback.textContent =
+            "✓ Μπράβο! Ο κώδικας περιλαμβάνει τα ζητούμενα στοιχεία. Δεν εκτελέστηκε σε compiler.";
+
+        feedback.className = "feedback correct";
+
+        refreshEditorScore();
+    } else {
+        feedback.textContent =
+            "Χρειάζονται διορθώσεις: " + missing.join(" ");
+
+        feedback.className = "feedback wrong";
+    }
+}
+
+
+/*
+    ΠΡΟΟΔΟΣ EDITORS
+*/
+
+function refreshEditorScore() {
     let score = 0;
 
-
-    // Έλεγχος ερωτήσεων πολλαπλής επιλογής
-    function answer(button, correct) {
-
-        const question = button.parentElement;
-        const feedback = question.querySelector(".feedback");
-
-        if (question.dataset.answered === "true") {
-            return;
-        }
-
-        if (correct) {
-
-            question.dataset.answered = "true";
-
-            feedback.innerHTML = "✅ Σωστά! Μπράβο!";
-            feedback.className = "feedback correct";
-
-            const buttons = question.querySelectorAll("button");
-
-            buttons.forEach(btn => btn.disabled = true);
-
+    for (let number = 1; number <= 3; number++) {
+        if (completedEditors[number]) {
             score++;
-
-            document.getElementById("score").innerText = score;
-
-        } else {
-
-            feedback.innerHTML =
-                "❌ Δεν είναι σωστό. Σκέψου ξανά και προσπάθησε άλλη μία φορά.";
-
-            feedback.className = "feedback wrong";
-
-            // Απενεργοποιούμε μόνο τη λάθος επιλογή
-            button.disabled = true;
         }
     }
 
+    document.getElementById("editor-score").textContent = score;
 
-    // Έλεγχος ερωτήσεων συμπλήρωσης κενού
-    function checkInput(inputId, correctAnswer, button) {
+    document.getElementById("editor-progress").textContent =
+        score + " / 3";
 
-        const input = document.getElementById(inputId);
-        const question = button.parentElement;
-        const feedback = question.querySelector(".feedback");
+    checkCompletion();
+}
 
-        if (question.dataset.answered === "true") {
-            return;
+function restoreEditors() {
+    for (let number = 1; number <= 3; number++) {
+        if (!completedEditors[number]) {
+            continue;
         }
 
-        const userAnswer = input.value.trim().toLowerCase();
+        const textarea =
+            document.getElementById("editor" + number);
 
-        if (userAnswer === correctAnswer.toLowerCase()) {
+        const feedback =
+            document.getElementById("editor-feedback" + number);
 
-            question.dataset.answered = "true";
+        textarea.value = completedEditors[number];
+        textarea.disabled = true;
 
-            feedback.innerHTML = "✅ Σωστά!";
-            feedback.className = "feedback correct";
+        textarea.parentElement.querySelector(
+            ".primary-button"
+        ).disabled = true;
 
-            input.disabled = true;
-            button.disabled = true;
+        feedback.textContent =
+            "✓ Έχεις ήδη ολοκληρώσει αυτή την άσκηση.";
 
-            score++;
+        feedback.className = "feedback correct";
+    }
 
-            document.getElementById("score").innerText = score;
+    refreshEditorScore();
+}
 
-        } else {
 
-            feedback.innerHTML = "❌ Δεν είναι σωστό. Προσπάθησε ξανά.";
-            feedback.className = "feedback wrong";
+/*
+    ΟΛΟΚΛΗΡΩΣΗ ΕΠΙΠΕΔΟΥ
+*/
+
+function checkCompletion() {
+    const answered = sections.reduce(
+        (total, section, sectionIndex) => {
+            return total + section.questions.filter(
+                (question, questionIndex) =>
+                    answeredQuestions[questionKey(
+                        sectionIndex,
+                        questionIndex
+                    )] === true
+            ).length;
+        },
+        0
+    );
+
+    const editorsDone = [1, 2, 3].filter(
+        number => Boolean(completedEditors[number])
+    ).length;
+
+    const completed =
+        answered === totalQuestions && editorsDone === 3;
+
+    document.getElementById(
+        "completion-message"
+    ).style.display = completed ? "block" : "none";
+
+    if (completed) {
+        try {
+            localStorage.setItem(
+                "c_learning_level1_completed",
+                "true"
+            );
+        } catch (error) {
+            console.warn("Δεν αποθηκεύτηκε η ολοκλήρωση.");
         }
     }
+}
+
+
+/*
+    ΑΡΧΙΚΟΣ ΚΩΔΙΚΑΣ EDITORS
+*/
+
+const initialCode = [
+    "",
+    `#include <stdio.h>
+
+int main(void) {
+
+    // Εμφάνισε το μήνυμα Hello World!
+
+    return 0;
+}`,
+    `#include <stdio.h>
+
+int main(void) {
+
+    // Δήλωσε char name[50];
+    // Διάβασε ένα όνομα με scanf
+    // Εμφάνισε το όνομα με printf
+
+    return 0;
+}`,
+    `#include <stdio.h>
+
+int main(void) {
+
+    // Δήλωσε int age;
+    // Ζήτησε την ηλικία με printf
+    // Διάβασε την ηλικία με scanf
+    // Εμφάνισε την ηλικία με printf
+
+    return 0;
+}`
+];
+
+
+/*
+    ΕΠΑΝΑΦΟΡΑ ΟΛΗΣ ΤΗΣ ΠΡΟΟΔΟΥ
+*/
+
+function resetProgress() {
+    const confirmed = confirm(
+        "Θέλεις να μηδενίσεις τις 30 ερωτήσεις και τις 3 ασκήσεις;"
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(EDITOR_KEY);
+        localStorage.removeItem(
+            "c_learning_level1_completed"
+        );
+    } catch (error) {
+        console.warn("Δεν διαγράφηκε η πρόοδος.");
+    }
+
+    answeredQuestions = {};
+    completedEditors = {};
+
+    createSections();
+    refreshScore();
+
+    for (let number = 1; number <= 3; number++) {
+        const textarea =
+            document.getElementById("editor" + number);
+
+        const feedback =
+            document.getElementById(
+                "editor-feedback" + number
+            );
+
+        textarea.value = initialCode[number];
+        textarea.disabled = false;
+
+        textarea.parentElement.querySelector(
+            ".primary-button"
+        ).disabled = false;
+
+        feedback.textContent = "";
+        feedback.className = "feedback";
+    }
+
+    refreshEditorScore();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/*
+    ΕΚΚΙΝΗΣΗ
+*/
+
+createSections();
+restoreProgress();
+restoreEditors();
 
 </script>
 

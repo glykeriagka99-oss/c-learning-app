@@ -1,559 +1,1968 @@
+
 <!DOCTYPE html>
 <html lang="el">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Επίπεδο 2 - Μεταβλητές στη C</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Επίπεδο 2 | Μεταβλητές στη C</title>
+/* =====================================
+   ΜΕΓΑΛΥΤΕΡΑ ΓΡΑΜΜΑΤΑ ΣΤΑ ΚΙΝΗΤΑ
+===================================== */
 
-    <style>
+@media screen and (max-width: 768px) {
 
-        /* Βασική εμφάνιση της σελίδας */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #FFF8DC;
-            margin: 0;
-            color: #222;
-        }
+    body {
+        font-size: 18px;
+        line-height: 1.7;
+    }
 
-        /* Κεντρικό πλαίσιο περιεχομένου */
-        .container {
-            max-width: 900px;
-            margin: 40px auto;
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
+    header h1 {
+        font-size: 30px;
+        line-height: 1.3;
+    }
 
-        h1 {
-            color: #174ea6;
-        }
+    header p {
+        font-size: 18px;
+    }
 
-        h2 {
-            color: #285ea8;
-            margin-top: 35px;
-        }
+    .card h2 {
+        font-size: 25px;
+        line-height: 1.4;
+    }
 
-        p {
-            line-height: 1.7;
-        }
+    .card h3,
+    .question h3 {
+        font-size: 21px;
+        line-height: 1.5;
+    }
 
-        pre {
-            background: #1e1e1e;
-            color: white;
-            padding: 18px;
-            border-radius: 10px;
-            overflow-x: auto;
-        }
+    .description,
+    .theory,
+    .theory p,
+    .card p {
+        font-size: 18px;
+        line-height: 1.8;
+    }
 
-        code {
-            font-family: Consolas, monospace;
-        }
+    .option {
+        font-size: 18px;
+        padding: 16px;
+        line-height: 1.5;
+    }
 
-        /* Πλαίσιο εμφάνισης βαθμολογίας */
-        .score-box {
-            background: #e8f0fe;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            font-weight: bold;
-        }
+    .primary-button,
+    .reset-button,
+    .back-button {
+        font-size: 17px;
+        padding: 15px 20px;
+    }
 
-        /* Εμφάνιση των ερωτήσεων */
-        .question {
-            background: #f7f9fc;
-            border: 1px solid #ddd;
-            padding: 20px;
-            margin-top: 25px;
-            border-radius: 10px;
-        }
+    .answer-input {
+        font-size: 18px;
+        padding: 15px;
+    }
 
-        button {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            text-align: left;
-            border: 1px solid #bbb;
-            border-radius: 8px;
-            background: white;
-            cursor: pointer;
-            font-size: 15px;
-        }
+    .code-editor {
+        font-size: 16px;
+        line-height: 1.6;
+    }
 
-        button:hover {
-            background: #e9f1ff;
-        }
+    pre {
+        font-size: 15px;
+        line-height: 1.6;
+        overflow-x: auto;
+    }
 
-        button:disabled {
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
+    .score-number {
+        font-size: 34px;
+    }
 
-        input {
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 6px;
-            border: 1px solid #aaa;
-        }
+    .section-score,
+    .editor-score {
+        font-size: 18px;
+    }
 
-        .check-button {
-            width: auto;
-            display: inline-block;
-            background: #174ea6;
-            color: white;
-            margin-left: 10px;
-        }
+    nav .logo {
+        font-size: 24px;
+    }
 
-        /* Μηνύματα σωστής και λάθος απάντησης */
-        .feedback {
-            font-weight: bold;
-            margin-top: 12px;
-        }
+    .nav-link {
+        font-size: 17px;
+    }
+}
 
-        .correct {
-            color: green;
-        }
+<style>
+:root {
+    --navy: #0b1220;
+    --navy-light: #16243a;
+    --blue: #2563eb;
+    --cyan: #22d3ee;
+    --green: #059669;
+    --red: #dc2626;
+    --bg: #f1f5f9;
+    --text: #0f172a;
+    --muted: #64748b;
+}
 
-        .wrong {
-            color: #c62828;
-        }
+* {
+    box-sizing: border-box;
+}
 
-        .back {
-            display: inline-block;
-            margin-top: 30px;
-            text-decoration: none;
-            color: #174ea6;
-        }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
 
-    </style>
+nav {
+    background: var(--navy);
+    padding: 20px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo {
+    color: white;
+    text-decoration: none;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.logo span {
+    color: var(--cyan);
+}
+
+.nav-link {
+    color: #cbd5e1;
+    text-decoration: none;
+}
+
+header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-light));
+    color: white;
+    text-align: center;
+    padding: 55px 20px;
+}
+
+header h1 {
+    margin: 0 0 15px;
+    font-size: 36px;
+}
+
+header p {
+    color: #cbd5e1;
+    line-height: 1.7;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 35px auto;
+    padding: 0 20px;
+}
+
+.card {
+    background: white;
+    padding: 28px;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+}
+
+.card h2 {
+    margin-top: 0;
+}
+
+.description {
+    color: var(--muted);
+    line-height: 1.8;
+}
+
+.theory {
+    background: #eff6ff;
+    border-left: 4px solid var(--blue);
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    line-height: 1.8;
+}
+
+.theory p {
+    margin: 10px 0;
+}
+
+pre {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 20px;
+    border-radius: 10px;
+    overflow-x: auto;
+    line-height: 1.7;
+}
+
+code, textarea {
+    font-family: Consolas, monospace;
+}
+
+.progress {
+    background: #e2e8f0;
+    height: 12px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 15px 0;
+}
+
+.progress-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--green);
+    transition: width 0.3s;
+}
+
+.score-number {
+    font-size: 30px;
+    font-weight: bold;
+    color: var(--blue);
+}
+
+.section-score {
+    background: #f1f5f9;
+    border-radius: 8px;
+    padding: 14px;
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+.question {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 18px 0;
+}
+
+.question h3 {
+    font-size: 17px;
+    line-height: 1.6;
+    margin-top: 0;
+}
+
+.option {
+    display: block;
+    width: 100%;
+    background: white;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 13px 15px;
+    margin: 9px 0;
+    text-align: left;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.option:hover:not(:disabled) {
+    background: #dbeafe;
+    border-color: var(--blue);
+}
+
+.option.correct-option {
+    background: #d1fae5;
+    border-color: var(--green);
+}
+
+.option.wrong-option {
+    background: #fee2e2;
+    border-color: var(--red);
+}
+
+.answer-input {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    font-size: 16px;
+}
+
+.primary-button {
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.primary-button:hover:not(:disabled) {
+    background: #1d4ed8;
+}
+
+button:disabled {
+    cursor: default;
+    opacity: 0.8;
+}
+
+.reset-button {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 12px 18px;
+    cursor: pointer;
+}
+
+.feedback {
+    margin-top: 12px;
+    font-weight: bold;
+    line-height: 1.6;
+}
+
+.correct {
+    color: #047857;
+}
+
+.wrong {
+    color: #b91c1c;
+}
+
+.editor-section {
+    border-top: 5px solid var(--cyan);
+}
+
+.editor-score {
+    background: #dbeafe;
+    color: #1e40af;
+    border-radius: 10px;
+    padding: 16px;
+    font-weight: bold;
+}
+
+.editor-exercise {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 22px;
+    margin: 25px 0;
+}
+
+.editor-exercise p {
+    line-height: 1.7;
+}
+
+.editor-label {
+    display: block;
+    background: var(--navy-light);
+    color: var(--cyan);
+    padding: 12px 16px;
+    border-radius: 10px 10px 0 0;
+    font-family: Consolas, monospace;
+}
+
+.code-editor {
+    display: block;
+    width: 100%;
+    min-height: 260px;
+    background: #0f172a;
+    color: #e2e8f0;
+    border: 1px solid #334155;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 18px;
+    font-size: 14px;
+    line-height: 1.6;
+    resize: vertical;
+    tab-size: 4;
+}
+
+.code-editor:focus {
+    outline: 2px solid var(--blue);
+}
+
+.back-button {
+    display: inline-block;
+    background: var(--navy);
+    color: white;
+    text-decoration: none;
+    padding: 14px 24px;
+    border-radius: 8px;
+    margin-bottom: 40px;
+}
+
+.completion {
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    border-radius: 12px;
+    padding: 18px;
+    margin-top: 20px;
+    display: none;
+}
+
+footer {
+    background: var(--navy);
+    color: #94a3b8;
+    padding: 25px;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 27px;
+    }
+
+    .container {
+        padding: 0 12px;
+    }
+
+    .card {
+        padding: 18px;
+    }
+
+    .editor-exercise {
+        padding: 14px;
+    }
+}
+</style>
 </head>
 
 <body>
 
-<div class="container">
+<nav>
+    <a href="/" class="logo">C<span>Learning</span></a>
+    <a href="/skills" class="nav-link">Skill Tree</a>
+</nav>
 
-    <h1>📦 Επίπεδο 2: Μεταβλητές στη C</h1>
+<header>
+    <h1>Επίπεδο 2: Μεταβλητές στη C</h1>
+    <p>
+        Τι είναι μια μεταβλητή - int - float - double - char
+    </p>
+    <p>5 ενότητες - 30 ερωτήσεις - 3 ασκήσεις κώδικα</p>
+</header>
 
-    <div class="score-box">
-        Σωστές απαντήσεις:
-        <span id="score">0</span> / 15
+<main class="container">
+
+<section class="card">
+    <h2>Η πρόοδός σου</h2>
+
+    <div class="score-number">
+        <span id="total-score">0</span> / 30
     </div>
 
-
-    <!-- Θεωρία του επιπέδου -->
-
-    <h2>📖 Σύνοψη</h2>
-
-    <p>
-        Οι μεταβλητές είναι από τις πιο βασικές έννοιες στον προγραμματισμό.
-        Μια μεταβλητή είναι ένας χώρος στη μνήμη του υπολογιστή όπου μπορούμε
-        να αποθηκεύσουμε μια τιμή και να τη χρησιμοποιήσουμε αργότερα στο
-        πρόγραμμά μας. Στη C, πριν χρησιμοποιήσουμε μια μεταβλητή, πρέπει να
-        δηλώσουμε τον τύπο των δεδομένων που θα αποθηκεύει. Για παράδειγμα,
-        ο τύπος <code>int</code> χρησιμοποιείται για ακέραιους αριθμούς,
-        όπως 5, 20 ή -3. Ο τύπος <code>float</code> χρησιμοποιείται για
-        αριθμούς με δεκαδικό μέρος, όπως 3.14 ή 7.5. Ο τύπος
-        <code>double</code> χρησιμοποιείται επίσης για δεκαδικούς αριθμούς,
-        αλλά με μεγαλύτερη ακρίβεια. Ο τύπος <code>char</code>
-        χρησιμοποιείται για έναν μόνο χαρακτήρα, όπως
-        <code>'A'</code> ή <code>'x'</code>.
-        Μπορούμε να δηλώσουμε μια μεταβλητή γράφοντας πρώτα τον τύπο της,
-        μετά το όνομά της και στο τέλος ελληνικό ερωτηματικό.
-        Για παράδειγμα, <code>int age;</code>.
-        Αν θέλουμε να της δώσουμε τιμή αμέσως, μπορούμε να γράψουμε
-        <code>int age = 20;</code>. Αυτό ονομάζεται αρχικοποίηση.
-        Η τιμή μιας μεταβλητής μπορεί να αλλάξει κατά την εκτέλεση
-        του προγράμματος. Για παράδειγμα, αν έχουμε
-        <code>int score = 10;</code>, αργότερα μπορούμε να γράψουμε
-        <code>score = 15;</code>.
-        Για να εμφανίσουμε την τιμή μιας μεταβλητής με την
-        <code>printf()</code>, χρησιμοποιούμε ειδικά σύμβολα μορφοποίησης.
-        Το <code>%d</code> χρησιμοποιείται για <code>int</code>,
-        το <code>%f</code> για δεκαδικούς αριθμούς και το
-        <code>%c</code> για χαρακτήρες.
-        Η C ξεχωρίζει τα κεφαλαία από τα πεζά γράμματα, επομένως οι
-        μεταβλητές <code>age</code> και <code>Age</code> θεωρούνται διαφορετικές.
-        Επίσης, ένα όνομα μεταβλητής δεν πρέπει να ξεκινά με αριθμό.
+    <p id="progress-text">
+        Έχεις ολοκληρώσει 0 από τις 30 ερωτήσεις.
     </p>
 
-
-    <!-- Παραδείγματα κώδικα -->
-
-    <h2>💻 Παραδείγματα</h2>
-
-<pre><code>int age = 20;
-float temperature = 23.5;
-double price = 19.99;
-char grade = 'A';
-
-printf("%d", age);
-printf("%f", temperature);
-printf("%c", grade);</code></pre>
+    <div class="progress">
+        <div class="progress-fill" id="progress-fill"></div>
+    </div>
 
     <p>
-        Μπορούμε επίσης να αλλάξουμε την τιμή μιας μεταβλητής:
+        Πρακτικές ασκήσεις:
+        <strong id="editor-progress">0 / 3</strong>
     </p>
 
-<pre><code>int score = 10;
+    <div id="completion-message" class="completion">
+        <strong>Συγχαρητήρια!</strong>
+        Ολοκλήρωσες το Επίπεδο 2!
+    </div>
 
-score = 20;
+    <button class="reset-button" onclick="resetProgress()">
+        Επαναφορά όλης της προόδου
+    </button>
+</section>
 
-printf("%d", score);</code></pre>
+<div id="sections-container"></div>
 
-    <p>
-        Το αποτέλεσμα θα είναι:
+<section class="card editor-section">
+    <h2>Τελική επανάληψη – Γράψε κώδικα C</h2>
+
+    <p class="description">
+        Λύσε τις τρεις ασκήσεις γράφοντας κώδικα.
+        Ο έλεγχος εξετάζει τη δομή του κώδικα,
+        χωρίς πραγματική μεταγλώττιση ή εκτέλεση.
     </p>
 
-<pre><code>20</code></pre>
-
-
-    <!-- Διαδραστικό Quiz -->
-
-    <h2>🧠 Quiz — 15 ερωτήσεις</h2>
-
-
-    <!-- 1 -->
-    <div class="question">
-        <h3>1. Τι είναι μια μεταβλητή;</h3>
-
-        <button onclick="answer(this, false, 'Η printf() είναι συνάρτηση και όχι μεταβλητή.')">
-            Μια συνάρτηση εμφάνισης
-        </button>
-
-        <button onclick="answer(this, true)">
-            Ένας χώρος όπου αποθηκεύουμε μια τιμή
-        </button>
-
-        <button onclick="answer(this, false, 'Η main() είναι συνάρτηση.')">
-            Το σημείο έναρξης του προγράμματος
-        </button>
-
-        <p class="feedback"></p>
+    <div class="editor-score">
+        Ολοκληρωμένες ασκήσεις:
+        <span id="editor-score">0</span> / 3
     </div>
 
+    <div class="editor-exercise">
+        <h3>Άσκηση 1: Οι πρώτες μου μεταβλητές</h3>
 
-    <!-- 2 -->
-    <div class="question">
-        <h3>2. Ποιος τύπος χρησιμοποιείται για ακέραιους αριθμούς;</h3>
+        <p>
+            Δήλωσε τις μεταβλητές
+            <code>int age = 20;</code>,
+            <code>float height = 1.75f;</code>,
+            <code>double pi = 3.1415926535;</code>
+            και <code>char initial = 'M';</code>.
+            Έπειτα εμφάνισε τις τιμές τους
+            χρησιμοποιώντας <code>printf()</code>.
+        </p>
 
-        <button onclick="answer(this, true)">int</button>
-        <button onclick="answer(this, false, 'Το float χρησιμοποιείται για δεκαδικούς αριθμούς.')">float</button>
-        <button onclick="answer(this, false, 'Το char χρησιμοποιείται για χαρακτήρες.')">char</button>
+        <label class="editor-label" for="editor1">
+            main.c — Άσκηση 1
+        </label>
 
-        <p class="feedback"></p>
+        <textarea id="editor1" class="code-editor" spellcheck="false">#include <stdio.h>
+
+int main(void) {
+
+    // Δήλωσε int age = 20;
+    // Δήλωσε float height = 1.75f;
+    // Δήλωσε double pi = 3.1415926535;
+    // Δήλωσε char initial = 'M';
+    // Εμφάνισε όλες τις τιμές
+
+    return 0;
+}</textarea>
+
+        <button class="primary-button" onclick="checkEditor(1)">
+            Έλεγχος κώδικα
+        </button>
+
+        <p id="editor-feedback1" class="feedback" aria-live="polite"></p>
     </div>
 
+    <div class="editor-exercise">
+        <h3>Άσκηση 2: Προσωπικά στοιχεία</h3>
 
-    <!-- 3 -->
-    <div class="question">
-        <h3>3. Ποιος τύπος είναι κατάλληλος για την τιμή 12.5;</h3>
+        <p>
+            Δήλωσε τις μεταβλητές
+            <code>int age = 18;</code>,
+            <code>float height = 1.70f;</code>
+            και <code>char initial = 'A';</code>.
+            Εμφάνισε την ηλικία, το ύψος
+            και το αρχικό του ονόματος
+            με τους σωστούς προσδιοριστές
+            <code>%d</code>, <code>%f</code>
+            και <code>%c</code>.
+        </p>
 
-        <button onclick="answer(this, false, 'Το int χρησιμοποιείται για ακέραιους αριθμούς.')">int</button>
-        <button onclick="answer(this, true)">float</button>
-        <button onclick="answer(this, false, 'Το char χρησιμοποιείται για χαρακτήρες.')">char</button>
+        <label class="editor-label" for="editor2">
+            main.c — Άσκηση 2
+        </label>
 
-        <p class="feedback"></p>
+        <textarea id="editor2" class="code-editor" spellcheck="false">#include <stdio.h>
+
+int main(void) {
+
+    // Δήλωσε τις τρεις μεταβλητές
+    // Εμφάνισε τις τιμές τους
+
+    return 0;
+}</textarea>
+
+        <button class="primary-button" onclick="checkEditor(2)">
+            Έλεγχος κώδικα
+        </button>
+
+        <p id="editor-feedback2" class="feedback" aria-live="polite"></p>
     </div>
 
+    <div class="editor-exercise">
+        <h3>Άσκηση 3: Διαδραστικό πρόγραμμα</h3>
 
-    <!-- 4 -->
-    <div class="question">
-        <h3>4. Ποια δήλωση μεταβλητής είναι σωστή;</h3>
+        <p>
+            Δήλωσε <code>int age;</code>,
+            <code>float height;</code>
+            και <code>char initial;</code>.
+            Διάβασε τις τρεις τιμές με
+            <code>scanf()</code> και
+            εμφάνισέ τες με <code>printf()</code>.
+        </p>
 
-        <button onclick="answer(this, false, 'Στη C γράφουμε πρώτα τον τύπο και μετά το όνομα.')">
-            age int = 20;
+        <label class="editor-label" for="editor3">
+            main.c — Άσκηση 3
+        </label>
+
+        <textarea id="editor3" class="code-editor" spellcheck="false">#include <stdio.h>
+
+int main(void) {
+
+    // Δήλωσε age, height, initial
+    // Διάβασε τις τιμές με scanf
+    // Εμφάνισέ τες με printf
+
+    return 0;
+}</textarea>
+
+        <button class="primary-button" onclick="checkEditor(3)">
+            Έλεγχος κώδικα
         </button>
 
-        <button onclick="answer(this, true)">
-            int age = 20;
-        </button>
-
-        <button onclick="answer(this, false, 'Η σύνταξη δεν είναι σωστή.')">
-            age = 20 int;
-        </button>
-
-        <p class="feedback"></p>
+        <p id="editor-feedback3" class="feedback" aria-live="polite"></p>
     </div>
 
+</section>
 
-    <!-- 5 -->
-    <div class="question">
-        <h3>5. Συμπλήρωσε το κενό:</h3>
+<a href="/skills" class="back-button">
+    ← Επιστροφή στο Skill Tree
+</a>
 
-<pre>___ score = 100;</pre>
+</main>
 
-        <input type="text" id="q5">
-
-        <button class="check-button"
-                onclick="checkInput('q5','int',this)">
-            Έλεγχος
-        </button>
-
-        <p class="feedback"></p>
-    </div>
-
-
-    <!-- 6 -->
-    <div class="question">
-        <h3>6. Ποιος τύπος χρησιμοποιείται για έναν χαρακτήρα;</h3>
-
-        <button onclick="answer(this, false, 'Το int χρησιμοποιείται για ακέραιους αριθμούς.')">int</button>
-        <button onclick="answer(this, true)">char</button>
-        <button onclick="answer(this, false, 'Το float χρησιμοποιείται για δεκαδικούς αριθμούς.')">float</button>
-
-        <p class="feedback"></p>
-    </div>
-
-
-    <!-- 7 -->
-    <div class="question">
-        <h3>7. Ποια τιμή ταιριάζει σε μεταβλητή char;</h3>
-
-        <button onclick="answer(this, false, 'Το 25 είναι ακέραιος αριθμός.')">25</button>
-
-        <button onclick="answer(this, true)">
-            'A'
-        </button>
-
-        <button onclick="answer(this, false, 'Το 3.14 είναι δεκαδικός αριθμός.')">
-            3.14
-        </button>
-
-        <p class="feedback"></p>
-    </div>
-
-
-    <!-- 8 -->
-    <div class="question">
-        <h3>8. Τι θα εμφανίσει ο παρακάτω κώδικας;</h3>
-
-<pre>int x = 5;
-x = 10;
-
-printf("%d", x);</pre>
-
-        <button onclick="answer(this, false, 'Η τιμή της x άλλαξε από 5 σε 10.')">5</button>
-        <button onclick="answer(this, true)">10</button>
-        <button onclick="answer(this, false, 'Η x έχει τιμή και μπορεί να εμφανιστεί.')">Τίποτα</button>
-
-        <p class="feedback"></p>
-    </div>
-
-
-    <!-- 9 -->
-    <div class="question">
-        <h3>9. Ποιο σύμβολο χρησιμοποιούμε στην printf() για int;</h3>
-
-        <button onclick="answer(this, true)">%d</button>
-        <button onclick="answer(this, false, 'Το %c χρησιμοποιείται για char.')">%c</button>
-        <button onclick="answer(this, false, 'Το %f χρησιμοποιείται για δεκαδικούς αριθμούς.')">%f</button>
-
-        <p class="feedback"></p>
-    </div>
-
-
-    <!-- 10 -->
-    <div class="question">
-        <h3>10. Συμπλήρωσε το κενό:</h3>
-
-<pre>char grade = ___;</pre>
-
-        <input type="text" id="q10">
-
-        <button class="check-button"
-                onclick="checkInput('q10', &quot;'A'&quot;, this)">
-            Έλεγχος
-        </button>
-
-        <p class="feedback"></p>
-    </div>
-
-
-    <!-- 11 -->
-    <div class="question">
-        <h3>11. Ποιο όνομα μεταβλητής ΔΕΝ είναι σωστό;</h3>
-
-        <button onclick="answer(this, false, 'Το age είναι σωστό όνομα μεταβλητής.')">
-            age
-        </button>
-
-        <button onclick="answer(this, true)">
-            2score
-        </button>
-
-        <button onclick="answer(this, false, 'Το userScore είναι σωστό όνομα μεταβλητής.')">
-            userScore
-        </button>
-
-        <p class="feedback"></p>
-    </div>
-
-
-    <!-- 12 -->
-    <div class="question">
-        <h3>12. Είναι οι μεταβλητές age και Age ίδιες στη C;</h3>
-
-        <button onclick="answer(this, false, 'Η C ξεχωρίζει τα κεφαλαία από τα πεζά γράμματα.')">
-            Ναι
-        </button>
-
-        <button onclick="answer(this, true)">
-            Όχι
-        </button>
-
-        <p class="feedback"></p>
-    </div>
-
-
-    <!-- 13 -->
-    <div class="question">
-        <h3>13. Ποιο θα εμφανίσει σωστά τη μεταβλητή age;</h3>
-
-<pre>int age = 18;</pre>
-
-        <button onclick="answer(this, true)">
-            printf("%d", age);
-        </button>
-
-        <button onclick="answer(this, false, 'Το %c χρησιμοποιείται για χαρακτήρες.')">
-            printf("%c", age);
-        </button>
-
-        <button onclick="answer(this, false, 'Η printf χρειάζεται format specifier.')">
-            printf(age);
-        </button>
-
-        <p class="feedback"></p>
-    </div>
-
-
-    <!-- 14 -->
-    <div class="question">
-        <h3>14. Συμπλήρωσε το κενό:</h3>
-
-<pre>float temperature = 22.5;
-
-printf("___", temperature);</pre>
-
-        <input type="text" id="q14">
-
-        <button class="check-button"
-                onclick="checkInput('q14','%f',this)">
-            Έλεγχος
-        </button>
-
-        <p class="feedback"></p>
-    </div>
-
-
-    <!-- 15 -->
-    <div class="question">
-        <h3>15. Ποιο πρόγραμμα δηλώνει σωστά τρεις διαφορετικούς τύπους;</h3>
-
-        <button onclick="answer(this, true)">
-            int age = 20; float height = 1.75; char grade = 'A';
-        </button>
-
-        <button onclick="answer(this, false, 'Το height έχει δεκαδική τιμή, οπότε το float είναι πιο κατάλληλο.')">
-            int age = 20; int height = 1.75; char grade = 'A';
-        </button>
-
-        <button onclick="answer(this, false, 'Οι τύποι δεν αντιστοιχούν σωστά στις τιμές.')">
-            char age = 20; float height = 1.75; int grade = 'A';
-        </button>
-
-        <p class="feedback"></p>
-    </div>
-
-
-    <a class="back" href="/skills">
-        ← Επιστροφή στο Skill Tree
-    </a>
-
-</div>
-
+<footer>
+    C Learning App • Επίπεδο 2: Μεταβλητές στη C
+</footer>
 
 <script>
+"use strict";
 
-    // Αρχική βαθμολογία
+/*
+    ΕΠΙΠΕΔΟ 2
+    5 ενότητες x 6 ερωτήσεις = 30
+*/
+
+const sections = [
+
+    {
+        title: "1. Τι είναι μια μεταβλητή;",
+
+        description:
+            "Μάθε τι είναι μια μεταβλητή, πώς τη δηλώνουμε και πώς αλλάζουμε την τιμή της.",
+
+        theory: `
+            <p>
+                Μια <strong>μεταβλητή</strong>
+                είναι μια ονομασμένη θέση στη μνήμη,
+                στην οποία αποθηκεύουμε δεδομένα.
+            </p>
+
+            <p>
+                Κάθε μεταβλητή έχει έναν
+                <strong>τύπο</strong>, ένα
+                <strong>όνομα</strong> και,
+                όταν αρχικοποιηθεί, μια
+                <strong>τιμή</strong>.
+            </p>
+
+            <p>
+                Για παράδειγμα,
+                <code>int age = 20;</code>
+                δημιουργεί μια μεταβλητή
+                με όνομα <code>age</code>
+                και αρχική τιμή <code>20</code>.
+            </p>
+
+            <p>
+                Η <strong>δήλωση</strong>
+                μιας μεταβλητής μπορεί να γίνει
+                χωρίς αρχική τιμή:
+                <code>int score;</code>.
+                Πριν χρησιμοποιήσουμε την τιμή
+                μιας τέτοιας τοπικής μεταβλητής,
+                πρέπει να της αναθέσουμε τιμή.
+            </p>
+
+            <p>
+                Η <strong>ανάθεση</strong>
+                αλλάζει την τιμή:
+                <code>score = 10;</code>.
+                Μπορούμε αργότερα να γράψουμε
+                <code>score = 25;</code>.
+            </p>
+
+            <p>
+                Τα ονόματα μεταβλητών δεν
+                μπορούν να ξεκινούν με αριθμό
+                και δεν μπορούν να περιέχουν
+                κενά. Η C διακρίνει
+                πεζά και κεφαλαία γράμματα:
+                <code>age</code> και
+                <code>Age</code> είναι διαφορετικά ονόματα.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main(void) {
+    int score;
+
+    score = 10;
+    printf("Score: %d\\n", score);
+
+    score = 25;
+    printf("New score: %d\\n", score);
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Τι είναι μια μεταβλητή;",
+                options: [
+                    "Μια ονομασμένη θέση αποθήκευσης δεδομένων",
+                    "Μια εντολή που τερματίζει το πρόγραμμα",
+                    "Μια βιβλιοθήκη της C"
+                ],
+                correct: 0,
+                explanation: "Η μεταβλητή αποθηκεύει δεδομένα που χρησιμοποιεί το πρόγραμμα."
+            },
+            {
+                type: "choice",
+                text: "Ποια δήλωση μεταβλητής είναι σωστή;",
+                options: [
+                    "int age = 20;",
+                    "age int = 20;",
+                    "20 = int age;"
+                ],
+                correct: 0,
+                explanation: "Γράφουμε πρώτα τον τύπο και μετά το όνομα."
+            },
+            {
+                type: "choice",
+                text: "Τι σημαίνει αρχικοποίηση μεταβλητής;",
+                options: [
+                    "Να δώσουμε αρχική τιμή κατά τη δήλωσή της",
+                    "Να διαγράψουμε τη μεταβλητή",
+                    "Να εμφανίσουμε τη μεταβλητή"
+                ],
+                correct: 0,
+                explanation: "Η αρχικοποίηση δίνει αρχική τιμή κατά τη δήλωση."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε το όνομα της μεταβλητής:",
+                code: `int ___ = 20;`,
+                correct: ["age"],
+                explanation: "Η μεταβλητή μπορεί να ονομαστεί age."
+            },
+            {
+                type: "choice",
+                text: "Ποιο όνομα μεταβλητής δεν είναι έγκυρο;",
+                options: ["student_age", "2score", "total"],
+                correct: 1,
+                explanation: "Ένα όνομα μεταβλητής δεν ξεκινά με αριθμό."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int score = 10;
+score = 25;
+printf("%d", score);`,
+                options: ["10", "25", "35"],
+                correct: 1,
+                explanation: "Η δεύτερη ανάθεση αντικαθιστά την προηγούμενη τιμή."
+            }
+        ]
+    },
+
+    {
+        title: "2. Ακέραιες μεταβλητές – int",
+
+        description:
+            "Μάθε να αποθηκεύεις θετικούς και αρνητικούς ακέραιους αριθμούς.",
+
+        theory: `
+            <p>
+                Ο τύπος <code>int</code>
+                χρησιμοποιείται για
+                <strong>ακέραιους αριθμούς</strong>,
+                δηλαδή αριθμούς χωρίς
+                δεκαδικό μέρος.
+            </p>
+
+            <p>
+                Παραδείγματα:
+                <code>10</code>,
+                <code>-5</code>,
+                <code>0</code>,
+                <code>120</code>.
+            </p>
+
+            <p>
+                Δηλώνουμε μια ακέραια μεταβλητή
+                με <code>int age = 20;</code>.
+            </p>
+
+            <p>
+                Για εμφάνιση με <code>printf()</code>
+                χρησιμοποιούμε <code>%d</code>.
+                Το ίδιο σύμβολο χρησιμοποιούμε
+                για ανάγνωση ενός <code>int</code>
+                με <code>scanf()</code>.
+            </p>
+
+            <p>
+                Ο <code>int</code> έχει
+                περιορισμένο εύρος τιμών,
+                το οποίο εξαρτάται
+                από την υλοποίηση της C.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main(void) {
+    int age = 20;
+    int temperature = -5;
+    int score = 100;
+
+    printf("Age: %d\\n", age);
+    printf("Temperature: %d\\n", temperature);
+    printf("Score: %d\\n", score);
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Τι αποθηκεύει ο τύπος int;",
+                options: [
+                    "Ακέραιους αριθμούς",
+                    "Μόνο χαρακτήρες",
+                    "Μόνο δεκαδικούς αριθμούς"
+                ],
+                correct: 0,
+                explanation: "Ο int χρησιμοποιείται για ακέραιους."
+            },
+            {
+                type: "choice",
+                text: "Ποια τιμή είναι κατάλληλη για int;",
+                options: ["3.14", "-12", "'A'"],
+                correct: 1,
+                explanation: "Το -12 είναι ακέραιος αριθμός."
+            },
+            {
+                type: "choice",
+                text: "Ποιος προσδιοριστής χρησιμοποιείται για εμφάνιση int;",
+                options: ["%f", "%c", "%d"],
+                correct: 2,
+                explanation: "Ο %d χρησιμοποιείται για int."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τον τύπο μεταβλητής:",
+                code: `___ score = 100;`,
+                correct: ["int"],
+                explanation: "Η τιμή 100 μπορεί να αποθηκευτεί σε int."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int x = -8;
+printf("%d", x);`,
+                options: ["8", "-8", "0"],
+                correct: 1,
+                explanation: "Η μεταβλητή x περιέχει την τιμή -8."
+            },
+            {
+                type: "choice",
+                text: "Ποια εντολή διαβάζει σωστά έναν int;",
+                options: [
+                    'scanf("%d", &age);',
+                    'scanf("%f", &age);',
+                    'printf("%d", &age);'
+                ],
+                correct: 0,
+                explanation: "Για ανάγνωση int χρησιμοποιούμε %d και &age."
+            }
+        ]
+    },
+
+    {
+        title: "3. Δεκαδικές μεταβλητές – float",
+
+        description:
+            "Μάθε πώς αποθηκεύουμε αριθμούς με δεκαδικό μέρος.",
+
+        theory: `
+            <p>
+                Ο τύπος <code>float</code>
+                χρησιμοποιείται για
+                αριθμούς κινητής υποδιαστολής,
+                όπως <code>1.75</code>
+                και <code>3.14</code>.
+            </p>
+
+            <p>
+                Στη C γράφουμε την υποδιαστολή
+                με <strong>τελεία</strong>,
+                όχι με κόμμα.
+            </p>
+
+            <p>
+                Παράδειγμα δήλωσης:
+                <code>float height = 1.75f;</code>.
+                Το <code>f</code> δηλώνει
+                ότι η σταθερά είναι τύπου float.
+            </p>
+
+            <p>
+                Για εμφάνιση με
+                <code>printf()</code> χρησιμοποιούμε
+                <code>%f</code>.
+            </p>
+
+            <p>
+                Μπορούμε να ορίσουμε
+                πόσα ψηφία θα εμφανίζονται
+                μετά την υποδιαστολή:
+                <code>%.2f</code> για δύο ψηφία.
+            </p>
+
+            <p>
+                Ο <code>float</code>
+                προσφέρει συνήθως
+                περίπου 6–7 σημαντικά
+                δεκαδικά ψηφία ακρίβειας.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main(void) {
+    float height = 1.75f;
+    float price = 12.50f;
+
+    printf("Height: %.2f\\n", height);
+    printf("Price: %.2f\\n", price);
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Πότε χρησιμοποιούμε float;",
+                options: [
+                    "Για αριθμούς με δεκαδικό μέρος",
+                    "Μόνο για γράμματα",
+                    "Μόνο για ακέραιους"
+                ],
+                correct: 0,
+                explanation: "Ο float αποθηκεύει αριθμούς κινητής υποδιαστολής."
+            },
+            {
+                type: "choice",
+                text: "Ποια δήλωση είναι σωστή;",
+                options: [
+                    "float height = 1.75f;",
+                    "float height = 1,75;",
+                    "height float = 1.75;"
+                ],
+                correct: 0,
+                explanation: "Στη C χρησιμοποιούμε τελεία στους δεκαδικούς."
+            },
+            {
+                type: "choice",
+                text: "Ποιος προσδιοριστής εμφανίζει float με printf;",
+                options: ["%d", "%f", "%c"],
+                correct: 1,
+                explanation: "Ο %f χρησιμοποιείται για εμφάνιση float."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τον τύπο:",
+                code: `___ price = 12.50f;`,
+                correct: ["float"],
+                explanation: "Ο τύπος float αποθηκεύει δεκαδικές τιμές."
+            },
+            {
+                type: "choice",
+                text: "Τι σημαίνει %.2f στη printf;",
+                options: [
+                    "Εμφάνιση δύο ψηφίων μετά την υποδιαστολή",
+                    "Εμφάνιση δύο διαφορετικών μεταβλητών",
+                    "Εμφάνιση μόνο ακεραίων"
+                ],
+                correct: 0,
+                explanation: "Το .2 καθορίζει δύο δεκαδικά ψηφία στην εμφάνιση."
+            },
+            {
+                type: "choice",
+                text: "Ποια εντολή διαβάζει σωστά έναν float;",
+                options: [
+                    'scanf("%d", &height);',
+                    'scanf("%f", &height);',
+                    'scanf("%c", &height);'
+                ],
+                correct: 1,
+                explanation: "Για ανάγνωση float χρησιμοποιούμε %f."
+            }
+        ]
+    },
+
+    {
+        title: "4. Μεταβλητές μεγαλύτερης ακρίβειας – double",
+
+        description:
+            "Μάθε πότε χρησιμοποιούμε double και πώς διαφέρει από τον float.",
+
+        theory: `
+            <p>
+                Ο τύπος <code>double</code>
+                αποθηκεύει επίσης αριθμούς
+                κινητής υποδιαστολής.
+            </p>
+
+            <p>
+                Συνήθως προσφέρει
+                <strong>μεγαλύτερη ακρίβεια</strong>
+                από τον <code>float</code>.
+            </p>
+
+            <p>
+                Σε συνηθισμένα συστήματα,
+                ο <code>double</code>
+                προσφέρει περίπου
+                15–16 σημαντικά δεκαδικά ψηφία,
+                ενώ ο <code>float</code>
+                περίπου 6–7.
+            </p>
+
+            <p>
+                Παράδειγμα:
+                <code>double pi = 3.1415926535;</code>.
+            </p>
+
+            <p>
+                Για εμφάνιση με
+                <code>printf()</code>
+                χρησιμοποιούμε <code>%f</code>
+                ή <code>%lf</code>.
+            </p>
+
+            <p>
+                Για ανάγνωση με
+                <code>scanf()</code>
+                χρησιμοποιούμε
+                <strong><code>%lf</code></strong>.
+                Αυτή η διαφορά είναι σημαντική.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main(void) {
+    double pi = 3.1415926535;
+
+    printf("Pi: %.10f\\n", pi);
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Τι αποθηκεύει ο double;",
+                options: [
+                    "Αριθμούς κινητής υποδιαστολής",
+                    "Μόνο ακέραιους",
+                    "Μόνο χαρακτήρες"
+                ],
+                correct: 0,
+                explanation: "Ο double χρησιμοποιείται για αριθμούς κινητής υποδιαστολής."
+            },
+            {
+                type: "choice",
+                text: "Ποιος τύπος έχει συνήθως μεγαλύτερη ακρίβεια;",
+                options: ["float", "double", "char"],
+                correct: 1,
+                explanation: "Ο double προσφέρει συνήθως μεγαλύτερη ακρίβεια."
+            },
+            {
+                type: "choice",
+                text: "Ποια δήλωση είναι σωστή;",
+                options: [
+                    "double pi = 3.14159;",
+                    "double pi = '3.14';",
+                    "pi double = 3.14;"
+                ],
+                correct: 0,
+                explanation: "Η σωστή δήλωση αρχίζει με double."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τον τύπο με μεγαλύτερη συνήθως ακρίβεια από float:",
+                code: `___ pi = 3.1415926535;`,
+                correct: ["double"],
+                explanation: "Ο double προσφέρει συνήθως μεγαλύτερη ακρίβεια."
+            },
+            {
+                type: "choice",
+                text: "Ποιος προσδιοριστής χρησιμοποιείται για ανάγνωση double με scanf;",
+                options: ["%f", "%lf", "%d"],
+                correct: 1,
+                explanation: "Στη scanf ο double διαβάζεται με %lf."
+            },
+            {
+                type: "choice",
+                text: "Ποια εντολή εμφανίζει τον double pi με 3 δεκαδικά ψηφία;",
+                options: [
+                    'printf("%.3f", pi);',
+                    'printf("%d", pi);',
+                    'printf("%c", pi);'
+                ],
+                correct: 0,
+                explanation: "Το %.3f εμφανίζει τρία ψηφία μετά την υποδιαστολή."
+            }
+        ]
+    },
+
+    {
+        title: "5. Μεταβλητές χαρακτήρων – char",
+
+        description:
+            "Μάθε πώς αποθηκεύουμε και εμφανίζουμε έναν χαρακτήρα.",
+
+        theory: `
+            <p>
+                Ο τύπος <code>char</code>
+                χρησιμοποιείται για την
+                αποθήκευση ενός χαρακτήρα.
+            </p>
+
+            <p>
+                Για παράδειγμα:
+                <code>char initial = 'A';</code>.
+            </p>
+
+            <p>
+                Ένας χαρακτήρας γράφεται
+                μέσα σε <strong>μονά εισαγωγικά</strong>,
+                όπως <code>'M'</code>.
+            </p>
+
+            <p>
+                Για εμφάνιση με
+                <code>printf()</code>
+                χρησιμοποιούμε <code>%c</code>.
+            </p>
+
+            <p>
+                Για ανάγνωση με
+                <code>scanf()</code>
+                χρησιμοποιούμε επίσης
+                <code>%c</code>.
+                Συχνά γράφουμε
+                <code>scanf(" %c", &amp;initial);</code>,
+                ώστε να παραλείπονται προηγούμενα
+                κενά και αλλαγές γραμμής.
+            </p>
+
+            <p>
+                Ο <code>char</code>
+                αποθηκεύει έναν χαρακτήρα,
+                όχι ολόκληρη λέξη.
+                Για λέξεις χρησιμοποιούμε
+                διαφορετική τεχνική,
+                όπως πίνακες χαρακτήρων.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main(void) {
+    char initial = 'M';
+
+    printf("Initial: %c\\n", initial);
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Τι αποθηκεύει ο char;",
+                options: [
+                    "Έναν χαρακτήρα",
+                    "Μόνο δεκαδικούς",
+                    "Ολόκληρη λέξη σε μία μεταβλητή char"
+                ],
+                correct: 0,
+                explanation: "Ο char αποθηκεύει έναν χαρακτήρα."
+            },
+            {
+                type: "choice",
+                text: "Ποια δήλωση είναι σωστή;",
+                options: [
+                    "char initial = 'A';",
+                    'char initial = "A";',
+                    "char initial = A;"
+                ],
+                correct: 0,
+                explanation: "Ένας χαρακτήρας γράφεται σε μονά εισαγωγικά."
+            },
+            {
+                type: "choice",
+                text: "Ποιος προσδιοριστής εμφανίζει char;",
+                options: ["%d", "%f", "%c"],
+                correct: 2,
+                explanation: "Ο %c χρησιμοποιείται για χαρακτήρες."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τον τύπο χαρακτήρα:",
+                code: `___ grade = 'A';`,
+                correct: ["char"],
+                explanation: "Ο char αποθηκεύει έναν χαρακτήρα."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `char letter = 'Z';
+printf("%c", letter);`,
+                options: ["Z", "letter", "%c"],
+                correct: 0,
+                explanation: "Η printf εμφανίζει τον χαρακτήρα Z."
+            },
+            {
+                type: "choice",
+                text: 'Γιατί γράφουμε scanf(" %c", &letter); με κενό πριν από το %c;',
+                options: [
+                    "Για να παραλείπονται προηγούμενα κενά και αλλαγές γραμμής",
+                    "Για να διαβάζονται δύο χαρακτήρες",
+                    "Για να μετατρέπεται ο char σε int"
+                ],
+                correct: 0,
+                explanation: "Το κενό στη μορφή της scanf παραλείπει λευκούς χαρακτήρες."
+            }
+        ]
+    }
+];
+
+
+/*
+    ΑΠΟΘΗΚΕΥΣΗ ΠΡΟΟΔΟΥ
+*/
+
+const STORAGE_KEY = "c_learning_lesson2_types_quiz_v2";
+const EDITOR_KEY = "c_learning_lesson2_types_editors_v2";
+
+const totalQuestions = sections.reduce(
+    (sum, section) => sum + section.questions.length,
+    0
+);
+
+function readStorage(key) {
+    try {
+        const data = JSON.parse(localStorage.getItem(key));
+        return data && typeof data === "object" ? data : {};
+    } catch (error) {
+        return {};
+    }
+}
+
+let answeredQuestions = readStorage(STORAGE_KEY);
+let completedEditors = readStorage(EDITOR_KEY);
+
+
+/*
+    ΑΣΦΑΛΗΣ ΕΜΦΑΝΙΣΗ ΚΕΙΜΕΝΟΥ
+*/
+
+function escapeHTML(value) {
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+
+/*
+    ΔΗΜΙΟΥΡΓΙΑ ΕΝΟΤΗΤΩΝ
+*/
+
+function createSections() {
+    const container =
+        document.getElementById("sections-container");
+
+    container.innerHTML = "";
+
+    sections.forEach((section, sectionIndex) => {
+        const sectionElement = document.createElement("section");
+        sectionElement.className = "card";
+
+        sectionElement.innerHTML = `
+            <h2>${escapeHTML(section.title)}</h2>
+
+            <p class="description">
+                ${escapeHTML(section.description)}
+            </p>
+
+            <div class="theory">
+                ${section.theory}
+            </div>
+
+            <h3>Παράδειγμα κώδικα C</h3>
+
+            <pre><code>${escapeHTML(section.example)}</code></pre>
+
+            <div class="section-score">
+                Ολοκληρωμένες ερωτήσεις:
+                <span id="section-score-${sectionIndex}">0</span>
+                / ${section.questions.length}
+            </div>
+
+            <h3>Quiz ενότητας</h3>
+            <div id="questions-${sectionIndex}"></div>
+        `;
+
+        container.appendChild(sectionElement);
+
+        const questionsContainer =
+            document.getElementById(
+                `questions-${sectionIndex}`
+            );
+
+        section.questions.forEach((question, questionIndex) => {
+            const element = document.createElement("div");
+            element.className = "question";
+
+            let html = `
+                <h3>
+                    ${questionIndex + 1}.
+                    ${escapeHTML(question.text)}
+                </h3>
+            `;
+
+            if (question.code) {
+                html += `
+                    <pre><code>${escapeHTML(question.code)}</code></pre>
+                `;
+            }
+
+            if (question.type === "choice") {
+                question.options.forEach((option, optionIndex) => {
+                    html += `
+                        <button class="option"
+                            onclick="checkChoice(
+                                this,
+                                ${sectionIndex},
+                                ${questionIndex},
+                                ${optionIndex}
+                            )">
+                            ${escapeHTML(option)}
+                        </button>
+                    `;
+                });
+            } else {
+                html += `
+                    <input class="answer-input"
+                        type="text"
+                        placeholder="Γράψε την απάντησή σου"
+                        autocomplete="off">
+
+                    <button class="primary-button"
+                        onclick="checkInput(
+                            this,
+                            ${sectionIndex},
+                            ${questionIndex}
+                        )">
+                        Έλεγχος
+                    </button>
+                `;
+            }
+
+            html += `
+                <p class="feedback" aria-live="polite"></p>
+            `;
+
+            element.innerHTML = html;
+            questionsContainer.appendChild(element);
+        });
+    });
+}
+
+
+/*
+    ΕΛΕΓΧΟΣ ΕΡΩΤΗΣΕΩΝ
+*/
+
+function questionKey(sectionIndex, questionIndex) {
+    return `${sectionIndex}-${questionIndex}`;
+}
+
+function getQuestionElement(sectionIndex, questionIndex) {
+    return document.getElementById(
+        `questions-${sectionIndex}`
+    ).children[questionIndex];
+}
+
+function saveAnswer(sectionIndex, questionIndex) {
+    const key = questionKey(sectionIndex, questionIndex);
+
+    if (answeredQuestions[key]) {
+        return;
+    }
+
+    answeredQuestions[key] = true;
+
+    try {
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(answeredQuestions)
+        );
+    } catch (error) {
+        console.warn("Δεν αποθηκεύτηκε η πρόοδος.");
+    }
+
+    refreshScore();
+}
+
+function checkChoice(button, sectionIndex, questionIndex, optionIndex) {
+    const question =
+        sections[sectionIndex].questions[questionIndex];
+
+    const element =
+        getQuestionElement(sectionIndex, questionIndex);
+
+    const feedback = element.querySelector(".feedback");
+
+    if (answeredQuestions[questionKey(sectionIndex, questionIndex)]) {
+        return;
+    }
+
+    if (optionIndex === question.correct) {
+        button.classList.add("correct-option");
+
+        element.querySelectorAll(".option").forEach(
+            btn => btn.disabled = true
+        );
+
+        feedback.textContent =
+            "✓ Σωστά! " + question.explanation;
+
+        feedback.className = "feedback correct";
+
+        saveAnswer(sectionIndex, questionIndex);
+    } else {
+        button.classList.add("wrong-option");
+        button.disabled = true;
+
+        feedback.textContent =
+            "✗ Λάθος απάντηση. Προσπάθησε ξανά.";
+
+        feedback.className = "feedback wrong";
+    }
+}
+
+function checkInput(button, sectionIndex, questionIndex) {
+    const question =
+        sections[sectionIndex].questions[questionIndex];
+
+    const element =
+        getQuestionElement(sectionIndex, questionIndex);
+
+    const input = element.querySelector(".answer-input");
+    const feedback = element.querySelector(".feedback");
+
+    if (answeredQuestions[questionKey(sectionIndex, questionIndex)]) {
+        return;
+    }
+
+    const answer = input.value.trim();
+
+    const isCorrect = question.correct.some(
+        correctAnswer => answer === correctAnswer
+    );
+
+    if (isCorrect) {
+        input.disabled = true;
+        button.disabled = true;
+
+        feedback.textContent =
+            "✓ Σωστά! " + question.explanation;
+
+        feedback.className = "feedback correct";
+
+        saveAnswer(sectionIndex, questionIndex);
+    } else {
+        feedback.textContent =
+            "✗ Έλεγξε την απάντησή σου και προσπάθησε ξανά.";
+
+        feedback.className = "feedback wrong";
+    }
+}
+
+
+/*
+    ΒΑΘΜΟΛΟΓΙΑ
+*/
+
+function refreshScore() {
+    let total = 0;
+
+    sections.forEach((section, sectionIndex) => {
+        let sectionScore = 0;
+
+        section.questions.forEach((question, questionIndex) => {
+            if (answeredQuestions[questionKey(sectionIndex, questionIndex)]) {
+                sectionScore++;
+                total++;
+            }
+        });
+
+        document.getElementById(
+            `section-score-${sectionIndex}`
+        ).textContent = sectionScore;
+    });
+
+    document.getElementById("total-score").textContent = total;
+
+    document.getElementById("progress-text").textContent =
+        `Έχεις ολοκληρώσει ${total} από τις ${totalQuestions} ερωτήσεις.`;
+
+    document.getElementById("progress-fill").style.width =
+        (total / totalQuestions * 100) + "%";
+
+    checkCompletion();
+}
+
+
+/*
+    ΕΠΑΝΑΦΟΡΑ ΑΠΑΝΤΗΣΕΩΝ
+*/
+
+function restoreProgress() {
+    sections.forEach((section, sectionIndex) => {
+        section.questions.forEach((question, questionIndex) => {
+            if (!answeredQuestions[questionKey(sectionIndex, questionIndex)]) {
+                return;
+            }
+
+            const element =
+                getQuestionElement(sectionIndex, questionIndex);
+
+            const feedback = element.querySelector(".feedback");
+
+            feedback.textContent =
+                "✓ Έχεις ήδη απαντήσει σωστά!";
+
+            feedback.className = "feedback correct";
+
+            if (question.type === "choice") {
+                element.querySelectorAll(".option").forEach(
+                    (button, optionIndex) => {
+                        button.disabled = true;
+
+                        if (optionIndex === question.correct) {
+                            button.classList.add("correct-option");
+                        }
+                    }
+                );
+            } else {
+                const input = element.querySelector(".answer-input");
+                const button = element.querySelector("button");
+
+                input.value = question.correct[0];
+                input.disabled = true;
+                button.disabled = true;
+            }
+        });
+    });
+
+    refreshScore();
+}
+
+
+/*
+    ΕΛΕΓΧΟΣ EDITORS
+
+    Ο έλεγχος αναζητά συγκεκριμένα μοτίβα.
+    Δεν μεταγλωττίζει ούτε εκτελεί κώδικα C.
+*/
+
+function removeComments(code) {
+    return code
+        .replace(/\/\*[\s\S]*?\*\//g, "")
+        .replace(/\/\/[^\n]*/g, "");
+}
+
+function checkEditor(number) {
+    if (completedEditors[number]) {
+        return;
+    }
+
+    const textarea =
+        document.getElementById("editor" + number);
+
+    const feedback =
+        document.getElementById("editor-feedback" + number);
+
+    const code = removeComments(textarea.value);
+    const missing = [];
+
+    if (!/#\s*include\s*<stdio\.h>/.test(code)) {
+        missing.push("Πρόσθεσε #include <stdio.h>.");
+    }
+
+    if (!/\bint\s+main\s*\(\s*(?:void\s*)?\)/.test(code)) {
+        missing.push("Χρειάζεται η συνάρτηση int main().");
+    }
+
+    if (!/\breturn\s+0\s*;/.test(code)) {
+        missing.push("Πρόσθεσε return 0;.");
+    }
+
+    if (number === 1) {
+        const declarations = [
+            /\bint\s+age\s*=\s*20\s*;/,
+            /\bfloat\s+height\s*=\s*1\.75f?\s*;/,
+            /\bdouble\s+pi\s*=\s*3\.1415926535\s*;/,
+            /\bchar\s+initial\s*=\s*'M'\s*;/
+        ];
+
+        declarations.forEach((pattern, index) => {
+            if (!pattern.test(code)) {
+                missing.push(
+                    [
+                        "Δήλωσε int age = 20;.",
+                        "Δήλωσε float height = 1.75f;.",
+                        "Δήλωσε double pi = 3.1415926535;.",
+                        "Δήλωσε char initial = 'M';."
+                    ][index]
+                );
+            }
+        });
+
+        const outputs = [
+            /printf\s*\(\s*"[^"]*%d[^"]*"\s*,\s*age\s*\)\s*;/,
+            /printf\s*\(\s*"[^"]*%f[^"]*"\s*,\s*height\s*\)\s*;/,
+            /printf\s*\(\s*"[^"]*%f[^"]*"\s*,\s*pi\s*\)\s*;/,
+            /printf\s*\(\s*"[^"]*%c[^"]*"\s*,\s*initial\s*\)\s*;/
+        ];
+
+        outputs.forEach((pattern, index) => {
+            if (!pattern.test(code)) {
+                missing.push(
+                    "Εμφάνισε τη μεταβλητή " +
+                    ["age", "height", "pi", "initial"][index] +
+                    " με τον κατάλληλο προσδιοριστή."
+                );
+            }
+        });
+    }
+
+    if (number === 2) {
+        const declarations = [
+            /\bint\s+age\s*=\s*18\s*;/,
+            /\bfloat\s+height\s*=\s*1\.70f?\s*;/,
+            /\bchar\s+initial\s*=\s*'A'\s*;/
+        ];
+
+        declarations.forEach((pattern, index) => {
+            if (!pattern.test(code)) {
+                missing.push(
+                    [
+                        "Δήλωσε int age = 18;.",
+                        "Δήλωσε float height = 1.70f;.",
+                        "Δήλωσε char initial = 'A';."
+                    ][index]
+                );
+            }
+        });
+
+        const outputs = [
+            /printf\s*\(\s*"[^"]*%d[^"]*"\s*,\s*age\s*\)\s*;/,
+            /printf\s*\(\s*"[^"]*%f[^"]*"\s*,\s*height\s*\)\s*;/,
+            /printf\s*\(\s*"[^"]*%c[^"]*"\s*,\s*initial\s*\)\s*;/
+        ];
+
+        outputs.forEach((pattern, index) => {
+            if (!pattern.test(code)) {
+                missing.push(
+                    "Εμφάνισε τη μεταβλητή " +
+                    ["age", "height", "initial"][index] +
+                    " με printf."
+                );
+            }
+        });
+    }
+
+    if (number === 3) {
+        const declarations = [
+            /\bint\s+age\s*;/,
+            /\bfloat\s+height\s*;/,
+            /\bchar\s+initial\s*;/
+        ];
+
+        declarations.forEach((pattern, index) => {
+            if (!pattern.test(code)) {
+                missing.push(
+                    "Δήλωσε τη μεταβλητή " +
+                    ["age", "height", "initial"][index] +
+                    " με τον σωστό τύπο."
+                );
+            }
+        });
+
+        const inputs = [
+            /scanf\s*\(\s*"%d"\s*,\s*&age\s*\)\s*;/,
+            /scanf\s*\(\s*"%f"\s*,\s*&height\s*\)\s*;/,
+            /scanf\s*\(\s*"\s*%c"\s*,\s*&initial\s*\)\s*;/
+        ];
+
+        inputs.forEach((pattern, index) => {
+            if (!pattern.test(code)) {
+                missing.push(
+                    "Διάβασε τη μεταβλητή " +
+                    ["age", "height", "initial"][index] +
+                    " με scanf."
+                );
+            }
+        });
+
+        const outputs = [
+            /printf\s*\(\s*"[^"]*%d[^"]*"\s*,\s*age\s*\)\s*;/,
+            /printf\s*\(\s*"[^"]*%f[^"]*"\s*,\s*height\s*\)\s*;/,
+            /printf\s*\(\s*"[^"]*%c[^"]*"\s*,\s*initial\s*\)\s*;/
+        ];
+
+        outputs.forEach((pattern, index) => {
+            if (!pattern.test(code)) {
+                missing.push(
+                    "Εμφάνισε τη μεταβλητή " +
+                    ["age", "height", "initial"][index] +
+                    " με printf."
+                );
+            }
+        });
+    }
+
+    if (missing.length === 0) {
+        completedEditors[number] = textarea.value;
+
+        try {
+            localStorage.setItem(
+                EDITOR_KEY,
+                JSON.stringify(completedEditors)
+            );
+        } catch (error) {
+            console.warn("Δεν αποθηκεύτηκε η άσκηση.");
+        }
+
+        textarea.disabled = true;
+
+        textarea.parentElement.querySelector(
+            ".primary-button"
+        ).disabled = true;
+
+        feedback.textContent =
+            "✓ Μπράβο! Ο κώδικας περιλαμβάνει τα ζητούμενα στοιχεία. Δεν εκτελέστηκε σε compiler.";
+
+        feedback.className = "feedback correct";
+
+        refreshEditorScore();
+    } else {
+        feedback.textContent =
+            "Χρειάζονται διορθώσεις: " + missing.join(" ");
+
+        feedback.className = "feedback wrong";
+    }
+}
+
+
+/*
+    ΠΡΟΟΔΟΣ EDITORS
+*/
+
+function refreshEditorScore() {
     let score = 0;
 
-
-    // Έλεγχος ερωτήσεων πολλαπλής επιλογής
-    function answer(button, correct, explanation = "") {
-
-        const question = button.parentElement;
-        const feedback = question.querySelector(".feedback");
-
-        if (question.dataset.answered === "true") {
-            return;
-        }
-
-        if (correct) {
-
-            question.dataset.answered = "true";
-
-            feedback.innerHTML = "✅ Σωστά! Μπράβο!";
-            feedback.className = "feedback correct";
-
-            const buttons = question.querySelectorAll("button");
-
-            buttons.forEach(btn => btn.disabled = true);
-
+    for (let number = 1; number <= 3; number++) {
+        if (completedEditors[number]) {
             score++;
-
-            document.getElementById("score").innerText = score;
-
-        } else {
-
-            feedback.innerHTML =
-                "❌ Δεν είναι σωστό. " + explanation +
-                " Προσπάθησε ξανά.";
-
-            feedback.className = "feedback wrong";
-
-            button.disabled = true;
         }
     }
 
+    document.getElementById("editor-score").textContent = score;
 
-    // Έλεγχος ερωτήσεων συμπλήρωσης κενού
-    function checkInput(inputId, correctAnswer, button) {
+    document.getElementById("editor-progress").textContent =
+        score + " / 3";
 
-        const input = document.getElementById(inputId);
-        const question = button.parentElement;
-        const feedback = question.querySelector(".feedback");
+    checkCompletion();
+}
 
-        if (question.dataset.answered === "true") {
-            return;
+function restoreEditors() {
+    for (let number = 1; number <= 3; number++) {
+        if (!completedEditors[number]) {
+            continue;
         }
 
-        const userAnswer = input.value.trim().toLowerCase();
-        const correct = correctAnswer.trim().toLowerCase();
+        const textarea =
+            document.getElementById("editor" + number);
 
-        if (userAnswer === correct) {
+        const feedback =
+            document.getElementById("editor-feedback" + number);
 
-            question.dataset.answered = "true";
+        textarea.value = completedEditors[number];
+        textarea.disabled = true;
 
-            feedback.innerHTML = "✅ Σωστά! Μπράβο!";
-            feedback.className = "feedback correct";
+        textarea.parentElement.querySelector(
+            ".primary-button"
+        ).disabled = true;
 
-            input.disabled = true;
-            button.disabled = true;
+        feedback.textContent =
+            "✓ Έχεις ήδη ολοκληρώσει αυτή την άσκηση.";
 
-            score++;
+        feedback.className = "feedback correct";
+    }
 
-            document.getElementById("score").innerText = score;
+    refreshEditorScore();
+}
 
-        } else {
 
-            feedback.innerHTML =
-                "❌ Δεν είναι σωστό. Προσπάθησε ξανά.";
+/*
+    ΟΛΟΚΛΗΡΩΣΗ ΕΠΙΠΕΔΟΥ
+*/
 
-            feedback.className = "feedback wrong";
+function checkCompletion() {
+    const answered = sections.reduce(
+        (total, section, sectionIndex) => {
+            return total + section.questions.filter(
+                (question, questionIndex) =>
+                    answeredQuestions[questionKey(
+                        sectionIndex,
+                        questionIndex
+                    )] === true
+            ).length;
+        },
+        0
+    );
+
+    const editorsDone = [1, 2, 3].filter(
+        number => Boolean(completedEditors[number])
+    ).length;
+
+    const completed =
+        answered === totalQuestions && editorsDone === 3;
+
+    document.getElementById(
+        "completion-message"
+    ).style.display = completed ? "block" : "none";
+
+    if (completed) {
+        try {
+            localStorage.setItem(
+                "c_learning_level2_completed",
+                "true"
+            );
+        } catch (error) {
+            console.warn("Δεν αποθηκεύτηκε η ολοκλήρωση.");
         }
     }
+}
+
+
+/*
+    ΑΡΧΙΚΟΣ ΚΩΔΙΚΑΣ EDITORS
+*/
+
+const initialCode = [
+    "",
+    `#include <stdio.h>
+
+int main(void) {
+
+    // Δήλωσε int age = 20;
+    // Δήλωσε float height = 1.75f;
+    // Δήλωσε double pi = 3.1415926535;
+    // Δήλωσε char initial = 'M';
+    // Εμφάνισε όλες τις τιμές
+
+    return 0;
+}`,
+    `#include <stdio.h>
+
+int main(void) {
+
+    // Δήλωσε τις τρεις μεταβλητές
+    // Εμφάνισε τις τιμές τους
+
+    return 0;
+}`,
+    `#include <stdio.h>
+
+int main(void) {
+
+    // Δήλωσε age, height, initial
+    // Διάβασε τις τιμές με scanf
+    // Εμφάνισέ τες με printf
+
+    return 0;
+}`
+];
+
+
+/*
+    ΕΠΑΝΑΦΟΡΑ ΟΛΗΣ ΤΗΣ ΠΡΟΟΔΟΥ
+*/
+
+function resetProgress() {
+    const confirmed = confirm(
+        "Θέλεις να μηδενίσεις τις 30 ερωτήσεις και τις 3 ασκήσεις;"
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(EDITOR_KEY);
+        localStorage.removeItem(
+            "c_learning_level2_completed"
+        );
+    } catch (error) {
+        console.warn("Δεν διαγράφηκε η πρόοδος.");
+    }
+
+    answeredQuestions = {};
+    completedEditors = {};
+
+    createSections();
+    refreshScore();
+
+    for (let number = 1; number <= 3; number++) {
+        const textarea =
+            document.getElementById("editor" + number);
+
+        const feedback =
+            document.getElementById(
+                "editor-feedback" + number
+            );
+
+        textarea.value = initialCode[number];
+        textarea.disabled = false;
+
+        textarea.parentElement.querySelector(
+            ".primary-button"
+        ).disabled = false;
+
+        feedback.textContent = "";
+        feedback.className = "feedback";
+    }
+
+    refreshEditorScore();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/*
+    ΕΚΚΙΝΗΣΗ
+*/
+
+createSections();
+restoreProgress();
+restoreEditors();
 
 </script>
 

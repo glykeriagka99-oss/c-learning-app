@@ -19,11 +19,41 @@ def skills():
 def lesson1():
     return render_template("lesson1.html")
 
-# Επίπεδο 2 - Μεταβλητές στη γλώσσα C
+# Επίπεδο 2 
 @app.route("/lesson/2")
 def lesson2():
     return render_template("lesson2.html")
+# Επίπεδο 3
+@app.route("/lesson/3")
+def lesson3():
+    return render_template("lesson3.html")
+# Επίπεδο 4
+@app.route("/lesson/4")
+def lesson4():
+    return render_template("lesson4.html")
+# Επίπεδο 5
+@app.route('/lesson/5')
+def lesson5():
+    return render_template('lesson5.html')
+# Επίπεδο 6
+@app.route('/lesson/6')
+def lesson6():
+    return render_template('lesson6.html')
 
+# Επίπεδο 7 
+@app.route('/lesson/7')
+def lesson7():
+    return render_template('lesson7.html')
+
+# Επίπεδο 8 - Συναρτήσεις
+@app.route('/lesson/8')
+def lesson8():
+    return render_template('lesson8.html')
 # Εκκίνηση της εφαρμογής όταν εκτελείται το αρχείο app.py
 if __name__ == "__main__":
-    app.run(debug=True, use_reloader=False)
+    app.run(
+        host="0.0.0.0",
+        port=5000,
+        debug=True,
+        use_reloader=False
+    )

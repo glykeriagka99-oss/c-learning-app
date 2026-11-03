@@ -1,0 +1,2033 @@
+
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Επίπεδο 8 - Συναρτήσεις στη C</title>
+
+<style>
+:root {
+    --navy: #0b1220;
+    --navy-light: #16243a;
+    --blue: #2563eb;
+    --cyan: #22d3ee;
+    --green: #059669;
+    --red: #dc2626;
+    --bg: #f1f5f9;
+    --text: #0f172a;
+    --muted: #64748b;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, sans-serif;
+}
+
+nav {
+    background: var(--navy);
+    padding: 20px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo {
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.logo span { color: var(--cyan); }
+
+.nav-link {
+    color: #cbd5e1;
+    text-decoration: none;
+}
+
+.nav-link:hover { color: var(--cyan); }
+
+header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-light));
+    color: white;
+    padding: 55px 20px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 36px;
+    margin: 0 0 15px;
+}
+
+header h1 span { color: var(--cyan); }
+
+header p {
+    color: #cbd5e1;
+    line-height: 1.7;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 35px auto;
+    padding: 0 20px;
+}
+
+.card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,.04);
+}
+
+.card h2 {
+    margin-top: 0;
+    color: var(--text);
+}
+
+.description {
+    color: var(--muted);
+    line-height: 1.8;
+}
+
+.theory {
+    background: #eff6ff;
+    border-left: 4px solid var(--blue);
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    line-height: 1.8;
+}
+
+.theory p { margin: 10px 0; }
+
+.theory code {
+    color: #1d4ed8;
+    font-weight: bold;
+}
+
+pre {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 20px;
+    border-radius: 10px;
+    overflow-x: auto;
+    line-height: 1.7;
+}
+
+pre code {
+    color: inherit !important;
+    font-weight: normal !important;
+}
+
+code, textarea {
+    font-family: Consolas, "Courier New", monospace;
+}
+
+.progress {
+    height: 12px;
+    background: #e2e8f0;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 15px 0;
+}
+
+.progress-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--green);
+    transition: width .3s;
+}
+
+.score-number {
+    font-size: 30px;
+    color: var(--blue);
+    font-weight: bold;
+}
+
+.section-score {
+    background: #f1f5f9;
+    border-radius: 8px;
+    padding: 14px;
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+.question {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 18px 0;
+}
+
+.question h3 {
+    font-size: 17px;
+    line-height: 1.6;
+    margin-top: 0;
+}
+
+.option {
+    display: block;
+    width: 100%;
+    background: white;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 13px 15px;
+    margin: 9px 0;
+    text-align: left;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.option:hover:not(:disabled) {
+    background: #dbeafe;
+    border-color: var(--blue);
+}
+
+.option.correct-option {
+    background: #d1fae5;
+    border-color: var(--green);
+}
+
+.option.wrong-option {
+    background: #fee2e2;
+    border-color: var(--red);
+}
+
+.answer-input {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    font-size: 16px;
+}
+
+.primary-button {
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.primary-button:hover:not(:disabled) {
+    background: #1d4ed8;
+}
+
+button:disabled {
+    opacity: .8;
+    cursor: default;
+}
+
+.reset-button {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 12px 18px;
+    cursor: pointer;
+}
+
+.feedback {
+    margin-top: 12px;
+    font-weight: bold;
+    line-height: 1.6;
+}
+
+.correct { color: #047857; }
+.wrong { color: #b91c1c; }
+
+.editor-section {
+    border-top: 5px solid var(--cyan);
+}
+
+.editor-score {
+    background: #dbeafe;
+    color: #1e40af;
+    border-radius: 10px;
+    padding: 16px;
+    font-weight: bold;
+}
+
+.editor-exercise {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 22px;
+    margin: 25px 0;
+}
+
+.editor-exercise p { line-height: 1.7; }
+
+.editor-label {
+    display: block;
+    background: var(--navy-light);
+    color: var(--cyan);
+    padding: 12px 16px;
+    border-radius: 10px 10px 0 0;
+    font-family: Consolas, monospace;
+}
+
+.code-editor {
+    display: block;
+    width: 100%;
+    min-height: 260px;
+    background: #0f172a;
+    color: #e2e8f0;
+    border: 1px solid #334155;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 18px;
+    font-size: 14px;
+    line-height: 1.6;
+    resize: vertical;
+    tab-size: 4;
+}
+
+.code-editor:focus {
+    outline: 2px solid var(--blue);
+}
+
+.back-button {
+    display: inline-block;
+    background: var(--navy);
+    color: white;
+    text-decoration: none;
+    padding: 14px 24px;
+    border-radius: 8px;
+    margin-bottom: 40px;
+}
+
+.completion {
+    display: none;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    border-radius: 12px;
+    padding: 18px;
+    margin-top: 20px;
+}
+
+footer {
+    background: var(--navy);
+    color: #94a3b8;
+    padding: 25px;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    header h1 { font-size: 27px; }
+    .container { padding: 0 12px; }
+    .card { padding: 18px; }
+    .editor-exercise { padding: 14px; }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <a href="/" class="logo">C<span>Learning</span></a>
+    <a href="/skills" class="nav-link">Skill Tree</a>
+</nav>
+
+<header>
+    <h1>Επίπεδο 8: <span>Συναρτήσεις (Functions)</span></h1>
+    <p>Μάθε να οργανώνεις τον κώδικά σου σε συναρτήσεις.</p>
+    <p>5 ενότητες - 30 ερωτήσεις - 3 ασκήσεις κώδικα</p>
+</header>
+
+<main class="container">
+
+<section class="card">
+    <h2>Η πρόοδός σου</h2>
+
+    <div class="score-number">
+        <span id="total-score">0</span> / 30
+    </div>
+
+    <p id="progress-text">
+        Έχεις ολοκληρώσει 0 από τις 30 ερωτήσεις.
+    </p>
+
+    <div class="progress">
+        <div class="progress-fill" id="progress-fill"></div>
+    </div>
+
+    <p>
+        Πρακτικές ασκήσεις:
+        <strong id="editor-progress">0 / 3</strong>
+    </p>
+
+    <div id="completion-message" class="completion">
+        <h3>🎉 Συγχαρητήρια!</h3>
+        <p>
+            Ολοκλήρωσες το Επίπεδο 8 και έφτασες
+            στο τέλος της εκπαιδευτικής διαδρομής!
+        </p>
+        <p>
+            Έχεις πλέον γνωρίσει τις βασικές έννοιες
+            προγραμματισμού στη γλώσσα C.
+        </p>
+    </div>
+
+    <button class="reset-button" onclick="resetProgress()">
+        Επαναφορά όλης της προόδου
+    </button>
+</section>
+
+<div id="sections-container"></div>
+
+<section class="card editor-section">
+    <h2>Τελική επανάληψη – Γράψε κώδικα C</h2>
+
+    <p class="description">
+        Ολοκλήρωσε τις τρεις ασκήσεις συναρτήσεων.
+        Ο έλεγχος γίνεται με JavaScript και αναγνωρίζει
+        βασικά στοιχεία του κώδικα, χωρίς πραγματική
+        μεταγλώττιση ή εκτέλεση C.
+    </p>
+
+    <div class="editor-score">
+        Ολοκληρωμένες ασκήσεις:
+        <span id="editor-score">0</span> / 3
+    </div>
+
+    <div class="editor-exercise">
+        <h3>Άσκηση 1: Η πρώτη σου συνάρτηση</h3>
+
+        <p>
+            Δημιούργησε μία συνάρτηση
+            <code>void hello(void)</code> που εμφανίζει
+            <code>Hello C!</code> με <code>printf</code>.
+            Στη συνέχεια, κάλεσέ τη μέσα στη
+            <code>main</code>.
+        </p>
+
+        <label class="editor-label" for="editor1">
+            main.c — Άσκηση 1
+        </label>
+
+        <textarea id="editor1" class="code-editor" spellcheck="false">#include <stdio.h>
+
+// Δημιούργησε εδώ τη συνάρτηση hello
+
+int main(void) {
+
+    // Κάλεσε τη hello
+
+    return 0;
+}</textarea>
+
+        <button class="primary-button" onclick="checkEditor(1)">
+            Έλεγχος κώδικα
+        </button>
+
+        <p id="editor-feedback1" class="feedback" aria-live="polite"></p>
+    </div>
+
+    <div class="editor-exercise">
+        <h3>Άσκηση 2: Συνάρτηση με παραμέτρους</h3>
+
+        <p>
+            Δημιούργησε μία συνάρτηση
+            <code>int add(int a, int b)</code>,
+            η οποία επιστρέφει το άθροισμα
+            των δύο αριθμών με <code>return a + b;</code>.
+            Μέσα στη <code>main</code> κάλεσε
+            <code>add(5, 3)</code> και εμφάνισε
+            το αποτέλεσμα με <code>printf</code>.
+        </p>
+
+        <label class="editor-label" for="editor2">
+            main.c — Άσκηση 2
+        </label>
+
+        <textarea id="editor2" class="code-editor" spellcheck="false">#include <stdio.h>
+
+// Δημιούργησε τη συνάρτηση add
+
+int main(void) {
+
+    // Κάλεσε add(5, 3)
+
+    // Εμφάνισε το αποτέλεσμα
+
+    return 0;
+}</textarea>
+
+        <button class="primary-button" onclick="checkEditor(2)">
+            Έλεγχος κώδικα
+        </button>
+
+        <p id="editor-feedback2" class="feedback" aria-live="polite"></p>
+    </div>
+
+    <div class="editor-exercise">
+        <h3>Άσκηση 3: Συνάρτηση και πίνακας</h3>
+
+        <p>
+            Δημιούργησε τη συνάρτηση
+            <code>int sumArray(int a[], int n)</code>.
+            Χρησιμοποίησε έναν βρόχο <code>for</code>
+            για να προσθέσεις τα στοιχεία του πίνακα
+            και επέστρεψε το άθροισμα.
+            Μέσα στη <code>main</code> δημιούργησε
+            τον πίνακα <code>{1, 2, 3, 4, 5}</code>,
+            κάλεσε <code>sumArray(numbers, 5)</code>
+            και εμφάνισε το αποτέλεσμα.
+        </p>
+
+        <label class="editor-label" for="editor3">
+            main.c — Άσκηση 3
+        </label>
+
+        <textarea id="editor3" class="code-editor" spellcheck="false">#include <stdio.h>
+
+// Δημιούργησε τη συνάρτηση sumArray
+
+int main(void) {
+
+    int numbers[5] = {1, 2, 3, 4, 5};
+
+    // Κάλεσε τη sumArray
+
+    // Εμφάνισε το αποτέλεσμα
+
+    return 0;
+}</textarea>
+
+        <button class="primary-button" onclick="checkEditor(3)">
+            Έλεγχος κώδικα
+        </button>
+
+        <p id="editor-feedback3" class="feedback" aria-live="polite"></p>
+    </div>
+
+</section>
+
+<a href="/skills" class="back-button">
+    ← Επιστροφή στο Skill Tree
+</a>
+
+</main>
+
+<footer>
+    C Learning App • Επίπεδο 8: Συναρτήσεις
+</footer>
+
+<script>
+"use strict";
+
+/* =========================================
+   5 ΕΝΟΤΗΤΕΣ - 30 ΕΡΩΤΗΣΕΙΣ
+========================================= */
+
+const sections = [
+
+    /* ΕΝΟΤΗΤΑ 1 */
+    {
+        title: "1. Εισαγωγή στις συναρτήσεις",
+
+        description:
+            "Τι είναι μία συνάρτηση και γιατί τη χρησιμοποιούμε;",
+
+        theory: `
+            <p>
+                Μία <strong>συνάρτηση (function)</strong>
+                είναι ένα οργανωμένο τμήμα κώδικα
+                που εκτελεί μία συγκεκριμένη εργασία.
+            </p>
+
+            <p>
+                Χρησιμοποιούμε συναρτήσεις για να
+                οργανώνουμε καλύτερα τα προγράμματά μας,
+                να αποφεύγουμε την επανάληψη κώδικα
+                και να διευκολύνουμε τη συντήρησή του.
+            </p>
+
+            <p>
+                Έχουμε ήδη χρησιμοποιήσει συναρτήσεις
+                όπως <code>printf()</code> και
+                <code>scanf()</code>.
+            </p>
+
+            <p>
+                Επίσης, κάθε πρόγραμμα C που έχουμε
+                γράψει μέχρι τώρα περιέχει τη
+                συνάρτηση <code>main()</code>.
+            </p>
+
+            <pre><code>int main(void) {
+    return 0;
+}</code></pre>
+
+            <p>
+                Μπορούμε να δημιουργήσουμε και
+                τις δικές μας συναρτήσεις.
+            </p>
+
+            <pre><code>void hello(void) {
+    printf("Hello!");
+}</code></pre>
+
+            <p>
+                Η λέξη <code>void</code> πριν από
+                το όνομα δηλώνει ότι η συνάρτηση
+                δεν επιστρέφει κάποια τιμή.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+void hello(void) {
+    printf("Hello C!\\n");
+}
+
+int main(void) {
+    hello();
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Τι είναι μία συνάρτηση;",
+                options: [
+                    "Ένα οργανωμένο τμήμα κώδικα",
+                    "Ένας τύπος μεταβλητής",
+                    "Ένας πίνακας"
+                ],
+                correct: 0,
+                explanation: "Η συνάρτηση εκτελεί μια συγκεκριμένη εργασία."
+            },
+            {
+                type: "choice",
+                text: "Ποια συνάρτηση αποτελεί το σημείο εκκίνησης ενός προγράμματος C;",
+                options: ["printf()", "main()", "scanf()"],
+                correct: 1,
+                explanation: "Η εκτέλεση ενός συνηθισμένου προγράμματος C ξεκινά από τη main."
+            },
+            {
+                type: "choice",
+                text: "Ποιο είναι πλεονέκτημα των συναρτήσεων;",
+                options: [
+                    "Κάνουν υποχρεωτικά το πρόγραμμα μεγαλύτερο",
+                    "Καταργούν τις μεταβλητές",
+                    "Επιτρέπουν επαναχρησιμοποίηση κώδικα"
+                ],
+                correct: 2,
+                explanation: "Μπορούμε να καλούμε την ίδια συνάρτηση πολλές φορές."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τον τύπο επιστροφής μιας συνάρτησης που δεν επιστρέφει τιμή:",
+                code: `___ hello(void) {
+    printf("Hi");
+}`,
+                correct: ["void"],
+                explanation: "Η void δηλώνει ότι δεν επιστρέφεται τιμή."
+            },
+            {
+                type: "choice",
+                text: "Ποια εντολή καλεί σωστά τη συνάρτηση hello;",
+                options: [
+                    "hello();",
+                    "void hello;",
+                    "function hello;"
+                ],
+                correct: 0,
+                explanation: "Μια συνάρτηση καλείται με το όνομά της και παρενθέσεις."
+            },
+            {
+                type: "choice",
+                text: "Πόσες φορές θα εμφανιστεί το Hi;",
+                code: `hello();
+hello();
+hello();`,
+                options: ["1", "2", "3"],
+                correct: 2,
+                explanation: "Η συνάρτηση καλείται τρεις φορές."
+            }
+        ]
+    },
+
+    /* ΕΝΟΤΗΤΑ 2 */
+    {
+        title: "2. Δημιουργία και κλήση συναρτήσεων",
+
+        description:
+            "Μάθε τη δομή μιας συνάρτησης και τον τρόπο κλήσης της.",
+
+        theory: `
+            <p>
+                Μία συνάρτηση αποτελείται από:
+                <strong>τύπο επιστροφής</strong>,
+                <strong>όνομα</strong>,
+                <strong>παραμέτρους</strong>
+                και <strong>σώμα</strong>.
+            </p>
+
+            <pre><code>void message(void) {
+    printf("Welcome!");
+}</code></pre>
+
+            <p>
+                Η συνάρτηση παραπάνω ονομάζεται
+                <code>message</code> και δεν
+                δέχεται παραμέτρους.
+            </p>
+
+            <p>
+                Για να εκτελεστεί, πρέπει να
+                την καλέσουμε:
+            </p>
+
+            <pre><code>message();</code></pre>
+
+            <p>
+                Όταν ο ορισμός της συνάρτησης
+                βρίσκεται μετά τη <code>main</code>,
+                μπορούμε να γράψουμε πρώτα
+                τη <strong>δήλωση (prototype)</strong>.
+            </p>
+
+            <pre><code>void message(void);
+
+int main(void) {
+    message();
+    return 0;
+}
+
+void message(void) {
+    printf("Welcome!");
+}</code></pre>
+
+            <p>
+                Το prototype ενημερώνει τον compiler
+                για το όνομα, τις παραμέτρους και
+                τον τύπο επιστροφής της συνάρτησης.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+void showMenu(void);
+
+int main(void) {
+    showMenu();
+    return 0;
+}
+
+void showMenu(void) {
+    printf("1. Start\\n");
+    printf("2. Exit\\n");
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Ποια είναι σωστή δήλωση συνάρτησης χωρίς παραμέτρους;",
+                options: [
+                    "void greet(void);",
+                    "greet = void;",
+                    "function greet;"
+                ],
+                correct: 0,
+                explanation: "Η δήλωση περιέχει τύπο, όνομα και παρενθέσεις."
+            },
+            {
+                type: "choice",
+                text: "Τι είναι το function prototype;",
+                options: [
+                    "Ένας βρόχος",
+                    "Μία δήλωση της συνάρτησης πριν από τον ορισμό της",
+                    "Ένας πίνακας"
+                ],
+                correct: 1,
+                explanation: "Το prototype δηλώνει τη μορφή της συνάρτησης."
+            },
+            {
+                type: "choice",
+                text: "Ποια εντολή καλεί τη showMenu;",
+                options: [
+                    "showMenu;",
+                    "void showMenu;",
+                    "showMenu();"
+                ],
+                correct: 2,
+                explanation: "Η κλήση γίνεται με παρενθέσεις."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε την κλήση:",
+                code: `void start(void);
+
+int main(void) {
+    ___();
+    return 0;
+}`,
+                correct: ["start"],
+                explanation: "Καλούμε τη συνάρτηση start()."
+            },
+            {
+                type: "choice",
+                text: "Ποιο σύμβολο κλείνει μία δήλωση prototype;",
+                options: [";", ":", "#"],
+                correct: 0,
+                explanation: "Το prototype ολοκληρώνεται με ;."
+            },
+            {
+                type: "choice",
+                text: "Πού βρίσκεται το σώμα μιας συνάρτησης;",
+                options: [
+                    "Μέσα σε αγκύλες []",
+                    "Μέσα σε άγκιστρα {}",
+                    "Μέσα σε εισαγωγικά"
+                ],
+                correct: 1,
+                explanation: "Οι εντολές της συνάρτησης περικλείονται σε {}."
+            }
+        ]
+    },
+
+    /* ΕΝΟΤΗΤΑ 3 */
+    {
+        title: "3. Παράμετροι και ορίσματα",
+
+        description:
+            "Μάθε να στέλνεις δεδομένα σε μία συνάρτηση.",
+
+        theory: `
+            <p>
+                Οι <strong>παράμετροι</strong> είναι
+                μεταβλητές που δηλώνονται
+                στη συνάρτηση.
+            </p>
+
+            <pre><code>void showNumber(int n) {
+    printf("%d", n);
+}</code></pre>
+
+            <p>
+                Όταν καλούμε τη συνάρτηση,
+                της δίνουμε ένα
+                <strong>όρισμα (argument)</strong>.
+            </p>
+
+            <pre><code>showNumber(10);</code></pre>
+
+            <p>
+                Εδώ η παράμετρος είναι το
+                <code>n</code> και το όρισμα
+                είναι η τιμή <code>10</code>.
+            </p>
+
+            <p>
+                Μία συνάρτηση μπορεί να έχει
+                περισσότερες παραμέτρους.
+            </p>
+
+            <pre><code>void printSum(int a, int b) {
+    printf("%d", a + b);
+}</code></pre>
+
+            <p>
+                Την καλούμε με δύο ορίσματα:
+            </p>
+
+            <pre><code>printSum(5, 3);</code></pre>
+
+            <p>
+                Στη C οι απλές αριθμητικές
+                παράμετροι μεταφέρονται
+                <strong>κατά τιμή</strong>.
+                Αυτό σημαίνει ότι η συνάρτηση
+                λαμβάνει αντίγραφο της τιμής.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+void printSum(int a, int b) {
+    printf("Sum: %d\\n", a + b);
+}
+
+int main(void) {
+    printSum(5, 3);
+    printSum(10, 20);
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Τι είναι μία παράμετρος;",
+                options: [
+                    "Μεταβλητή που δηλώνεται στη συνάρτηση",
+                    "Μόνο μία σταθερά",
+                    "Μία εντολή εκτύπωσης"
+                ],
+                correct: 0,
+                explanation: "Η παράμετρος δέχεται δεδομένα κατά την κλήση."
+            },
+            {
+                type: "choice",
+                text: "Ποιο είναι το όρισμα στην κλήση showNumber(8);",
+                options: ["showNumber", "8", "int"],
+                correct: 1,
+                explanation: "Το 8 είναι η τιμή που περνά στη συνάρτηση."
+            },
+            {
+                type: "choice",
+                text: "Πόσες παραμέτρους έχει η συνάρτηση;",
+                code: `void printSum(int a, int b) {
+    printf("%d", a + b);
+}`,
+                options: ["0", "1", "2"],
+                correct: 2,
+                explanation: "Έχει τις παραμέτρους a και b."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τον τύπο της παραμέτρου:",
+                code: `void show(___ n) {
+    printf("%d", n);
+}`,
+                correct: ["int"],
+                explanation: "Η παράμετρος n είναι ακέραιος."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `void doubleNumber(int n) {
+    printf("%d", n * 2);
+}
+
+doubleNumber(6);`,
+                options: ["12", "6", "2"],
+                correct: 0,
+                explanation: "Η συνάρτηση υπολογίζει 6 * 2 = 12."
+            },
+            {
+                type: "choice",
+                text: "Τι σημαίνει μεταφορά κατά τιμή;",
+                options: [
+                    "Η συνάρτηση αλλάζει πάντα την αρχική μεταβλητή",
+                    "Η συνάρτηση λαμβάνει αντίγραφο της τιμής",
+                    "Η συνάρτηση δεν μπορεί να χρησιμοποιήσει μεταβλητές"
+                ],
+                correct: 1,
+                explanation: "Οι απλές αριθμητικές παράμετροι περνούν κατά τιμή."
+            }
+        ]
+    },
+
+    /* ΕΝΟΤΗΤΑ 4 */
+    {
+        title: "4. Επιστροφή τιμών με return",
+
+        description:
+            "Μάθε να δημιουργείς συναρτήσεις που υπολογίζουν και επιστρέφουν αποτελέσματα.",
+
+        theory: `
+            <p>
+                Μέχρι τώρα χρησιμοποιήσαμε
+                συναρτήσεις <code>void</code>.
+                Μία συνάρτηση όμως μπορεί
+                να <strong>επιστρέφει τιμή</strong>.
+            </p>
+
+            <pre><code>int add(int a, int b) {
+    return a + b;
+}</code></pre>
+
+            <p>
+                Η λέξη <code>int</code> πριν από
+                το όνομα δηλώνει ότι η συνάρτηση
+                επιστρέφει ακέραιο.
+            </p>
+
+            <p>
+                Η εντολή <code>return</code>
+                επιστρέφει το αποτέλεσμα
+                στον κώδικα που έκανε την κλήση.
+            </p>
+
+            <pre><code>int result = add(5, 3);</code></pre>
+
+            <p>
+                Τώρα το <code>result</code>
+                έχει την τιμή <code>8</code>.
+            </p>
+
+            <p>
+                Μπορούμε να επιστρέψουμε
+                και άλλους τύπους, όπως
+                <code>float</code> ή
+                <code>double</code>.
+            </p>
+
+            <pre><code>double half(double x) {
+    return x / 2.0;
+}</code></pre>
+
+            <p>
+                Μία συνάρτηση μπορεί να περιέχει
+                περισσότερες από μία εντολές
+                <code>return</code>, για παράδειγμα
+                σε διαφορετικά μονοπάτια
+                μιας συνθήκης <code>if</code>.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int square(int n) {
+    return n * n;
+}
+
+int main(void) {
+    int result = square(5);
+
+    printf("Result: %d\\n", result);
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Τι επιστρέφει η συνάρτηση;",
+                code: `int square(int n) {
+    return n * n;
+}`,
+                options: [
+                    "Ακέραιο αριθμό",
+                    "Συμβολοσειρά",
+                    "Καμία τιμή"
+                ],
+                correct: 0,
+                explanation: "Ο τύπος επιστροφής είναι int."
+            },
+            {
+                type: "choice",
+                text: "Ποια λέξη-κλειδί επιστρέφει αποτέλεσμα;",
+                options: ["printf", "return", "scanf"],
+                correct: 1,
+                explanation: "Η return επιστρέφει την τιμή."
+            },
+            {
+                type: "choice",
+                text: "Τι τιμή παίρνει το result;",
+                code: `int add(int a, int b) {
+    return a + b;
+}
+
+int result = add(4, 6);`,
+                options: ["4", "6", "10"],
+                correct: 2,
+                explanation: "Η συνάρτηση επιστρέφει 4 + 6 = 10."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τη λέξη-κλειδί:",
+                code: `int triple(int n) {
+    ___ n * 3;
+}`,
+                correct: ["return"],
+                explanation: "Η return επιστρέφει το αποτέλεσμα."
+            },
+            {
+                type: "choice",
+                text: "Ποιος τύπος είναι κατάλληλος για επιστροφή δεκαδικού αριθμού;",
+                options: ["double", "void", "char[]"],
+                correct: 0,
+                explanation: "Η double μπορεί να επιστρέψει δεκαδική τιμή."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int bigger(int a, int b) {
+    if (a > b) {
+        return a;
+    }
+    return b;
+}
+
+printf("%d", bigger(7, 3));`,
+                options: ["3", "7", "10"],
+                correct: 1,
+                explanation: "Η συνάρτηση επιστρέφει τον μεγαλύτερο αριθμό."
+            }
+        ]
+    },
+
+    /* ΕΝΟΤΗΤΑ 5 */
+    {
+        title: "5. Συναρτήσεις με πίνακες και δομές",
+
+        description:
+            "Συνδύασε τις συναρτήσεις με όσα έμαθες στα προηγούμενα επίπεδα.",
+
+        theory: `
+            <p>
+                Οι συναρτήσεις μπορούν να
+                συνεργάζονται με
+                <strong>πίνακες</strong>,
+                <strong>επαναλήψεις</strong>
+                και <strong>δομές</strong>.
+            </p>
+
+            <p>
+                Για παράδειγμα, μπορούμε να
+                δημιουργήσουμε μία συνάρτηση
+                που υπολογίζει το άθροισμα
+                ενός πίνακα.
+            </p>
+
+            <pre><code>int sumArray(int a[], int n) {
+    int sum = 0;
+
+    for (int i = 0; i < n; i++) {
+        sum += a[i];
+    }
+
+    return sum;
+}</code></pre>
+
+            <p>
+                Στη <code>main</code>
+                καλούμε τη συνάρτηση:
+            </p>
+
+            <pre><code>int numbers[3] = {2, 4, 6};
+int result = sumArray(numbers, 3);</code></pre>
+
+            <p>
+                Το αποτέλεσμα είναι <code>12</code>.
+            </p>
+
+            <p>
+                Μπορούμε επίσης να περάσουμε
+                μία δομή ως παράμετρο.
+            </p>
+
+            <pre><code>typedef struct {
+    int age;
+    float grade;
+} Student;
+
+void printStudent(Student s) {
+    printf("%d", s.age);
+}</code></pre>
+
+            <p>
+                Με αυτόν τον τρόπο μπορούμε
+                να χωρίζουμε ένα μεγαλύτερο
+                πρόγραμμα σε μικρότερες
+                και πιο κατανοητές εργασίες.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+typedef struct {
+    int age;
+    float grade;
+} Student;
+
+void printStudent(Student s) {
+    printf("Age: %d\\n", s.age);
+    printf("Grade: %.1f\\n", s.grade);
+}
+
+int main(void) {
+    Student s1 = {20, 18.5f};
+
+    printStudent(s1);
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Τι δέχεται η συνάρτηση sumArray;",
+                code: `int sumArray(int a[], int n);`,
+                options: [
+                    "Έναν πίνακα και το πλήθος στοιχείων",
+                    "Μόνο μία συμβολοσειρά",
+                    "Μόνο έναν χαρακτήρα"
+                ],
+                correct: 0,
+                explanation: "Η συνάρτηση δέχεται πίνακα και πλήθος στοιχείων."
+            },
+            {
+                type: "choice",
+                text: "Ποια κλήση είναι σωστή;",
+                code: `int numbers[3] = {1, 2, 3};`,
+                options: [
+                    "sumArray(3, numbers)",
+                    "sumArray(numbers, 3)",
+                    "sumArray = numbers"
+                ],
+                correct: 1,
+                explanation: "Πρώτα περνάμε τον πίνακα και μετά το πλήθος."
+            },
+            {
+                type: "choice",
+                text: "Τι επιστρέφει η συνάρτηση;",
+                code: `int sumArray(int a[], int n) {
+    int sum = 0;
+    for (int i = 0; i < n; i++) {
+        sum += a[i];
+    }
+    return sum;
+}`,
+                options: [
+                    "Το πρώτο στοιχείο",
+                    "Το πλήθος στοιχείων",
+                    "Το άθροισμα των στοιχείων"
+                ],
+                correct: 2,
+                explanation: "Ο βρόχος προσθέτει όλα τα στοιχεία."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τη λέξη-κλειδί:",
+                code: `int sumArray(int a[], int n) {
+    int sum = 0;
+    for (int i = 0; i < n; i++) {
+        sum += a[i];
+    }
+    ___ sum;
+}`,
+                correct: ["return"],
+                explanation: "Η return επιστρέφει το τελικό άθροισμα."
+            },
+            {
+                type: "choice",
+                text: "Ποια δήλωση επιτρέπει σε μία συνάρτηση να δεχτεί μία μεταβλητή Student;",
+                code: `typedef struct {
+    int age;
+} Student;`,
+                options: [
+                    "void show(Student s)",
+                    "void show(int Student)",
+                    "void show(Student)"
+                ],
+                correct: 0,
+                explanation: "Η παράμετρος χρειάζεται τύπο και όνομα."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int square(int x) {
+    return x * x;
+}
+
+int numbers[2] = {3, 4};
+printf("%d", square(numbers[1]));`,
+                options: ["9", "16", "4"],
+                correct: 1,
+                explanation: "Το numbers[1] είναι 4 και το τετράγωνό του 16."
+            }
+        ]
+    }
+];
+
+/* =========================================
+   ΑΠΟΘΗΚΕΥΣΗ ΠΡΟΟΔΟΥ
+========================================= */
+
+const QUIZ_KEY = "c_learning_lesson8_quiz";
+const EDITOR_KEY = "c_learning_lesson8_editors";
+const COMPLETION_KEY = "c_learning_level8_completed";
+
+const totalQuestions = sections.reduce(
+    (sum, section) => sum + section.questions.length,
+    0
+);
+
+function readStorage(key) {
+    try {
+        const data = JSON.parse(localStorage.getItem(key));
+
+        if (
+            data &&
+            typeof data === "object" &&
+            !Array.isArray(data)
+        ) {
+            return data;
+        }
+    } catch (error) {
+        console.warn("Πρόβλημα ανάγνωσης προόδου.");
+    }
+
+    return {};
+}
+
+let answeredQuestions = readStorage(QUIZ_KEY);
+let completedEditors = readStorage(EDITOR_KEY);
+
+function escapeHTML(value) {
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+function questionKey(sectionIndex, questionIndex) {
+    return sectionIndex + "-" + questionIndex;
+}
+
+function getQuestionElement(sectionIndex, questionIndex) {
+    return document.getElementById(
+        "questions-" + sectionIndex
+    ).children[questionIndex];
+}
+
+/* =========================================
+   ΕΜΦΑΝΙΣΗ ΕΝΟΤΗΤΩΝ
+========================================= */
+
+function createSections() {
+    const container =
+        document.getElementById("sections-container");
+
+    container.innerHTML = "";
+
+    sections.forEach((section, sectionIndex) => {
+        const sectionElement =
+            document.createElement("section");
+
+        sectionElement.className = "card";
+
+        sectionElement.innerHTML = `
+            <h2>${escapeHTML(section.title)}</h2>
+
+            <p class="description">
+                ${escapeHTML(section.description)}
+            </p>
+
+            <div class="theory">
+                ${section.theory}
+            </div>
+
+            <h3>Παράδειγμα κώδικα C</h3>
+
+            <pre><code>${escapeHTML(section.example)}</code></pre>
+
+            <div class="section-score">
+                Ολοκληρωμένες ερωτήσεις:
+                <span id="section-score-${sectionIndex}">0</span>
+                / ${section.questions.length}
+            </div>
+
+            <h3>Quiz ενότητας</h3>
+
+            <div id="questions-${sectionIndex}"></div>
+        `;
+
+        container.appendChild(sectionElement);
+
+        const questionsContainer =
+            document.getElementById(
+                "questions-" + sectionIndex
+            );
+
+        section.questions.forEach((question, questionIndex) => {
+            const element = document.createElement("div");
+            element.className = "question";
+
+            let html = `
+                <h3>
+                    Ερώτηση ${questionIndex + 1}:
+                    ${escapeHTML(question.text)}
+                </h3>
+            `;
+
+            if (question.code) {
+                html += `
+                    <pre><code>${escapeHTML(question.code)}</code></pre>
+                `;
+            }
+
+            if (question.type === "choice") {
+                question.options.forEach((option, optionIndex) => {
+                    html += `
+                        <button
+                            class="option"
+                            onclick="checkChoice(
+                                this,
+                                ${sectionIndex},
+                                ${questionIndex},
+                                ${optionIndex}
+                            )">
+                            ${escapeHTML(option)}
+                        </button>
+                    `;
+                });
+            } else {
+                html += `
+                    <input
+                        class="answer-input"
+                        type="text"
+                        placeholder="Γράψε την απάντησή σου"
+                        autocomplete="off">
+
+                    <button
+                        class="primary-button"
+                        onclick="checkInput(
+                            this,
+                            ${sectionIndex},
+                            ${questionIndex}
+                        )">
+                        Έλεγχος
+                    </button>
+                `;
+            }
+
+            html += `
+                <p class="feedback" aria-live="polite"></p>
+            `;
+
+            element.innerHTML = html;
+            questionsContainer.appendChild(element);
+        });
+    });
+}
+
+/* =========================================
+   ΕΛΕΓΧΟΣ QUIZ
+========================================= */
+
+function saveAnswer(sectionIndex, questionIndex) {
+    const key = questionKey(sectionIndex, questionIndex);
+
+    if (answeredQuestions[key]) {
+        return;
+    }
+
+    answeredQuestions[key] = true;
+
+    try {
+        localStorage.setItem(
+            QUIZ_KEY,
+            JSON.stringify(answeredQuestions)
+        );
+    } catch (error) {
+        console.warn("Δεν αποθηκεύτηκε η πρόοδος.");
+    }
+
+    refreshScore();
+}
+
+function checkChoice(
+    button,
+    sectionIndex,
+    questionIndex,
+    optionIndex
+) {
+    const question =
+        sections[sectionIndex].questions[questionIndex];
+
+    const element =
+        getQuestionElement(sectionIndex, questionIndex);
+
+    const feedback = element.querySelector(".feedback");
+
+    if (
+        answeredQuestions[
+            questionKey(sectionIndex, questionIndex)
+        ]
+    ) {
+        return;
+    }
+
+    if (optionIndex === question.correct) {
+        button.classList.add("correct-option");
+
+        element.querySelectorAll(".option").forEach(btn => {
+            btn.disabled = true;
+        });
+
+        feedback.textContent =
+            "✓ Σωστά! " + question.explanation;
+
+        feedback.className = "feedback correct";
+
+        saveAnswer(sectionIndex, questionIndex);
+    } else {
+        button.classList.add("wrong-option");
+        button.disabled = true;
+
+        feedback.textContent =
+            "✗ Λάθος απάντηση. Προσπάθησε ξανά.";
+
+        feedback.className = "feedback wrong";
+    }
+}
+
+function checkInput(
+    button,
+    sectionIndex,
+    questionIndex
+) {
+    const question =
+        sections[sectionIndex].questions[questionIndex];
+
+    const element =
+        getQuestionElement(sectionIndex, questionIndex);
+
+    const input = element.querySelector(".answer-input");
+    const feedback = element.querySelector(".feedback");
+
+    if (
+        answeredQuestions[
+            questionKey(sectionIndex, questionIndex)
+        ]
+    ) {
+        return;
+    }
+
+    const answer = input.value.trim();
+
+    const isCorrect = question.correct.some(
+        correctAnswer => answer === correctAnswer
+    );
+
+    if (isCorrect) {
+        input.disabled = true;
+        button.disabled = true;
+
+        feedback.textContent =
+            "✓ Σωστά! " + question.explanation;
+
+        feedback.className = "feedback correct";
+
+        saveAnswer(sectionIndex, questionIndex);
+    } else {
+        feedback.textContent =
+            "✗ Έλεγξε την απάντησή σου και προσπάθησε ξανά.";
+
+        feedback.className = "feedback wrong";
+    }
+}
+
+/* =========================================
+   ΒΑΘΜΟΛΟΓΙΑ
+========================================= */
+
+function refreshScore() {
+    let total = 0;
+
+    sections.forEach((section, sectionIndex) => {
+        let sectionScore = 0;
+
+        section.questions.forEach((question, questionIndex) => {
+            if (
+                answeredQuestions[
+                    questionKey(sectionIndex, questionIndex)
+                ] === true
+            ) {
+                sectionScore++;
+                total++;
+            }
+        });
+
+        document.getElementById(
+            "section-score-" + sectionIndex
+        ).textContent = sectionScore;
+    });
+
+    document.getElementById("total-score").textContent =
+        total;
+
+    document.getElementById("progress-text").textContent =
+        "Έχεις ολοκληρώσει " +
+        total + " από τις " +
+        totalQuestions + " ερωτήσεις.";
+
+    document.getElementById("progress-fill").style.width =
+        (total / totalQuestions * 100) + "%";
+
+    checkCompletion();
+}
+
+/* =========================================
+   ΕΠΑΝΑΦΟΡΑ ΑΠΑΝΤΗΣΕΩΝ
+========================================= */
+
+function restoreProgress() {
+    sections.forEach((section, sectionIndex) => {
+        section.questions.forEach((question, questionIndex) => {
+            if (
+                !answeredQuestions[
+                    questionKey(sectionIndex, questionIndex)
+                ]
+            ) {
+                return;
+            }
+
+            const element =
+                getQuestionElement(sectionIndex, questionIndex);
+
+            const feedback =
+                element.querySelector(".feedback");
+
+            feedback.textContent =
+                "✓ Έχεις ήδη απαντήσει σωστά!";
+
+            feedback.className = "feedback correct";
+
+            if (question.type === "choice") {
+                element.querySelectorAll(".option").forEach(
+                    (button, optionIndex) => {
+                        button.disabled = true;
+
+                        if (optionIndex === question.correct) {
+                            button.classList.add("correct-option");
+                        }
+                    }
+                );
+            } else {
+                const input =
+                    element.querySelector(".answer-input");
+
+                const button =
+                    element.querySelector("button");
+
+                input.value = question.correct[0];
+                input.disabled = true;
+                button.disabled = true;
+            }
+        });
+    });
+
+    refreshScore();
+}
+
+/* =========================================
+   ΕΛΕΓΧΟΣ ΑΣΚΗΣΕΩΝ ΚΩΔΙΚΑ
+========================================= */
+
+function removeComments(code) {
+    return code
+        .replace(/\/\*[\s\S]*?\*\//g, "")
+        .replace(/\/\/[^\n]*/g, "");
+}
+
+function checkEditor(number) {
+    if (completedEditors[number]) {
+        return;
+    }
+
+    const textarea =
+        document.getElementById("editor" + number);
+
+    const feedback =
+        document.getElementById(
+            "editor-feedback" + number
+        );
+
+    const code = removeComments(textarea.value);
+    const missing = [];
+
+    if (!/#\s*include\s*<stdio\.h>/.test(code)) {
+        missing.push("Πρόσθεσε #include <stdio.h>.");
+    }
+
+    if (!/\bint\s+main\s*\(\s*(?:void\s*)?\)/.test(code)) {
+        missing.push("Χρειάζεται η συνάρτηση int main().");
+    }
+
+    if (!/\breturn\s+0\s*;/.test(code)) {
+        missing.push("Πρόσθεσε return 0; στη main.");
+    }
+
+    /* ΑΣΚΗΣΗ 1 */
+
+    if (number === 1) {
+        if (
+            !/\bvoid\s+hello\s*\(\s*void\s*\)\s*\{[\s\S]*?\}/.test(code)
+        ) {
+            missing.push(
+                "Δημιούργησε void hello(void) με σώμα {}."
+            );
+        }
+
+        if (
+            !/printf\s*\(\s*"[^"]*Hello C![^"]*"\s*\)/.test(code)
+        ) {
+            missing.push(
+                'Εμφάνισε "Hello C!" με printf.'
+            );
+        }
+
+        const calls = code.match(/\bhello\s*\(\s*\)\s*;/g) || [];
+
+        if (calls.length < 1) {
+            missing.push(
+                "Κάλεσε τη hello(); μέσα στη main."
+            );
+        }
+    }
+
+    /* ΑΣΚΗΣΗ 2 */
+
+    if (number === 2) {
+        if (
+            !/\bint\s+add\s*\(\s*int\s+a\s*,\s*int\s+b\s*\)\s*\{/.test(code)
+        ) {
+            missing.push(
+                "Δημιούργησε int add(int a, int b)."
+            );
+        }
+
+        if (
+            !/\breturn\s+a\s*\+\s*b\s*;/.test(code)
+        ) {
+            missing.push(
+                "Επέστρεψε το άθροισμα με return a + b;."
+            );
+        }
+
+        if (
+            !/\badd\s*\(\s*5\s*,\s*3\s*\)/.test(code)
+        ) {
+            missing.push(
+                "Κάλεσε τη συνάρτηση add(5, 3)."
+            );
+        }
+
+        if (!/\bprintf\s*\(/.test(code)) {
+            missing.push(
+                "Εμφάνισε το αποτέλεσμα με printf."
+            );
+        }
+    }
+
+    /* ΑΣΚΗΣΗ 3 */
+
+    if (number === 3) {
+        if (
+            !/\bint\s+sumArray\s*\(\s*int\s+a\s*\[\s*\]\s*,\s*int\s+n\s*\)\s*\{/.test(code)
+        ) {
+            missing.push(
+                "Δημιούργησε int sumArray(int a[], int n)."
+            );
+        }
+
+        if (!/\bint\s+sum\s*=\s*0\s*;/.test(code)) {
+            missing.push(
+                "Αρχικοποίησε int sum = 0;."
+            );
+        }
+
+        if (
+            !/\bfor\s*\(\s*int\s+i\s*=\s*0\s*;\s*i\s*<\s*n\s*;\s*i\s*\+\+\s*\)/.test(code)
+        ) {
+            missing.push(
+                "Χρησιμοποίησε for με i από 0 έως n - 1."
+            );
+        }
+
+        if (
+            !/\bsum\s*\+=\s*a\s*\[\s*i\s*\]\s*;/.test(code)
+        ) {
+            missing.push(
+                "Πρόσθεσε τα στοιχεία με sum += a[i];."
+            );
+        }
+
+        if (!/\breturn\s+sum\s*;/.test(code)) {
+            missing.push(
+                "Επέστρεψε το άθροισμα με return sum;."
+            );
+        }
+
+        if (
+            !/\bint\s+numbers\s*\[\s*5\s*\]\s*=\s*\{\s*1\s*,\s*2\s*,\s*3\s*,\s*4\s*,\s*5\s*\}\s*;/.test(code)
+        ) {
+            missing.push(
+                "Χρησιμοποίησε τον πίνακα numbers[5]."
+            );
+        }
+
+        if (
+            !/\bsumArray\s*\(\s*numbers\s*,\s*5\s*\)/.test(code)
+        ) {
+            missing.push(
+                "Κάλεσε sumArray(numbers, 5)."
+            );
+        }
+
+        if (!/\bprintf\s*\(/.test(code)) {
+            missing.push(
+                "Εμφάνισε το αποτέλεσμα με printf."
+            );
+        }
+    }
+
+    if (missing.length === 0) {
+        completedEditors[number] = textarea.value;
+
+        try {
+            localStorage.setItem(
+                EDITOR_KEY,
+                JSON.stringify(completedEditors)
+            );
+        } catch (error) {
+            console.warn("Δεν αποθηκεύτηκε η άσκηση.");
+        }
+
+        textarea.disabled = true;
+
+        textarea.parentElement.querySelector(
+            ".primary-button"
+        ).disabled = true;
+
+        feedback.textContent =
+            "✓ Μπράβο! Βρέθηκαν τα ζητούμενα στοιχεία. Δεν έγινε πραγματική εκτέλεση C.";
+
+        feedback.className = "feedback correct";
+
+        refreshEditorScore();
+    } else {
+        feedback.textContent =
+            "Χρειάζονται διορθώσεις: " +
+            missing.join(" ");
+
+        feedback.className = "feedback wrong";
+    }
+}
+
+/* =========================================
+   ΠΡΟΟΔΟΣ ΑΣΚΗΣΕΩΝ
+========================================= */
+
+function refreshEditorScore() {
+    let score = 0;
+
+    for (let number = 1; number <= 3; number++) {
+        if (completedEditors[number]) {
+            score++;
+        }
+    }
+
+    document.getElementById(
+        "editor-score"
+    ).textContent = score;
+
+    document.getElementById(
+        "editor-progress"
+    ).textContent = score + " / 3";
+
+    checkCompletion();
+}
+
+function restoreEditors() {
+    for (let number = 1; number <= 3; number++) {
+        if (!completedEditors[number]) {
+            continue;
+        }
+
+        const textarea =
+            document.getElementById("editor" + number);
+
+        const feedback =
+            document.getElementById(
+                "editor-feedback" + number
+            );
+
+        textarea.value = completedEditors[number];
+        textarea.disabled = true;
+
+        textarea.parentElement.querySelector(
+            ".primary-button"
+        ).disabled = true;
+
+        feedback.textContent =
+            "✓ Έχεις ήδη ολοκληρώσει αυτή την άσκηση.";
+
+        feedback.className = "feedback correct";
+    }
+
+    refreshEditorScore();
+}
+
+/* =========================================
+   ΟΛΟΚΛΗΡΩΣΗ ΕΠΙΠΕΔΟΥ 8
+========================================= */
+
+function checkCompletion() {
+    const answered = sections.reduce(
+        (total, section, sectionIndex) => {
+            return total + section.questions.filter(
+                (question, questionIndex) =>
+                    answeredQuestions[
+                        questionKey(sectionIndex, questionIndex)
+                    ] === true
+            ).length;
+        },
+        0
+    );
+
+    const editorsDone = [1, 2, 3].filter(
+        number => Boolean(completedEditors[number])
+    ).length;
+
+    const completed =
+        answered === totalQuestions &&
+        editorsDone === 3;
+
+    document.getElementById(
+        "completion-message"
+    ).style.display = completed ? "block" : "none";
+
+    try {
+        if (completed) {
+            localStorage.setItem(
+                COMPLETION_KEY,
+                "true"
+            );
+        } else {
+            localStorage.removeItem(COMPLETION_KEY);
+        }
+    } catch (error) {
+        console.warn("Δεν ενημερώθηκε η ολοκλήρωση.");
+    }
+}
+
+/* =========================================
+   ΑΡΧΙΚΟΣ ΚΩΔΙΚΑΣ
+========================================= */
+
+const initialCode = [
+    "",
+
+    `#include <stdio.h>
+
+// Δημιούργησε εδώ τη συνάρτηση hello
+
+int main(void) {
+
+    // Κάλεσε τη hello
+
+    return 0;
+}`,
+
+    `#include <stdio.h>
+
+// Δημιούργησε τη συνάρτηση add
+
+int main(void) {
+
+    // Κάλεσε add(5, 3)
+
+    // Εμφάνισε το αποτέλεσμα
+
+    return 0;
+}`,
+
+    `#include <stdio.h>
+
+// Δημιούργησε τη συνάρτηση sumArray
+
+int main(void) {
+
+    int numbers[5] = {1, 2, 3, 4, 5};
+
+    // Κάλεσε τη sumArray
+
+    // Εμφάνισε το αποτέλεσμα
+
+    return 0;
+}`
+];
+
+/* =========================================
+   ΕΠΑΝΑΦΟΡΑ ΠΡΟΟΔΟΥ
+========================================= */
+
+function resetProgress() {
+    const confirmed = confirm(
+        "Θέλεις να μηδενίσεις τις 30 ερωτήσεις και τις 3 ασκήσεις;"
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+        localStorage.removeItem(QUIZ_KEY);
+        localStorage.removeItem(EDITOR_KEY);
+        localStorage.removeItem(COMPLETION_KEY);
+    } catch (error) {
+        console.warn("Δεν διαγράφηκε η πρόοδος.");
+    }
+
+    answeredQuestions = {};
+    completedEditors = {};
+
+    createSections();
+    refreshScore();
+
+    for (let number = 1; number <= 3; number++) {
+        const textarea =
+            document.getElementById("editor" + number);
+
+        const feedback =
+            document.getElementById(
+                "editor-feedback" + number
+            );
+
+        textarea.value = initialCode[number];
+        textarea.disabled = false;
+
+        textarea.parentElement.querySelector(
+            ".primary-button"
+        ).disabled = false;
+
+        feedback.textContent = "";
+        feedback.className = "feedback";
+    }
+
+    refreshEditorScore();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+/* =========================================
+   ΕΚΚΙΝΗΣΗ
+========================================= */
+
+createSections();
+restoreProgress();
+restoreEditors();
+
+</script>
+
+</body>
+</html>

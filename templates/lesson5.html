@@ -1,0 +1,2013 @@
+
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Επίπεδο 5 | Επαναλήψεις στη C</title>
+
+<style>
+:root {
+    --navy: #0b1220;
+    --navy-light: #16243a;
+    --blue: #2563eb;
+    --cyan: #22d3ee;
+    --green: #059669;
+    --red: #dc2626;
+    --bg: #f1f5f9;
+    --text: #0f172a;
+    --muted: #64748b;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+nav {
+    background: var(--navy);
+    padding: 20px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo {
+    color: white;
+    text-decoration: none;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.logo span {
+    color: var(--cyan);
+}
+
+.nav-link {
+    color: #cbd5e1;
+    text-decoration: none;
+}
+
+header {
+    background: linear-gradient(
+        135deg,
+        var(--navy),
+        var(--navy-light)
+    );
+    color: white;
+    text-align: center;
+    padding: 55px 20px;
+}
+
+header h1 {
+    margin: 0 0 15px;
+    font-size: 36px;
+}
+
+header p {
+    color: #cbd5e1;
+    line-height: 1.7;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 35px auto;
+    padding: 0 20px;
+}
+
+.card {
+    background: white;
+    padding: 28px;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+}
+
+.card h2 {
+    margin-top: 0;
+}
+
+.description {
+    color: var(--muted);
+    line-height: 1.8;
+}
+
+.theory {
+    background: #eff6ff;
+    border-left: 4px solid var(--blue);
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    line-height: 1.8;
+}
+
+.theory p {
+    margin: 10px 0;
+}
+
+pre {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 20px;
+    border-radius: 10px;
+    overflow-x: auto;
+    line-height: 1.7;
+}
+
+code,
+textarea {
+    font-family: Consolas, monospace;
+}
+
+.progress {
+    background: #e2e8f0;
+    height: 12px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 15px 0;
+}
+
+.progress-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--green);
+    transition: width 0.3s;
+}
+
+.score-number {
+    font-size: 30px;
+    font-weight: bold;
+    color: var(--blue);
+}
+
+.section-score {
+    background: #f1f5f9;
+    border-radius: 8px;
+    padding: 14px;
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+.question {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 18px 0;
+}
+
+.question h3 {
+    font-size: 17px;
+    line-height: 1.6;
+    margin-top: 0;
+}
+
+.option {
+    display: block;
+    width: 100%;
+    background: white;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 13px 15px;
+    margin: 9px 0;
+    text-align: left;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.option:hover:not(:disabled) {
+    background: #dbeafe;
+    border-color: var(--blue);
+}
+
+.option.correct-option {
+    background: #d1fae5;
+    border-color: var(--green);
+}
+
+.option.wrong-option {
+    background: #fee2e2;
+    border-color: var(--red);
+}
+
+.answer-input {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    font-size: 16px;
+}
+
+.primary-button {
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.primary-button:hover:not(:disabled) {
+    background: #1d4ed8;
+}
+
+button:disabled {
+    cursor: default;
+    opacity: 0.8;
+}
+
+.reset-button {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 12px 18px;
+    cursor: pointer;
+}
+
+.feedback {
+    margin-top: 12px;
+    font-weight: bold;
+    line-height: 1.6;
+}
+
+.correct {
+    color: #047857;
+}
+
+.wrong {
+    color: #b91c1c;
+}
+
+.editor-section {
+    border-top: 5px solid var(--cyan);
+}
+
+.editor-score {
+    background: #dbeafe;
+    color: #1e40af;
+    border-radius: 10px;
+    padding: 16px;
+    font-weight: bold;
+}
+
+.editor-exercise {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 22px;
+    margin: 25px 0;
+}
+
+.editor-exercise p {
+    line-height: 1.7;
+}
+
+.editor-label {
+    display: block;
+    background: var(--navy-light);
+    color: var(--cyan);
+    padding: 12px 16px;
+    border-radius: 10px 10px 0 0;
+    font-family: Consolas, monospace;
+}
+
+.code-editor {
+    display: block;
+    width: 100%;
+    min-height: 260px;
+    background: #0f172a;
+    color: #e2e8f0;
+    border: 1px solid #334155;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 18px;
+    font-size: 14px;
+    line-height: 1.6;
+    resize: vertical;
+    tab-size: 4;
+}
+
+.code-editor:focus {
+    outline: 2px solid var(--blue);
+}
+
+.back-button {
+    display: inline-block;
+    background: var(--navy);
+    color: white;
+    text-decoration: none;
+    padding: 14px 24px;
+    border-radius: 8px;
+    margin-bottom: 40px;
+}
+
+.completion {
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    border-radius: 12px;
+    padding: 18px;
+    margin-top: 20px;
+    display: none;
+}
+
+footer {
+    background: var(--navy);
+    color: #94a3b8;
+    padding: 25px;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 27px;
+    }
+
+    .container {
+        padding: 0 12px;
+    }
+
+    .card {
+        padding: 18px;
+    }
+
+    .editor-exercise {
+        padding: 14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <a href="/" class="logo">
+        C<span>Learning</span>
+    </a>
+
+    <a href="/skills" class="nav-link">
+        Skill Tree
+    </a>
+</nav>
+
+<header>
+    <h1>Επίπεδο 5: Επαναλήψεις στη C</h1>
+
+    <p>
+        Εισαγωγή - for - while - do...while - break & continue
+    </p>
+
+    <p>
+        5 ενότητες - 30 ερωτήσεις-3 ασκήσεις κώδικα
+    </p>
+</header>
+
+<main class="container">
+
+<section class="card">
+    <h2>Η πρόοδός σου</h2>
+
+    <div class="score-number">
+        <span id="total-score">0</span> / 30
+    </div>
+
+    <p id="progress-text">
+        Έχεις ολοκληρώσει 0 από τις 30 ερωτήσεις.
+    </p>
+
+    <div class="progress">
+        <div
+            class="progress-fill"
+            id="progress-fill">
+        </div>
+    </div>
+
+    <p>
+        Πρακτικές ασκήσεις:
+        <strong id="editor-progress">0 / 3</strong>
+    </p>
+
+    <div id="completion-message" class="completion">
+        <strong>Συγχαρητήρια!</strong>
+        Ολοκλήρωσες το Επίπεδο 5!
+    </div>
+
+    <button
+        class="reset-button"
+        onclick="resetProgress()">
+        Επαναφορά όλης της προόδου
+    </button>
+</section>
+
+<div id="sections-container"></div>
+
+<section class="card editor-section">
+
+    <h2>Τελική επανάληψη – Γράψε κώδικα C</h2>
+
+    <p class="description">
+        Λύσε τις τρεις ασκήσεις γράφοντας κώδικα C.
+        Ο έλεγχος εξετάζει τη δομή του κώδικα,
+        χωρίς πραγματική μεταγλώττιση ή εκτέλεση.
+    </p>
+
+    <div class="editor-score">
+        Ολοκληρωμένες ασκήσεις:
+        <span id="editor-score">0</span> / 3
+    </div>
+
+    <div class="editor-exercise">
+        <h3>Άσκηση 1: Αριθμοί από 1 μέχρι 10</h3>
+
+        <p>
+            Γράψε ένα πρόγραμμα που χρησιμοποιεί
+            <code>for</code> για να εμφανίσει
+            τους αριθμούς από το 1 μέχρι το 10.
+        </p>
+
+        <label class="editor-label" for="editor1">
+            main.c — Άσκηση 1
+        </label>
+
+        <textarea
+            id="editor1"
+            class="code-editor"
+            spellcheck="false">#include <stdio.h>
+
+int main(void) {
+
+    // Γράψε εδώ τον βρόχο for
+
+    return 0;
+}</textarea>
+
+        <button
+            class="primary-button"
+            onclick="checkEditor(1)">
+            Έλεγχος κώδικα
+        </button>
+
+        <p
+            id="editor-feedback1"
+            class="feedback"
+            aria-live="polite">
+        </p>
+    </div>
+
+    <div class="editor-exercise">
+        <h3>Άσκηση 2: Μετρητής με while</h3>
+
+        <p>
+            Γράψε ένα πρόγραμμα που χρησιμοποιεί
+            <code>while</code> για να εμφανίσει
+            τους αριθμούς από το 1 μέχρι το 5.
+        </p>
+
+        <label class="editor-label" for="editor2">
+            main.c — Άσκηση 2
+        </label>
+
+        <textarea
+            id="editor2"
+            class="code-editor"
+            spellcheck="false">#include <stdio.h>
+
+int main(void) {
+
+    int i = 1;
+
+    // Γράψε εδώ τον βρόχο while
+
+    return 0;
+}</textarea>
+
+        <button
+            class="primary-button"
+            onclick="checkEditor(2)">
+            Έλεγχος κώδικα
+        </button>
+
+        <p
+            id="editor-feedback2"
+            class="feedback"
+            aria-live="polite">
+        </p>
+    </div>
+
+    <div class="editor-exercise">
+        <h3>Άσκηση 3: Επανάληψη με do...while</h3>
+
+        <p>
+            Γράψε ένα πρόγραμμα που χρησιμοποιεί
+            <code>do...while</code> για να εμφανίσει
+            τους αριθμούς από το 1 μέχρι το 3.
+        </p>
+
+        <label class="editor-label" for="editor3">
+            main.c — Άσκηση 3
+        </label>
+
+        <textarea
+            id="editor3"
+            class="code-editor"
+            spellcheck="false">#include <stdio.h>
+
+int main(void) {
+
+    int i = 1;
+
+    // Γράψε εδώ τον βρόχο do...while
+
+    return 0;
+}</textarea>
+
+        <button
+            class="primary-button"
+            onclick="checkEditor(3)">
+            Έλεγχος κώδικα
+        </button>
+
+        <p
+            id="editor-feedback3"
+            class="feedback"
+            aria-live="polite">
+        </p>
+    </div>
+
+</section>
+
+<a href="/skills" class="back-button">
+    ← Επιστροφή στο Skill Tree
+</a>
+
+</main>
+
+<footer>
+    C Learning App • Επίπεδο 5: Επαναλήψεις στη C
+</footer>
+
+
+<script>
+"use strict";
+
+/* ==========================================
+   ΕΠΙΠΕΔΟ 5 - ΕΠΑΝΑΛΗΨΕΙΣ ΣΤΗ C
+   5 ΕΝΟΤΗΤΕΣ x 6 ΕΡΩΤΗΣΕΙΣ = 30
+========================================== */
+
+const sections = [
+
+    /* ======================================
+       ΕΝΟΤΗΤΑ 1
+    ====================================== */
+
+    {
+        title: "1. Εισαγωγή στις επαναλήψεις",
+
+        description:
+            "Τι είναι οι βρόχοι και γιατί τους χρησιμοποιούμε;",
+
+        theory: `
+            <p>
+                Οι <strong>επαναλήψεις (loops)</strong>
+                επιτρέπουν σε ένα πρόγραμμα να εκτελεί
+                πολλές φορές τις ίδιες εντολές.
+            </p>
+
+            <p>
+                Αν θέλουμε να εμφανίσουμε 5 φορές
+                τη λέξη Hello, δεν χρειάζεται
+                να γράψουμε 5 εντολές printf().
+            </p>
+
+            <p>
+                Μπορούμε να χρησιμοποιήσουμε
+                έναν <strong>βρόχο</strong>.
+            </p>
+
+            <p>
+                Στη C υπάρχουν τρεις βασικοί βρόχοι:
+                <code>for</code>,
+                <code>while</code> και
+                <code>do...while</code>.
+            </p>
+
+            <p>
+                Κάθε βρόχος έχει μια συνθήκη
+                που καθορίζει πότε συνεχίζεται
+                η επανάληψη.
+            </p>
+
+            <p>
+                Είναι σημαντικό η συνθήκη
+                να μπορεί κάποια στιγμή
+                να γίνει ψευδής, ώστε
+                να μη δημιουργηθεί
+                ατέρμονος βρόχος.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main(void) {
+    for (int i = 1; i <= 5; i++) {
+        printf("Hello!\\n");
+    }
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Τι είναι ένας βρόχος (loop);",
+                options: [
+                    "Μια δομή που επαναλαμβάνει εντολές",
+                    "Ένας τύπος μεταβλητής",
+                    "Μια εντολή εισόδου"
+                ],
+                correct: 0,
+                explanation:
+                    "Ο βρόχος χρησιμοποιείται για επανάληψη εντολών."
+            },
+            {
+                type: "choice",
+                text: "Ποια από τις παρακάτω είναι δομή επανάληψης;",
+                options: [
+                    "printf",
+                    "while",
+                    "scanf"
+                ],
+                correct: 1,
+                explanation:
+                    "Το while είναι μία από τις δομές επανάληψης της C."
+            },
+            {
+                type: "choice",
+                text: "Γιατί χρησιμοποιούμε βρόχους;",
+                options: [
+                    "Για να αποφεύγουμε την επανάληψη ίδιων εντολών στον κώδικα",
+                    "Για να διαγράφουμε μεταβλητές",
+                    "Για να αντικαθιστούμε τη main"
+                ],
+                correct: 0,
+                explanation:
+                    "Οι βρόχοι κάνουν τον κώδικα πιο σύντομο και οργανωμένο."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τη λέξη για τον βρόχο:",
+                code: `___ (int i = 1; i <= 5; i++) {
+    printf("Hello!\\n");
+}`,
+                correct: ["for"],
+                explanation:
+                    "Η λέξη for ξεκινά έναν βρόχο με μετρητή."
+            },
+            {
+                type: "choice",
+                text: "Ποιος βρόχος εκτελείται τουλάχιστον μία φορά;",
+                options: [
+                    "for",
+                    "while",
+                    "do...while"
+                ],
+                correct: 2,
+                explanation:
+                    "Το do...while ελέγχει τη συνθήκη μετά την πρώτη εκτέλεση."
+            },
+            {
+                type: "choice",
+                text: "Τι είναι ένας ατέρμονος βρόχος;",
+                options: [
+                    "Ένας βρόχος που δεν τερματίζει",
+                    "Ένας βρόχος που εκτελείται μόνο μία φορά",
+                    "Ένας βρόχος χωρίς μεταβλητές"
+                ],
+                correct: 0,
+                explanation:
+                    "Ένας ατέρμονος βρόχος συνεχίζει χωρίς να τερματίζει."
+            }
+        ]
+    },
+
+    /* ======================================
+       ΕΝΟΤΗΤΑ 2 - FOR
+    ====================================== */
+
+    {
+        title: "2. Ο βρόχος for",
+
+        description:
+            "Μάθε να χρησιμοποιείς μετρητές και συγκεκριμένο αριθμό επαναλήψεων.",
+
+        theory: `
+            <p>
+                Ο βρόχος <code>for</code>
+                χρησιμοποιείται συχνά όταν
+                γνωρίζουμε πόσες φορές θέλουμε
+                να επαναλάβουμε μια εντολή.
+            </p>
+
+            <p>Η σύνταξή του είναι:</p>
+
+            <pre><code>for (αρχικοποίηση; συνθήκη; μεταβολή) {
+    // εντολές
+}</code></pre>
+
+            <p>
+                Στην <strong>αρχικοποίηση</strong>
+                ορίζουμε την αρχική τιμή του μετρητή.
+            </p>
+
+            <p>
+                Η <strong>συνθήκη</strong>
+                καθορίζει αν θα εκτελεστεί
+                η επόμενη επανάληψη.
+            </p>
+
+            <p>
+                Η <strong>μεταβολή</strong>
+                αλλάζει την τιμή του μετρητή
+                μετά από κάθε επανάληψη.
+            </p>
+
+            <p>
+                Το <code>i++</code> αυξάνει
+                το i κατά 1, ενώ το
+                <code>i--</code> το μειώνει κατά 1.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main(void) {
+    for (int i = 1; i <= 5; i++) {
+        printf("%d\\n", i);
+    }
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Πότε χρησιμοποιούμε συχνά το for;",
+                options: [
+                    "Όταν γνωρίζουμε τον αριθμό των επαναλήψεων",
+                    "Μόνο για χαρακτήρες",
+                    "Μόνο για είσοδο δεδομένων"
+                ],
+                correct: 0,
+                explanation:
+                    "Το for είναι κατάλληλο για επαναλήψεις με μετρητή."
+            },
+            {
+                type: "choice",
+                text: "Από ποια τιμή ξεκινά το i;",
+                code: `for (int i = 2; i <= 5; i++)`,
+                options: ["0", "2", "5"],
+                correct: 1,
+                explanation:
+                    "Η αρχικοποίηση int i = 2 δίνει αρχική τιμή 2."
+            },
+            {
+                type: "choice",
+                text: "Πόσες φορές εκτελείται ο βρόχος;",
+                code: `for (int i = 1; i <= 4; i++) {
+    printf("%d ", i);
+}`,
+                options: ["3", "4", "5"],
+                correct: 1,
+                explanation:
+                    "Ο βρόχος εκτελείται για i = 1, 2, 3 και 4."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τον τελεστή αύξησης:",
+                code: `for (int i = 0; i < 5; i___)`,
+                correct: ["++"],
+                explanation:
+                    "Το i++ αυξάνει τον μετρητή κατά 1."
+            },
+            {
+                type: "choice",
+                text: "Πόσες φορές εκτελείται ο βρόχος;",
+                code: `for (int i = 0; i < 10; i += 2) {
+    printf("%d ", i);
+}`,
+                options: ["5", "10", "2"],
+                correct: 0,
+                explanation:
+                    "Οι τιμές του i είναι 0, 2, 4, 6 και 8."
+            },
+            {
+                type: "choice",
+                text: "Ποιος βρόχος μετρά αντίστροφα από 5 μέχρι 1;",
+                options: [
+                    "for (int i = 1; i <= 5; i++)",
+                    "for (int i = 5; i >= 1; i--)",
+                    "for (int i = 5; i <= 1; i++)"
+                ],
+                correct: 1,
+                explanation:
+                    "Ξεκινά από 5 και μειώνει τον μετρητή μέχρι το 1."
+            }
+        ]
+    },
+
+    /* ======================================
+       ΕΝΟΤΗΤΑ 3 - WHILE
+    ====================================== */
+
+    {
+        title: "3. Ο βρόχος while",
+
+        description:
+            "Μάθε να επαναλαμβάνεις εντολές όσο μια συνθήκη παραμένει αληθής.",
+
+        theory: `
+            <p>
+                Ο βρόχος <code>while</code>
+                επαναλαμβάνει εντολές όσο
+                μια συνθήκη είναι αληθής.
+            </p>
+
+            <p>Η σύνταξη είναι:</p>
+
+            <pre><code>while (συνθήκη) {
+    // εντολές
+}</code></pre>
+
+            <p>
+                Η συνθήκη ελέγχεται
+                <strong>πριν</strong>
+                από κάθε επανάληψη.
+            </p>
+
+            <p>
+                Αν η συνθήκη είναι ψευδής
+                από την αρχή, οι εντολές
+                του βρόχου δεν εκτελούνται.
+            </p>
+
+            <p>
+                Όταν χρησιμοποιούμε μετρητή,
+                πρέπει να τον ενημερώνουμε,
+                όπως με <code>i++</code>.
+            </p>
+
+            <p>
+                Διαφορετικά, αν η συνθήκη
+                παραμένει αληθής,
+                μπορεί να δημιουργηθεί
+                ατέρμονος βρόχος.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main(void) {
+    int i = 1;
+
+    while (i <= 5) {
+        printf("%d\\n", i);
+        i++;
+    }
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Πότε ελέγχεται η συνθήκη του while;",
+                options: [
+                    "Πριν από κάθε επανάληψη",
+                    "Μόνο στο τέλος του προγράμματος",
+                    "Μετά από όλες τις επαναλήψεις"
+                ],
+                correct: 0,
+                explanation:
+                    "Το while ελέγχει τη συνθήκη πριν εκτελέσει το σώμα."
+            },
+            {
+                type: "choice",
+                text: "Τι συμβαίνει αν η συνθήκη είναι ψευδής από την αρχή;",
+                options: [
+                    "Ο βρόχος εκτελείται μία φορά",
+                    "Ο βρόχος δεν εκτελείται καθόλου",
+                    "Ο βρόχος εκτελείται για πάντα"
+                ],
+                correct: 1,
+                explanation:
+                    "Το while μπορεί να εκτελεστεί μηδέν φορές."
+            },
+            {
+                type: "choice",
+                text: "Πόσες φορές εκτελείται η printf;",
+                code: `int i = 1;
+while (i <= 3) {
+    printf("%d ", i);
+    i++;
+}`,
+                options: ["2", "3", "4"],
+                correct: 1,
+                explanation:
+                    "Η printf εκτελείται για i = 1, 2 και 3."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τη λέξη που λείπει:",
+                code: `___ (i < 10) {
+    i++;
+}`,
+                correct: ["while"],
+                explanation:
+                    "Η λέξη while ξεκινά τον βρόχο."
+            },
+            {
+                type: "choice",
+                text: "Τι μπορεί να προκαλέσει ατέρμονο βρόχο;",
+                options: [
+                    "Μια συνθήκη που δεν γίνεται ποτέ ψευδής",
+                    "Η σωστή αύξηση του μετρητή",
+                    "Η εντολή return 0"
+                ],
+                correct: 0,
+                explanation:
+                    "Αν η συνθήκη παραμένει αληθής, ο βρόχος δεν σταματά."
+            },
+            {
+                type: "choice",
+                text: "Ποια σύνταξη είναι σωστή;",
+                options: [
+                    "while x < 5 { }",
+                    "while (x < 5) { }",
+                    "while x < 5 then"
+                ],
+                correct: 1,
+                explanation:
+                    "Η συνθήκη του while γράφεται μέσα σε παρενθέσεις."
+            }
+        ]
+    },
+
+    /* ======================================
+       ΕΝΟΤΗΤΑ 4 - DO WHILE
+    ====================================== */
+
+    {
+        title: "4. Ο βρόχος do...while",
+
+        description:
+            "Μάθε τον βρόχο που εκτελείται τουλάχιστον μία φορά.",
+
+        theory: `
+            <p>
+                Ο βρόχος <code>do...while</code>
+                μοιάζει με το while,
+                αλλά έχει μία βασική διαφορά.
+            </p>
+
+            <p>
+                Εκτελεί πρώτα τις εντολές
+                και μετά ελέγχει τη συνθήκη.
+            </p>
+
+            <p>Η σύνταξη είναι:</p>
+
+            <pre><code>do {
+    // εντολές
+} while (συνθήκη);</code></pre>
+
+            <p>
+                Επομένως, το σώμα του
+                <code>do...while</code>
+                εκτελείται
+                <strong>τουλάχιστον μία φορά</strong>.
+            </p>
+
+            <p>
+                Είναι χρήσιμο, για παράδειγμα,
+                όταν θέλουμε να εμφανίσουμε
+                ένα μενού πριν ζητήσουμε
+                αν ο χρήστης θέλει να συνεχίσει.
+            </p>
+
+            <p>
+                Προσοχή: Στο τέλος της
+                εντολής <code>while (συνθήκη)</code>
+                χρειάζεται <code>;</code>.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main(void) {
+    int i = 1;
+
+    do {
+        printf("%d\\n", i);
+        i++;
+    } while (i <= 5);
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Πότε ελέγχει τη συνθήκη το do...while;",
+                options: [
+                    "Πριν από το σώμα",
+                    "Μετά το σώμα",
+                    "Δεν ελέγχει συνθήκη"
+                ],
+                correct: 1,
+                explanation:
+                    "Το do...while ελέγχει τη συνθήκη στο τέλος."
+            },
+            {
+                type: "choice",
+                text: "Πόσες φορές εκτελείται τουλάχιστον το do...while;",
+                options: ["0", "1", "2"],
+                correct: 1,
+                explanation:
+                    "Το σώμα εκτελείται πριν ελεγχθεί η συνθήκη."
+            },
+            {
+                type: "choice",
+                text: "Ποια λέξη ξεκινά τον βρόχο do...while;",
+                options: ["while", "for", "do"],
+                correct: 2,
+                explanation:
+                    "Η εντολή ξεκινά με τη λέξη do."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τη λέξη:",
+                code: `do {
+    printf("Hello");
+} ___ (x < 5);`,
+                correct: ["while"],
+                explanation:
+                    "Μετά το σώμα του do γράφουμε while (συνθήκη);"
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `int x = 10;
+do {
+    printf("%d", x);
+} while (x < 5);`,
+                options: [
+                    "Τίποτα",
+                    "10",
+                    "Ατέρμονη επανάληψη"
+                ],
+                correct: 1,
+                explanation:
+                    "Εμφανίζει το 10 μία φορά και μετά σταματά."
+            },
+            {
+                type: "choice",
+                text: "Ποιος βρόχος ταιριάζει σε μενού που πρέπει να εμφανιστεί τουλάχιστον μία φορά;",
+                options: [
+                    "do...while",
+                    "Μόνο for",
+                    "Κανένας"
+                ],
+                correct: 0,
+                explanation:
+                    "Το do...while εκτελεί πρώτα το σώμα και μετά ελέγχει."
+            }
+        ]
+    },
+
+    /* ======================================
+       ΕΝΟΤΗΤΑ 5 - BREAK / CONTINUE
+    ====================================== */
+
+    {
+        title: "5. break, continue και συνδυαστικές ασκήσεις",
+
+        description:
+            "Μάθε να ελέγχεις τη ροή των επαναλήψεων.",
+
+        theory: `
+            <p>
+                Η εντολή <code>break</code>
+                τερματίζει αμέσως
+                τον κοντινότερο βρόχο.
+            </p>
+
+            <p>Παράδειγμα:</p>
+
+            <pre><code>for (int i = 1; i <= 5; i++) {
+    if (i == 3) {
+        break;
+    }
+    printf("%d ", i);
+}</code></pre>
+
+            <p>
+                Αποτέλεσμα: <strong>1 2</strong>
+            </p>
+
+            <p>
+                Η εντολή <code>continue</code>
+                παραλείπει το υπόλοιπο
+                της τρέχουσας επανάληψης.
+            </p>
+
+            <pre><code>for (int i = 1; i <= 5; i++) {
+    if (i == 3) {
+        continue;
+    }
+    printf("%d ", i);
+}</code></pre>
+
+            <p>
+                Αποτέλεσμα:
+                <strong>1 2 4 5</strong>
+            </p>
+
+            <p>
+                Μπορούμε επίσης να τοποθετήσουμε
+                έναν βρόχο μέσα σε άλλον.
+                Αυτό ονομάζεται
+                <strong>εμφωλευμένος βρόχος</strong>.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+int main(void) {
+    for (int i = 1; i <= 5; i++) {
+        if (i == 3) {
+            continue;
+        }
+
+        printf("%d\\n", i);
+    }
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Τι κάνει το break μέσα σε έναν βρόχο;",
+                options: [
+                    "Τερματίζει τον βρόχο",
+                    "Αυξάνει τον μετρητή",
+                    "Δηλώνει μεταβλητή"
+                ],
+                correct: 0,
+                explanation:
+                    "Το break σταματά τον κοντινότερο βρόχο."
+            },
+            {
+                type: "choice",
+                text: "Τι κάνει το continue;",
+                options: [
+                    "Τερματίζει όλο το πρόγραμμα",
+                    "Παραλείπει το υπόλοιπο της τρέχουσας επανάληψης",
+                    "Δημιουργεί νέο βρόχο"
+                ],
+                correct: 1,
+                explanation:
+                    "Το continue συνεχίζει με την επόμενη επανάληψη."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `for (int i = 1; i <= 5; i++) {
+    if (i == 3) break;
+    printf("%d ", i);
+}`,
+                options: [
+                    "1 2",
+                    "1 2 3",
+                    "1 2 4 5"
+                ],
+                correct: 0,
+                explanation:
+                    "Το break σταματά τον βρόχο πριν εμφανιστεί το 3."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε την εντολή που σταματά τον βρόχο:",
+                code: `if (i == 5) {
+    ___;
+}`,
+                correct: ["break"],
+                explanation:
+                    "Το break τερματίζει τον βρόχο."
+            },
+            {
+                type: "choice",
+                text: "Τι είναι ένας εμφωλευμένος βρόχος;",
+                options: [
+                    "Ένας βρόχος μέσα σε άλλον βρόχο",
+                    "Ένας βρόχος χωρίς συνθήκη",
+                    "Ένας τύπος μεταβλητής"
+                ],
+                correct: 0,
+                explanation:
+                    "Εμφωλευμένος βρόχος σημαίνει βρόχος μέσα σε βρόχο."
+            },
+            {
+                type: "choice",
+                text: "Πόσες φορές εκτελείται η printf;",
+                code: `for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 2; j++) {
+        printf("Hi ");
+    }
+}`,
+                options: ["3", "5", "6"],
+                correct: 2,
+                explanation:
+                    "Ο εξωτερικός βρόχος εκτελείται 3 φορές και ο εσωτερικός 2: 3 × 2 = 6."
+            }
+        ]
+    }
+];
+
+
+/* ==========================================
+   ΑΠΟΘΗΚΕΥΣΗ ΠΡΟΟΔΟΥ
+========================================== */
+
+const QUIZ_KEY = "c_learning_lesson5_quiz_v2";
+const EDITOR_KEY = "c_learning_lesson5_editors_v2";
+const COMPLETION_KEY = "c_learning_level5_completed";
+
+const totalQuestions = sections.reduce(
+    (sum, section) => sum + section.questions.length,
+    0
+);
+
+function readStorage(key) {
+    try {
+        const data = JSON.parse(localStorage.getItem(key));
+
+        if (
+            data &&
+            typeof data === "object" &&
+            !Array.isArray(data)
+        ) {
+            return data;
+        }
+    } catch (error) {
+        console.warn("Πρόβλημα ανάγνωσης προόδου.");
+    }
+
+    return {};
+}
+
+let answeredQuestions = readStorage(QUIZ_KEY);
+let completedEditors = readStorage(EDITOR_KEY);
+
+
+/* ==========================================
+   ΑΣΦΑΛΗΣ ΕΜΦΑΝΙΣΗ ΚΕΙΜΕΝΟΥ
+========================================== */
+
+function escapeHTML(value) {
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+
+/* ==========================================
+   ΔΗΜΙΟΥΡΓΙΑ ΕΝΟΤΗΤΩΝ
+========================================== */
+
+function createSections() {
+    const container =
+        document.getElementById("sections-container");
+
+    container.innerHTML = "";
+
+    sections.forEach((section, sectionIndex) => {
+
+        const sectionElement =
+            document.createElement("section");
+
+        sectionElement.className = "card";
+
+        sectionElement.innerHTML = `
+            <h2>${escapeHTML(section.title)}</h2>
+
+            <p class="description">
+                ${escapeHTML(section.description)}
+            </p>
+
+            <div class="theory">
+                ${section.theory}
+            </div>
+
+            <h3>Παράδειγμα κώδικα C</h3>
+
+            <pre><code>${escapeHTML(section.example)}</code></pre>
+
+            <div class="section-score">
+                Ολοκληρωμένες ερωτήσεις:
+                <span id="section-score-${sectionIndex}">0</span>
+                / ${section.questions.length}
+            </div>
+
+            <h3>Quiz ενότητας</h3>
+
+            <div id="questions-${sectionIndex}"></div>
+        `;
+
+        container.appendChild(sectionElement);
+
+        const questionsContainer =
+            document.getElementById(
+                `questions-${sectionIndex}`
+            );
+
+        section.questions.forEach((question, questionIndex) => {
+
+            const element = document.createElement("div");
+            element.className = "question";
+
+            let html = `
+                <h3>
+                    ${questionIndex + 1}.
+                    ${escapeHTML(question.text)}
+                </h3>
+            `;
+
+            if (question.code) {
+                html += `
+                    <pre><code>${escapeHTML(question.code)}</code></pre>
+                `;
+            }
+
+            if (question.type === "choice") {
+
+                question.options.forEach((option, optionIndex) => {
+
+                    html += `
+                        <button
+                            class="option"
+                            onclick="checkChoice(
+                                this,
+                                ${sectionIndex},
+                                ${questionIndex},
+                                ${optionIndex}
+                            )">
+                            ${escapeHTML(option)}
+                        </button>
+                    `;
+                });
+
+            } else {
+
+                html += `
+                    <input
+                        class="answer-input"
+                        type="text"
+                        placeholder="Γράψε την απάντησή σου"
+                        autocomplete="off">
+
+                    <button
+                        class="primary-button"
+                        onclick="checkInput(
+                            this,
+                            ${sectionIndex},
+                            ${questionIndex}
+                        )">
+                        Έλεγχος
+                    </button>
+                `;
+            }
+
+            html += `
+                <p class="feedback" aria-live="polite"></p>
+            `;
+
+            element.innerHTML = html;
+
+            questionsContainer.appendChild(element);
+        });
+    });
+}
+
+
+/* ==========================================
+   ΕΛΕΓΧΟΣ ΕΡΩΤΗΣΕΩΝ
+========================================== */
+
+function questionKey(sectionIndex, questionIndex) {
+    return `${sectionIndex}-${questionIndex}`;
+}
+
+function getQuestionElement(sectionIndex, questionIndex) {
+    return document.getElementById(
+        `questions-${sectionIndex}`
+    ).children[questionIndex];
+}
+
+function saveAnswer(sectionIndex, questionIndex) {
+    const key = questionKey(sectionIndex, questionIndex);
+
+    if (answeredQuestions[key]) {
+        return;
+    }
+
+    answeredQuestions[key] = true;
+
+    try {
+        localStorage.setItem(
+            QUIZ_KEY,
+            JSON.stringify(answeredQuestions)
+        );
+    } catch (error) {
+        console.warn("Δεν αποθηκεύτηκε η πρόοδος.");
+    }
+
+    refreshScore();
+}
+
+function checkChoice(button, sectionIndex, questionIndex, optionIndex) {
+
+    const question =
+        sections[sectionIndex].questions[questionIndex];
+
+    const element =
+        getQuestionElement(sectionIndex, questionIndex);
+
+    const feedback = element.querySelector(".feedback");
+
+    if (answeredQuestions[questionKey(sectionIndex, questionIndex)]) {
+        return;
+    }
+
+    if (optionIndex === question.correct) {
+
+        button.classList.add("correct-option");
+
+        element.querySelectorAll(".option").forEach(btn => {
+            btn.disabled = true;
+        });
+
+        feedback.textContent =
+            "✓ Σωστά! " + question.explanation;
+
+        feedback.className = "feedback correct";
+
+        saveAnswer(sectionIndex, questionIndex);
+
+    } else {
+
+        button.classList.add("wrong-option");
+        button.disabled = true;
+
+        feedback.textContent =
+            "✗ Λάθος απάντηση. Προσπάθησε ξανά.";
+
+        feedback.className = "feedback wrong";
+    }
+}
+
+function checkInput(button, sectionIndex, questionIndex) {
+
+    const question =
+        sections[sectionIndex].questions[questionIndex];
+
+    const element =
+        getQuestionElement(sectionIndex, questionIndex);
+
+    const input = element.querySelector(".answer-input");
+    const feedback = element.querySelector(".feedback");
+
+    if (answeredQuestions[questionKey(sectionIndex, questionIndex)]) {
+        return;
+    }
+
+    const answer = input.value.trim();
+
+    const isCorrect = question.correct.some(
+        correctAnswer => answer === correctAnswer
+    );
+
+    if (isCorrect) {
+
+        input.disabled = true;
+        button.disabled = true;
+
+        feedback.textContent =
+            "✓ Σωστά! " + question.explanation;
+
+        feedback.className = "feedback correct";
+
+        saveAnswer(sectionIndex, questionIndex);
+
+    } else {
+
+        feedback.textContent =
+            "✗ Έλεγξε την απάντησή σου και προσπάθησε ξανά.";
+
+        feedback.className = "feedback wrong";
+    }
+}
+
+
+/* ==========================================
+   ΒΑΘΜΟΛΟΓΙΑ
+========================================== */
+
+function refreshScore() {
+    let total = 0;
+
+    sections.forEach((section, sectionIndex) => {
+
+        let sectionScore = 0;
+
+        section.questions.forEach((question, questionIndex) => {
+
+            if (
+                answeredQuestions[
+                    questionKey(sectionIndex, questionIndex)
+                ]
+            ) {
+                sectionScore++;
+                total++;
+            }
+        });
+
+        document.getElementById(
+            `section-score-${sectionIndex}`
+        ).textContent = sectionScore;
+    });
+
+    document.getElementById("total-score").textContent = total;
+
+    document.getElementById("progress-text").textContent =
+        `Έχεις ολοκληρώσει ${total} από τις ${totalQuestions} ερωτήσεις.`;
+
+    document.getElementById("progress-fill").style.width =
+        (total / totalQuestions * 100) + "%";
+
+    checkCompletion();
+}
+
+
+/* ==========================================
+   ΕΠΑΝΑΦΟΡΑ ΑΠΑΝΤΗΣΕΩΝ
+========================================== */
+
+function restoreProgress() {
+
+    sections.forEach((section, sectionIndex) => {
+
+        section.questions.forEach((question, questionIndex) => {
+
+            if (
+                !answeredQuestions[
+                    questionKey(sectionIndex, questionIndex)
+                ]
+            ) {
+                return;
+            }
+
+            const element =
+                getQuestionElement(sectionIndex, questionIndex);
+
+            const feedback = element.querySelector(".feedback");
+
+            feedback.textContent =
+                "✓ Έχεις ήδη απαντήσει σωστά!";
+
+            feedback.className = "feedback correct";
+
+            if (question.type === "choice") {
+
+                element.querySelectorAll(".option").forEach(
+                    (button, optionIndex) => {
+
+                        button.disabled = true;
+
+                        if (optionIndex === question.correct) {
+                            button.classList.add("correct-option");
+                        }
+                    }
+                );
+
+            } else {
+
+                const input =
+                    element.querySelector(".answer-input");
+
+                const button =
+                    element.querySelector("button");
+
+                input.value = question.correct[0];
+                input.disabled = true;
+                button.disabled = true;
+            }
+        });
+    });
+
+    refreshScore();
+}
+
+
+/* ==========================================
+   ΕΛΕΓΧΟΣ CODE EDITORS
+========================================== */
+
+function removeComments(code) {
+    return code
+        .replace(/\/\*[\s\S]*?\*\//g, "")
+        .replace(/\/\/[^\n]*/g, "");
+}
+
+function checkEditor(number) {
+
+    if (completedEditors[number]) {
+        return;
+    }
+
+    const textarea =
+        document.getElementById("editor" + number);
+
+    const feedback =
+        document.getElementById("editor-feedback" + number);
+
+    const code = removeComments(textarea.value);
+
+    const missing = [];
+
+    if (!/#\s*include\s*<stdio\.h>/.test(code)) {
+        missing.push("Πρόσθεσε #include <stdio.h>.");
+    }
+
+    if (!/\bint\s+main\s*\(\s*(?:void\s*)?\)/.test(code)) {
+        missing.push("Χρειάζεται η συνάρτηση int main().");
+    }
+
+    if (!/\breturn\s+0\s*;/.test(code)) {
+        missing.push("Πρόσθεσε return 0;.");
+    }
+
+    /*
+       ΑΣΚΗΣΗ 1: FOR 1-10
+    */
+
+    if (number === 1) {
+
+        if (!/\bfor\s*\(/.test(code)) {
+            missing.push("Χρησιμοποίησε βρόχο for.");
+        }
+
+        if (!/\bint\s+i\s*=\s*1\b/.test(code)) {
+            missing.push("Ξεκίνα τον μετρητή i από το 1.");
+        }
+
+        if (!/(?:i\s*<=\s*10|i\s*<\s*11)/.test(code)) {
+            missing.push("Ο βρόχος πρέπει να φτάνει μέχρι το 10.");
+        }
+
+        if (!/(?:i\+\+|\+\+i|i\s*\+=\s*1)/.test(code)) {
+            missing.push("Αύξησε το i κατά 1.");
+        }
+
+        if (
+            !/printf\s*\(\s*"[^"]*%d[^"]*"\s*,\s*i\s*\)\s*;/.test(code)
+        ) {
+            missing.push("Εμφάνισε το i με printf και %d.");
+        }
+    }
+
+    /*
+       ΑΣΚΗΣΗ 2: WHILE 1-5
+    */
+
+    if (number === 2) {
+
+        if (!/\bint\s+i\s*=\s*1\s*;/.test(code)) {
+            missing.push("Δήλωσε int i = 1;.");
+        }
+
+        if (!/\bwhile\s*\(/.test(code)) {
+            missing.push("Χρησιμοποίησε βρόχο while.");
+        }
+
+        if (!/(?:i\s*<=\s*5|i\s*<\s*6)/.test(code)) {
+            missing.push("Η συνθήκη πρέπει να φτάνει μέχρι το 5.");
+        }
+
+        if (!/(?:i\+\+|\+\+i|i\s*\+=\s*1)/.test(code)) {
+            missing.push("Αύξησε το i κατά 1.");
+        }
+
+        if (
+            !/printf\s*\(\s*"[^"]*%d[^"]*"\s*,\s*i\s*\)\s*;/.test(code)
+        ) {
+            missing.push("Εμφάνισε το i με printf και %d.");
+        }
+    }
+
+    /*
+       ΑΣΚΗΣΗ 3: DO WHILE 1-3
+    */
+
+    if (number === 3) {
+
+        if (!/\bint\s+i\s*=\s*1\s*;/.test(code)) {
+            missing.push("Δήλωσε int i = 1;.");
+        }
+
+        if (!/\bdo\s*\{/.test(code)) {
+            missing.push("Χρησιμοποίησε do { ... }.");
+        }
+
+        if (!/\}\s*while\s*\([^)]*\)\s*;/.test(code)) {
+            missing.push("Ολοκλήρωσε με } while (συνθήκη);.");
+        }
+
+        if (!/(?:i\s*<=\s*3|i\s*<\s*4)/.test(code)) {
+            missing.push("Η συνθήκη πρέπει να φτάνει μέχρι το 3.");
+        }
+
+        if (!/(?:i\+\+|\+\+i|i\s*\+=\s*1)/.test(code)) {
+            missing.push("Αύξησε το i κατά 1.");
+        }
+
+        if (
+            !/printf\s*\(\s*"[^"]*%d[^"]*"\s*,\s*i\s*\)\s*;/.test(code)
+        ) {
+            missing.push("Εμφάνισε το i με printf και %d.");
+        }
+    }
+
+    if (missing.length === 0) {
+
+        completedEditors[number] = textarea.value;
+
+        try {
+            localStorage.setItem(
+                EDITOR_KEY,
+                JSON.stringify(completedEditors)
+            );
+        } catch (error) {
+            console.warn("Δεν αποθηκεύτηκε η άσκηση.");
+        }
+
+        textarea.disabled = true;
+
+        textarea.parentElement.querySelector(
+            ".primary-button"
+        ).disabled = true;
+
+        feedback.textContent =
+            "✓ Μπράβο! Ο κώδικας περιλαμβάνει τα ζητούμενα στοιχεία. Δεν εκτελέστηκε σε compiler.";
+
+        feedback.className = "feedback correct";
+
+        refreshEditorScore();
+
+    } else {
+
+        feedback.textContent =
+            "Χρειάζονται διορθώσεις: " + missing.join(" ");
+
+        feedback.className = "feedback wrong";
+    }
+}
+
+
+/* ==========================================
+   ΠΡΟΟΔΟΣ EDITORS
+========================================== */
+
+function refreshEditorScore() {
+
+    let score = 0;
+
+    for (let number = 1; number <= 3; number++) {
+
+        if (completedEditors[number]) {
+            score++;
+        }
+    }
+
+    document.getElementById("editor-score").textContent = score;
+
+    document.getElementById("editor-progress").textContent =
+        score + " / 3";
+
+    checkCompletion();
+}
+
+function restoreEditors() {
+
+    for (let number = 1; number <= 3; number++) {
+
+        if (!completedEditors[number]) {
+            continue;
+        }
+
+        const textarea =
+            document.getElementById("editor" + number);
+
+        const feedback =
+            document.getElementById("editor-feedback" + number);
+
+        textarea.value = completedEditors[number];
+        textarea.disabled = true;
+
+        textarea.parentElement.querySelector(
+            ".primary-button"
+        ).disabled = true;
+
+        feedback.textContent =
+            "✓ Έχεις ήδη ολοκληρώσει αυτή την άσκηση.";
+
+        feedback.className = "feedback correct";
+    }
+
+    refreshEditorScore();
+}
+
+
+/* ==========================================
+   ΟΛΟΚΛΗΡΩΣΗ ΕΠΙΠΕΔΟΥ
+========================================== */
+
+function checkCompletion() {
+
+    const answered = sections.reduce(
+        (total, section, sectionIndex) => {
+
+            return total + section.questions.filter(
+                (question, questionIndex) =>
+
+                    answeredQuestions[
+                        questionKey(sectionIndex, questionIndex)
+                    ] === true
+
+            ).length;
+
+        },
+        0
+    );
+
+    const editorsDone = [1, 2, 3].filter(
+        number => Boolean(completedEditors[number])
+    ).length;
+
+    const completed =
+        answered === totalQuestions &&
+        editorsDone === 3;
+
+    document.getElementById(
+        "completion-message"
+    ).style.display = completed ? "block" : "none";
+
+    try {
+        if (completed) {
+            localStorage.setItem(COMPLETION_KEY, "true");
+        } else {
+            localStorage.removeItem(COMPLETION_KEY);
+        }
+    } catch (error) {
+        console.warn("Δεν ενημερώθηκε η ολοκλήρωση.");
+    }
+}
+
+
+/* ==========================================
+   ΑΡΧΙΚΟΣ ΚΩΔΙΚΑΣ EDITORS
+========================================== */
+
+const initialCode = [
+    "",
+
+    `#include <stdio.h>
+
+int main(void) {
+
+    // Γράψε εδώ τον βρόχο for
+
+    return 0;
+}`,
+
+    `#include <stdio.h>
+
+int main(void) {
+
+    int i = 1;
+
+    // Γράψε εδώ τον βρόχο while
+
+    return 0;
+}`,
+
+    `#include <stdio.h>
+
+int main(void) {
+
+    int i = 1;
+
+    // Γράψε εδώ τον βρόχο do...while
+
+    return 0;
+}`
+];
+
+
+/* ==========================================
+   ΕΠΑΝΑΦΟΡΑ ΟΛΗΣ ΤΗΣ ΠΡΟΟΔΟΥ
+========================================== */
+
+function resetProgress() {
+
+    const confirmed = confirm(
+        "Θέλεις να μηδενίσεις τις 30 ερωτήσεις και τις 3 ασκήσεις;"
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+        localStorage.removeItem(QUIZ_KEY);
+        localStorage.removeItem(EDITOR_KEY);
+        localStorage.removeItem(COMPLETION_KEY);
+    } catch (error) {
+        console.warn("Δεν διαγράφηκε η πρόοδος.");
+    }
+
+    answeredQuestions = {};
+    completedEditors = {};
+
+    createSections();
+    refreshScore();
+
+    for (let number = 1; number <= 3; number++) {
+
+        const textarea =
+            document.getElementById("editor" + number);
+
+        const feedback =
+            document.getElementById(
+                "editor-feedback" + number
+            );
+
+        textarea.value = initialCode[number];
+        textarea.disabled = false;
+
+        textarea.parentElement.querySelector(
+            ".primary-button"
+        ).disabled = false;
+
+        feedback.textContent = "";
+        feedback.className = "feedback";
+    }
+
+    refreshEditorScore();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/* ==========================================
+   ΕΚΚΙΝΗΣΗ
+========================================== */
+
+createSections();
+restoreProgress();
+restoreEditors();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,2053 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Επίπεδο 7 - Σύνθετοι Τύποι Δεδομένων</title>
+
+<style>
+:root {
+    --navy: #0b1220;
+    --navy-light: #16243a;
+    --blue: #2563eb;
+    --cyan: #22d3ee;
+    --green: #059669;
+    --red: #dc2626;
+    --bg: #f1f5f9;
+    --text: #0f172a;
+    --muted: #64748b;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+nav {
+    background: var(--navy);
+    padding: 20px 7%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.logo {
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.logo span {
+    color: var(--cyan);
+}
+
+.nav-link {
+    color: #cbd5e1;
+    text-decoration: none;
+}
+
+.nav-link:hover {
+    color: var(--cyan);
+}
+
+header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-light));
+    color: white;
+    padding: 55px 20px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 36px;
+    margin: 0 0 15px;
+}
+
+header h1 span {
+    color: var(--cyan);
+}
+
+header p {
+    color: #cbd5e1;
+    line-height: 1.7;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 35px auto;
+    padding: 0 20px;
+}
+
+.card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+}
+
+.card h2 {
+    margin-top: 0;
+    color: var(--text);
+}
+
+.description {
+    color: var(--muted);
+    line-height: 1.8;
+}
+
+.theory {
+    background: #eff6ff;
+    border-left: 4px solid var(--blue);
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    line-height: 1.8;
+}
+
+.theory p {
+    margin: 10px 0;
+}
+
+.theory code {
+    color: #1d4ed8;
+    font-weight: bold;
+}
+
+pre {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 20px;
+    border-radius: 10px;
+    overflow-x: auto;
+    line-height: 1.7;
+    white-space: pre;
+}
+
+pre code {
+    color: inherit !important;
+    font-weight: normal !important;
+}
+
+code, textarea {
+    font-family: Consolas, "Courier New", monospace;
+}
+
+.progress {
+    background: #e2e8f0;
+    height: 12px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 15px 0;
+}
+
+.progress-fill {
+    background: var(--green);
+    width: 0%;
+    height: 100%;
+    transition: width 0.3s;
+}
+
+.score-number {
+    font-size: 30px;
+    color: var(--blue);
+    font-weight: bold;
+}
+
+.section-score {
+    background: #f1f5f9;
+    border-radius: 8px;
+    padding: 14px;
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+.question {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 18px 0;
+}
+
+.question h3 {
+    font-size: 17px;
+    line-height: 1.6;
+    margin-top: 0;
+}
+
+.option {
+    display: block;
+    width: 100%;
+    background: white;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 13px 15px;
+    margin: 9px 0;
+    text-align: left;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.option:hover:not(:disabled) {
+    background: #dbeafe;
+    border-color: var(--blue);
+}
+
+.option.correct-option {
+    background: #d1fae5;
+    border-color: var(--green);
+}
+
+.option.wrong-option {
+    background: #fee2e2;
+    border-color: var(--red);
+}
+
+.answer-input {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    font-size: 16px;
+}
+
+.primary-button {
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.primary-button:hover:not(:disabled) {
+    background: #1d4ed8;
+}
+
+button:disabled {
+    opacity: 0.8;
+    cursor: default;
+}
+
+.reset-button {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 12px 18px;
+    cursor: pointer;
+}
+
+.feedback {
+    margin-top: 12px;
+    font-weight: bold;
+    line-height: 1.6;
+}
+
+.correct {
+    color: #047857;
+}
+
+.wrong {
+    color: #b91c1c;
+}
+
+.editor-section {
+    border-top: 5px solid var(--cyan);
+}
+
+.editor-score {
+    background: #dbeafe;
+    color: #1e40af;
+    border-radius: 10px;
+    padding: 16px;
+    font-weight: bold;
+}
+
+.editor-exercise {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 22px;
+    margin: 25px 0;
+}
+
+.editor-exercise p {
+    line-height: 1.7;
+}
+
+.editor-label {
+    display: block;
+    background: var(--navy-light);
+    color: var(--cyan);
+    padding: 12px 16px;
+    border-radius: 10px 10px 0 0;
+    font-family: Consolas, monospace;
+}
+
+.code-editor {
+    display: block;
+    width: 100%;
+    min-height: 260px;
+    background: #0f172a;
+    color: #e2e8f0;
+    border: 1px solid #334155;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 18px;
+    font-size: 14px;
+    line-height: 1.6;
+    resize: vertical;
+    tab-size: 4;
+}
+
+.code-editor:focus {
+    outline: 2px solid var(--blue);
+}
+
+.back-button {
+    display: inline-block;
+    background: var(--navy);
+    color: white;
+    text-decoration: none;
+    padding: 14px 24px;
+    border-radius: 8px;
+    margin-bottom: 40px;
+}
+
+.completion {
+    display: none;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    border-radius: 12px;
+    padding: 18px;
+    margin-top: 20px;
+}
+
+footer {
+    background: var(--navy);
+    color: #94a3b8;
+    padding: 25px;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 27px;
+    }
+
+    .container {
+        padding: 0 12px;
+    }
+
+    .card {
+        padding: 18px;
+    }
+
+    .editor-exercise {
+        padding: 14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <a href="/" class="logo">C<span>Learning</span></a>
+    <a href="/skills" class="nav-link">Skill Tree</a>
+</nav>
+
+<header>
+    <h1>Επίπεδο 7: <span>Σύνθετοι Τύποι Δεδομένων</span></h1>
+    <p>Strings - Struct - Enum - Typedef - Συνδυασμός</p>
+    <p>5 ενότητες - 30 ερωτήσεις - 3 ασκήσεις κώδικα</p>
+</header>
+
+<main class="container">
+
+<section class="card">
+    <h2>Η πρόοδός σου</h2>
+
+    <div class="score-number">
+        <span id="total-score">0</span> / 30
+    </div>
+
+    <p id="progress-text">
+        Έχεις ολοκληρώσει 0 από τις 30 ερωτήσεις.
+    </p>
+
+    <div class="progress">
+        <div class="progress-fill" id="progress-fill"></div>
+    </div>
+
+    <p>
+        Πρακτικές ασκήσεις:
+        <strong id="editor-progress">0 / 3</strong>
+    </p>
+
+    <div id="completion-message" class="completion">
+        <strong>Συγχαρητήρια!</strong>
+        Ολοκλήρωσες το Επίπεδο 7!
+    </div>
+
+    <button class="reset-button" onclick="resetProgress()">
+        Επαναφορά όλης της προόδου
+    </button>
+</section>
+
+<div id="sections-container"></div>
+
+<section class="card editor-section">
+    <h2>Τελική επανάληψη – Γράψε κώδικα C</h2>
+
+    <p class="description">
+        Εφάρμοσε όσα έμαθες στις τρεις ασκήσεις.
+        Ο έλεγχος αναγνωρίζει βασικά στοιχεία του κώδικα.
+        Δεν γίνεται πραγματική μεταγλώττιση ή εκτέλεση.
+    </p>
+
+    <div class="editor-score">
+        Ολοκληρωμένες ασκήσεις:
+        <span id="editor-score">0</span> / 3
+    </div>
+
+    <div class="editor-exercise">
+        <h3>Άσκηση 1: Συμβολοσειρές</h3>
+
+        <p>
+            Δήλωσε έναν πίνακα χαρακτήρων
+            <code>char name[30] = "Maria";</code>
+            και εμφάνισε το όνομα με
+            <code>printf</code> χρησιμοποιώντας
+            τον προσδιοριστή <code>%s</code>.
+        </p>
+
+        <label class="editor-label" for="editor1">
+            main.c — Άσκηση 1
+        </label>
+
+        <textarea id="editor1" class="code-editor" spellcheck="false">#include <stdio.h>
+
+int main(void) {
+
+    // Δήλωσε τη συμβολοσειρά name
+
+    // Εμφάνισε το όνομα
+
+    return 0;
+}</textarea>
+
+        <button class="primary-button" onclick="checkEditor(1)">
+            Έλεγχος κώδικα
+        </button>
+
+        <p id="editor-feedback1" class="feedback" aria-live="polite"></p>
+    </div>
+
+    <div class="editor-exercise">
+        <h3>Άσκηση 2: Δημιουργία δομής struct</h3>
+
+        <p>
+            Δημιούργησε μία δομή
+            <code>struct Student</code> με πεδία
+            <code>int age</code> και
+            <code>float grade</code>.
+            Μέσα στη <code>main</code>,
+            δήλωσε <code>struct Student s1;</code>,
+            δώσε ηλικία 20 και βαθμό 18.5
+            και εμφάνισε την ηλικία με
+            <code>printf</code>.
+        </p>
+
+        <label class="editor-label" for="editor2">
+            main.c — Άσκηση 2
+        </label>
+
+        <textarea id="editor2" class="code-editor" spellcheck="false">#include <stdio.h>
+
+// Δημιούργησε εδώ τη struct Student
+
+int main(void) {
+
+    // Δήλωσε τη μεταβλητή s1
+
+    // Δώσε τιμές στα πεδία
+
+    // Εμφάνισε την ηλικία
+
+    return 0;
+}</textarea>
+
+        <button class="primary-button" onclick="checkEditor(2)">
+            Έλεγχος κώδικα
+        </button>
+
+        <p id="editor-feedback2" class="feedback" aria-live="polite"></p>
+    </div>
+
+    <div class="editor-exercise">
+        <h3>Άσκηση 3: Enum και typedef</h3>
+
+        <p>
+            Δημιούργησε τον τύπο
+            <code>typedef enum { LOW, MEDIUM, HIGH } Priority;</code>.
+            Μέσα στη <code>main</code>,
+            δήλωσε μία μεταβλητή
+            <code>Priority task = HIGH;</code>.
+            Έλεγξε με <code>if</code> αν η
+            προτεραιότητα είναι <code>HIGH</code>
+            και εμφάνισε μήνυμα με
+            <code>printf</code>.
+        </p>
+
+        <label class="editor-label" for="editor3">
+            main.c — Άσκηση 3
+        </label>
+
+        <textarea id="editor3" class="code-editor" spellcheck="false">#include <stdio.h>
+
+// Δημιούργησε τον τύπο Priority
+
+int main(void) {
+
+    // Δήλωσε τη μεταβλητή task
+
+    // Έλεγξε αν task == HIGH
+
+    return 0;
+}</textarea>
+
+        <button class="primary-button" onclick="checkEditor(3)">
+            Έλεγχος κώδικα
+        </button>
+
+        <p id="editor-feedback3" class="feedback" aria-live="polite"></p>
+    </div>
+
+</section>
+
+<a href="/skills" class="back-button">
+    ← Επιστροφή στο Skill Tree
+</a>
+
+</main>
+
+<footer>
+    C Learning App • Επίπεδο 7: Σύνθετοι Τύποι Δεδομένων
+</footer>
+
+<script>
+"use strict";
+
+/* =========================================
+   ΕΚΠΑΙΔΕΥΤΙΚΟ ΥΛΙΚΟ
+   5 ΕΝΟΤΗΤΕΣ - 30 ΕΡΩΤΗΣΕΙΣ
+========================================= */
+
+const sections = [
+
+    /* ΕΝΟΤΗΤΑ 1 */
+    {
+        title: "1. Εισαγωγή στους σύνθετους τύπους",
+
+        description:
+            "Μάθε πώς αποθηκεύουμε και οργανώνουμε πιο σύνθετα δεδομένα.",
+
+        theory: `
+            <p>
+                Μέχρι τώρα γνωρίσαμε απλούς τύπους
+                δεδομένων όπως <code>int</code>,
+                <code>float</code>, <code>double</code>
+                και <code>char</code>.
+            </p>
+
+            <p>
+                Όταν ένα πρόγραμμα χρειάζεται να
+                αποθηκεύσει περισσότερες πληροφορίες,
+                χρησιμοποιούμε και πιο σύνθετες
+                μορφές δεδομένων.
+            </p>
+
+            <p>
+                Έχουμε ήδη γνωρίσει τους
+                <strong>πίνακες</strong>, που περιέχουν
+                πολλά στοιχεία του ίδιου τύπου.
+            </p>
+
+            <pre><code>int grades[3] = {15, 18, 20};</code></pre>
+
+            <p>
+                Μία <strong>συμβολοσειρά</strong>
+                στη C αποθηκεύεται συνήθως
+                σε πίνακα χαρακτήρων.
+            </p>
+
+            <pre><code>char name[] = "Nikos";</code></pre>
+
+            <p>
+                Μία <strong>δομή (struct)</strong>
+                μπορεί να συγκεντρώνει
+                διαφορετικούς τύπους δεδομένων.
+            </p>
+
+            <pre><code>struct Student {
+    int age;
+    float grade;
+};</code></pre>
+
+            <p>
+                Θα μάθουμε επίσης τις απαριθμήσεις
+                <code>enum</code> και τη δήλωση
+                εναλλακτικών ονομάτων τύπων
+                με <code>typedef</code>.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+struct Student {
+    int age;
+    float grade;
+};
+
+int main(void) {
+    struct Student s1 = {20, 18.5f};
+
+    printf("Age: %d\\n", s1.age);
+    printf("Grade: %.1f\\n", s1.grade);
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Ποιος τύπος επιτρέπει την ομαδοποίηση διαφορετικών πεδίων;",
+                options: ["struct", "int", "char"],
+                correct: 0,
+                explanation: "Η struct μπορεί να περιέχει πεδία διαφορετικών τύπων."
+            },
+            {
+                type: "choice",
+                text: "Ποια δήλωση αποθηκεύει μια συμβολοσειρά;",
+                options: [
+                    "int name = \"Nikos\";",
+                    "char name[] = \"Nikos\";",
+                    "float name = \"Nikos\";"
+                ],
+                correct: 1,
+                explanation: "Μία συμβολοσειρά μπορεί να αποθηκευτεί σε char array."
+            },
+            {
+                type: "choice",
+                text: "Τι περιέχει ο πίνακας int grades[3];",
+                options: [
+                    "Τρεις ακέραιους",
+                    "Τρεις διαφορετικούς τύπους",
+                    "Τρεις συναρτήσεις"
+                ],
+                correct: 0,
+                explanation: "Ο πίνακας περιέχει στοιχεία του ίδιου τύπου int."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τη λέξη για να δηλώσεις μία δομή:",
+                code: `___ Student {
+    int age;
+};`,
+                correct: ["struct"],
+                explanation: "Η λέξη-κλειδί struct χρησιμοποιείται για δομές."
+            },
+            {
+                type: "choice",
+                text: "Ποια λέξη-κλειδί δημιουργεί έναν τύπο απαρίθμησης;",
+                options: ["printf", "enum", "scanf"],
+                correct: 1,
+                explanation: "Η enum ορίζει ένα σύνολο ονομασμένων ακέραιων σταθερών."
+            },
+            {
+                type: "choice",
+                text: "Σε τι χρησιμεύει το typedef;",
+                options: [
+                    "Στην εκτύπωση",
+                    "Στη δημιουργία βρόχου",
+                    "Στη δήλωση εναλλακτικού ονόματος τύπου"
+                ],
+                correct: 2,
+                explanation: "Το typedef δίνει ένα άλλο όνομα σε έναν τύπο."
+            }
+        ]
+    },
+
+    /* ΕΝΟΤΗΤΑ 2 */
+    {
+        title: "2. Συμβολοσειρές (Strings)",
+
+        description:
+            "Μάθε να αποθηκεύεις, να εμφανίζεις και να διαβάζεις κείμενο.",
+
+        theory: `
+            <p>
+                Η C δεν διαθέτει ενσωματωμένο
+                βασικό τύπο <code>string</code>.
+                Συνήθως χρησιμοποιούμε
+                πίνακες <code>char</code>.
+            </p>
+
+            <pre><code>char name[20] = "Maria";</code></pre>
+
+            <p>
+                Οι συμβολοσειρές τελειώνουν
+                με τον ειδικό χαρακτήρα
+                <code>\\0</code>.
+            </p>
+
+            <p>
+                Η λέξη <code>"Cat"</code>
+                χρειάζεται τέσσερις θέσεις:
+                C, a, t και <code>\\0</code>.
+            </p>
+
+            <pre><code>char animal[4] = "Cat";</code></pre>
+
+            <p>
+                Για εμφάνιση συμβολοσειράς
+                χρησιμοποιούμε <code>%s</code>.
+            </p>
+
+            <pre><code>printf("%s", name);</code></pre>
+
+            <p>
+                Για ασφαλέστερη εισαγωγή κειμένου
+                μπορούμε να χρησιμοποιήσουμε
+                τη <code>fgets</code>.
+            </p>
+
+            <pre><code>char name[20];
+
+fgets(name, sizeof name, stdin);</code></pre>
+
+            <p>
+                Η <code>fgets</code> μπορεί να
+                κρατήσει και τον χαρακτήρα αλλαγής
+                γραμμής <code>\\n</code>,
+                αν υπάρχει διαθέσιμος χώρος.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+#include <string.h>
+
+int main(void) {
+    char name[20] = "Maria";
+
+    printf("Name: %s\\n", name);
+    printf("Length: %zu\\n", strlen(name));
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Ποια δήλωση είναι σωστή;",
+                options: [
+                    "char city[] = \"Athens\";",
+                    "int city[] = \"Athens\";",
+                    "string city = \"Athens\";"
+                ],
+                correct: 0,
+                explanation: "Η C χρησιμοποιεί πίνακα char για συμβολοσειρές."
+            },
+            {
+                type: "choice",
+                text: "Ποιος χαρακτήρας σηματοδοτεί το τέλος μιας C string;",
+                options: ["\\n", "\\0", "\\t"],
+                correct: 1,
+                explanation: "Ο χαρακτήρας \\0 τερματίζει τη συμβολοσειρά."
+            },
+            {
+                type: "choice",
+                text: "Ποιος προσδιοριστής εμφανίζει συμβολοσειρά;",
+                options: ["%d", "%f", "%s"],
+                correct: 2,
+                explanation: "Ο προσδιοριστής %s χρησιμοποιείται για strings."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τον προσδιοριστή μορφής:",
+                code: `char name[] = "Anna";
+printf("___", name);`,
+                correct: ["%s"],
+                explanation: "Η printf χρησιμοποιεί %s για συμβολοσειρές."
+            },
+            {
+                type: "choice",
+                text: "Πόσες θέσεις χρειάζεται τουλάχιστον η συμβολοσειρά \"Dog\";",
+                options: ["3", "4", "5"],
+                correct: 1,
+                explanation: "Τρεις χαρακτήρες και ένας τερματικός \\0."
+            },
+            {
+                type: "choice",
+                text: "Ποια συνάρτηση υπολογίζει το μήκος μιας συμβολοσειράς χωρίς το τελικό \\0;",
+                options: ["strlen", "printf", "sizeof"],
+                correct: 0,
+                explanation: "Η strlen από το string.h μετρά τους χαρακτήρες πριν από το \\0."
+            }
+        ]
+    },
+
+    /* ΕΝΟΤΗΤΑ 3 */
+    {
+        title: "3. Δομές (struct)",
+
+        description:
+            "Μάθε να συγκεντρώνεις διαφορετικά δεδομένα σε μία δομή.",
+
+        theory: `
+            <p>
+                Μία <code>struct</code> είναι χρήσιμη
+                όταν ένα αντικείμενο έχει
+                περισσότερες ιδιότητες.
+            </p>
+
+            <p>
+                Για παράδειγμα, ένας μαθητής
+                μπορεί να έχει όνομα,
+                ηλικία και βαθμό.
+            </p>
+
+            <pre><code>struct Student {
+    char name[30];
+    int age;
+    float grade;
+};</code></pre>
+
+            <p>
+                Δηλώνουμε μία μεταβλητή
+                αυτού του τύπου:
+            </p>
+
+            <pre><code>struct Student s1;</code></pre>
+
+            <p>
+                Χρησιμοποιούμε τον τελεστή
+                <strong>τελεία (.)</strong>
+                για πρόσβαση στα πεδία.
+            </p>
+
+            <pre><code>s1.age = 20;
+s1.grade = 18.5f;</code></pre>
+
+            <p>
+                Μπορούμε να αρχικοποιήσουμε
+                τη δομή κατά τη δήλωσή της:
+            </p>
+
+            <pre><code>struct Student s2 = {"Anna", 19, 17.5f};</code></pre>
+
+            <p>
+                Για να εμφανίσουμε την ηλικία:
+            </p>
+
+            <pre><code>printf("%d", s2.age);</code></pre>
+        `,
+
+        example: `#include <stdio.h>
+
+struct Product {
+    int code;
+    float price;
+};
+
+int main(void) {
+    struct Product p1 = {101, 12.5f};
+
+    printf("Code: %d\\n", p1.code);
+    printf("Price: %.2f\\n", p1.price);
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Ποια δήλωση δομής είναι σωστή;",
+                options: [
+                    "struct Car { int year; };",
+                    "struct Car (int year);",
+                    "struct Car = int year;"
+                ],
+                correct: 0,
+                explanation: "Η struct ορίζεται με άγκιστρα και τελικό ελληνικό ερωτηματικό (;)."
+            },
+            {
+                type: "choice",
+                text: "Πώς δηλώνουμε μεταβλητή της δομής Student;",
+                options: [
+                    "Student = s1;",
+                    "struct Student s1;",
+                    "int Student s1;"
+                ],
+                correct: 1,
+                explanation: "Χωρίς typedef χρησιμοποιούμε struct Student."
+            },
+            {
+                type: "choice",
+                text: "Ποια έκφραση προσπελαύνει το πεδίο age;",
+                code: `struct Student s1;`,
+                options: ["s1[age]", "s1->age", "s1.age"],
+                correct: 2,
+                explanation: "Για μεταβλητή struct χρησιμοποιούμε την τελεία."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τον τελεστή πρόσβασης στο πεδίο:",
+                code: `s1___age = 20;`,
+                correct: ["."],
+                explanation: "Ο τελεστής . χρησιμοποιείται για πεδία δομών."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `struct Point {
+    int x;
+    int y;
+};
+
+struct Point p = {3, 7};
+printf("%d", p.y);`,
+                options: ["3", "7", "0"],
+                correct: 1,
+                explanation: "Το πεδίο y έχει αρχικοποιηθεί με την τιμή 7."
+            },
+            {
+                type: "choice",
+                text: "Ποια εντολή αλλάζει σωστά την τιμή του πεδίου price;",
+                code: `struct Product p1;`,
+                options: [
+                    "p1.price = 25.0f;",
+                    "p1[price] = 25.0f;",
+                    "Product.price = 25.0f;"
+                ],
+                correct: 0,
+                explanation: "Η ανάθεση γίνεται στο πεδίο p1.price."
+            }
+        ]
+    },
+
+    /* ΕΝΟΤΗΤΑ 4 */
+    {
+        title: "4. Απαριθμήσεις (enum)",
+
+        description:
+            "Μάθε να χρησιμοποιείς ονομασμένες σταθερές για συγκεκριμένες καταστάσεις.",
+
+        theory: `
+            <p>
+                Η <code>enum</code> δημιουργεί
+                έναν τύπο απαρίθμησης με
+                ονομασμένες ακέραιες σταθερές.
+            </p>
+
+            <pre><code>enum Day {
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY
+};</code></pre>
+
+            <p>
+                Αν δεν δώσουμε συγκεκριμένες τιμές,
+                οι σταθερές ξεκινούν από το 0
+                και αυξάνονται κατά 1.
+            </p>
+
+            <p>
+                Επομένως:
+                <code>MONDAY = 0</code>,
+                <code>TUESDAY = 1</code>,
+                <code>WEDNESDAY = 2</code>.
+            </p>
+
+            <pre><code>enum Day today = TUESDAY;</code></pre>
+
+            <p>
+                Μπορούμε να χρησιμοποιήσουμε
+                enum σε συνθήκες.
+            </p>
+
+            <pre><code>if (today == TUESDAY) {
+    printf("Tuesday");
+}</code></pre>
+
+            <p>
+                Μπορούμε επίσης να ορίσουμε
+                ρητά τις τιμές.
+            </p>
+
+            <pre><code>enum Status {
+    ERROR = -1,
+    OK = 0,
+    RUNNING = 1
+};</code></pre>
+
+            <p>
+                Οι απαριθμήσεις κάνουν τον
+                κώδικα πιο κατανοητό από τη χρήση
+                ανεξήγητων αριθμητικών τιμών.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+enum TrafficLight {
+    RED,
+    YELLOW,
+    GREEN
+};
+
+int main(void) {
+    enum TrafficLight light = GREEN;
+
+    if (light == GREEN) {
+        printf("Go!\\n");
+    }
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Ποια δήλωση enum είναι σωστή;",
+                options: [
+                    "enum Color { RED, GREEN, BLUE };",
+                    "enum Color = RED, GREEN, BLUE;",
+                    "int enum Color;"
+                ],
+                correct: 0,
+                explanation: "Η enum ορίζει ονομασμένες σταθερές μέσα σε άγκιστρα."
+            },
+            {
+                type: "choice",
+                text: "Ποια είναι η τιμή του GREEN;",
+                code: `enum Color { RED, GREEN, BLUE };`,
+                options: ["0", "1", "2"],
+                correct: 1,
+                explanation: "Οι προεπιλεγμένες τιμές είναι 0, 1, 2."
+            },
+            {
+                type: "choice",
+                text: "Πώς δηλώνουμε μία μεταβλητή του enum Color;",
+                options: [
+                    "int Color c;",
+                    "Color = c;",
+                    "enum Color c;"
+                ],
+                correct: 2,
+                explanation: "Χωρίς typedef γράφουμε enum Color c."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τη λέξη-κλειδί:",
+                code: `___ State { OFF, ON };`,
+                correct: ["enum"],
+                explanation: "Η enum δηλώνει τύπο απαρίθμησης."
+            },
+            {
+                type: "choice",
+                text: "Τι εμφανίζει ο κώδικας;",
+                code: `enum State { OFF = 5, ON = 10 };
+printf("%d", ON);`,
+                options: ["5", "10", "1"],
+                correct: 1,
+                explanation: "Η σταθερά ON έχει οριστεί ρητά με τιμή 10."
+            },
+            {
+                type: "choice",
+                text: "Ποια συνθήκη ελέγχει σωστά αν η μεταβλητή state είναι ON;",
+                options: [
+                    "if (state == ON)",
+                    "if (state = ON)",
+                    "if (state[ON])"
+                ],
+                correct: 0,
+                explanation: "Ο τελεστής == συγκρίνει δύο τιμές."
+            }
+        ]
+    },
+
+    /* ΕΝΟΤΗΤΑ 5 */
+    {
+        title: "5. Typedef και συνδυασμός τύπων",
+
+        description:
+            "Μάθε να δίνεις ονόματα σε τύπους και να συνδυάζεις όσα έμαθες.",
+
+        theory: `
+            <p>
+                Η <code>typedef</code> δηλώνει
+                ένα νέο όνομα για έναν
+                ήδη υπάρχοντα τύπο.
+            </p>
+
+            <pre><code>typedef unsigned int Age;
+
+Age years = 20;</code></pre>
+
+            <p>
+                Η <code>Age</code> είναι
+                εναλλακτικό όνομα του
+                <code>unsigned int</code>.
+            </p>
+
+            <p>
+                Είναι ιδιαίτερα χρήσιμη
+                σε συνδυασμό με δομές.
+            </p>
+
+            <pre><code>typedef struct {
+    char name[30];
+    int age;
+} Student;</code></pre>
+
+            <p>
+                Τώρα μπορούμε να γράψουμε:
+            </p>
+
+            <pre><code>Student s1 = {"Maria", 20};</code></pre>
+
+            <p>
+                Δεν χρειάζεται να γράφουμε
+                <code>struct Student</code>,
+                επειδή χρησιμοποιούμε
+                το όνομα <code>Student</code>
+                που δημιουργήσαμε με typedef.
+            </p>
+
+            <p>
+                Το ίδιο μπορούμε να κάνουμε
+                και με enum:
+            </p>
+
+            <pre><code>typedef enum {
+    LOW,
+    MEDIUM,
+    HIGH
+} Priority;
+
+Priority task = HIGH;</code></pre>
+
+            <p>
+                Έτσι συνδυάζουμε
+                <strong>συμβολοσειρές,
+                δομές, enum και typedef</strong>
+                σε πιο οργανωμένα προγράμματα.
+            </p>
+        `,
+
+        example: `#include <stdio.h>
+
+typedef enum {
+    LOW,
+    MEDIUM,
+    HIGH
+} Priority;
+
+typedef struct {
+    char title[30];
+    Priority priority;
+} Task;
+
+int main(void) {
+    Task task = {"Study C", HIGH};
+
+    printf("Task: %s\\n", task.title);
+
+    if (task.priority == HIGH) {
+        printf("High priority\\n");
+    }
+
+    return 0;
+}`,
+
+        questions: [
+            {
+                type: "choice",
+                text: "Τι κάνει η typedef;",
+                options: [
+                    "Δηλώνει εναλλακτικό όνομα τύπου",
+                    "Εκτυπώνει κείμενο",
+                    "Δημιουργεί επανάληψη"
+                ],
+                correct: 0,
+                explanation: "Η typedef δημιουργεί νέο όνομα για υπάρχοντα τύπο."
+            },
+            {
+                type: "choice",
+                text: "Ποια δήλωση είναι σωστή;",
+                code: `typedef int Number;`,
+                options: [
+                    "int Number = 5;",
+                    "Number x = 5;",
+                    "typedef x = 5;"
+                ],
+                correct: 1,
+                explanation: "Το Number είναι πλέον εναλλακτικό όνομα του int."
+            },
+            {
+                type: "choice",
+                text: "Πώς δηλώνουμε μεταβλητή μετά από αυτόν τον ορισμό;",
+                code: `typedef struct {
+    int age;
+} Person;`,
+                options: [
+                    "struct Person p;",
+                    "int Person p;",
+                    "Person p;"
+                ],
+                correct: 2,
+                explanation: "Το Person είναι το όνομα τύπου που ορίστηκε με typedef."
+            },
+            {
+                type: "input",
+                text: "Συμπλήρωσε τη λέξη-κλειδί:",
+                code: `___ unsigned int Age;`,
+                correct: ["typedef"],
+                explanation: "Η typedef επιτρέπει να χρησιμοποιούμε το όνομα Age."
+            },
+            {
+                type: "choice",
+                text: "Ποια εντολή προσπελαύνει σωστά το πεδίο age;",
+                code: `typedef struct {
+    int age;
+} Person;
+
+Person p = {20};`,
+                options: [
+                    "printf(\"%d\", p.age);",
+                    "printf(\"%d\", Person.age);",
+                    "printf(\"%d\", p[age]);"
+                ],
+                correct: 0,
+                explanation: "Χρησιμοποιούμε τη μεταβλητή p και τον τελεστή τελεία."
+            },
+            {
+                type: "choice",
+                text: "Ποια συνθήκη είναι σωστή;",
+                code: `typedef enum {
+    LOW,
+    HIGH
+} Priority;
+
+Priority task = HIGH;`,
+                options: [
+                    "if (Priority == HIGH)",
+                    "if (task == HIGH)",
+                    "if (task = HIGH)"
+                ],
+                correct: 1,
+                explanation: "Συγκρίνουμε τη μεταβλητή task με τη σταθερά HIGH."
+            }
+        ]
+    }
+];
+
+/* =========================================
+   ΑΠΟΘΗΚΕΥΣΗ ΠΡΟΟΔΟΥ
+========================================= */
+
+const QUIZ_KEY = "c_learning_lesson7_quiz";
+const EDITOR_KEY = "c_learning_lesson7_editors";
+const COMPLETION_KEY = "c_learning_level7_completed";
+
+const totalQuestions = sections.reduce(
+    (total, section) => total + section.questions.length,
+    0
+);
+
+function readStorage(key) {
+    try {
+        const data = JSON.parse(localStorage.getItem(key));
+
+        if (
+            data &&
+            typeof data === "object" &&
+            !Array.isArray(data)
+        ) {
+            return data;
+        }
+    } catch (error) {
+        console.warn("Πρόβλημα ανάγνωσης προόδου.");
+    }
+
+    return {};
+}
+
+let answeredQuestions = readStorage(QUIZ_KEY);
+let completedEditors = readStorage(EDITOR_KEY);
+
+/* =========================================
+   ΒΟΗΘΗΤΙΚΕΣ ΣΥΝΑΡΤΗΣΕΙΣ
+========================================= */
+
+function escapeHTML(value) {
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+function questionKey(sectionIndex, questionIndex) {
+    return sectionIndex + "-" + questionIndex;
+}
+
+function getQuestionElement(sectionIndex, questionIndex) {
+    return document.getElementById(
+        "questions-" + sectionIndex
+    ).children[questionIndex];
+}
+
+/* =========================================
+   ΔΗΜΙΟΥΡΓΙΑ ΕΝΟΤΗΤΩΝ
+========================================= */
+
+function createSections() {
+    const container =
+        document.getElementById("sections-container");
+
+    container.innerHTML = "";
+
+    sections.forEach((section, sectionIndex) => {
+        const sectionElement =
+            document.createElement("section");
+
+        sectionElement.className = "card";
+
+        sectionElement.innerHTML = `
+            <h2>${escapeHTML(section.title)}</h2>
+
+            <p class="description">
+                ${escapeHTML(section.description)}
+            </p>
+
+            <div class="theory">
+                ${section.theory}
+            </div>
+
+            <h3>Παράδειγμα κώδικα C</h3>
+
+            <pre><code>${escapeHTML(section.example)}</code></pre>
+
+            <div class="section-score">
+                Ολοκληρωμένες ερωτήσεις:
+                <span id="section-score-${sectionIndex}">0</span>
+                / ${section.questions.length}
+            </div>
+
+            <h3>Quiz ενότητας</h3>
+
+            <div id="questions-${sectionIndex}"></div>
+        `;
+
+        container.appendChild(sectionElement);
+
+        const questionsContainer =
+            document.getElementById(
+                "questions-" + sectionIndex
+            );
+
+        section.questions.forEach((question, questionIndex) => {
+            const element = document.createElement("div");
+            element.className = "question";
+
+            let html = `
+                <h3>
+                    Ερώτηση ${questionIndex + 1}:
+                    ${escapeHTML(question.text)}
+                </h3>
+            `;
+
+            if (question.code) {
+                html += `
+                    <pre><code>${escapeHTML(question.code)}</code></pre>
+                `;
+            }
+
+            if (question.type === "choice") {
+                question.options.forEach((option, optionIndex) => {
+                    html += `
+                        <button
+                            class="option"
+                            onclick="checkChoice(
+                                this,
+                                ${sectionIndex},
+                                ${questionIndex},
+                                ${optionIndex}
+                            )">
+                            ${escapeHTML(option)}
+                        </button>
+                    `;
+                });
+            } else {
+                html += `
+                    <input
+                        class="answer-input"
+                        type="text"
+                        placeholder="Γράψε την απάντησή σου"
+                        autocomplete="off">
+
+                    <button
+                        class="primary-button"
+                        onclick="checkInput(
+                            this,
+                            ${sectionIndex},
+                            ${questionIndex}
+                        )">
+                        Έλεγχος
+                    </button>
+                `;
+            }
+
+            html += `
+                <p class="feedback" aria-live="polite"></p>
+            `;
+
+            element.innerHTML = html;
+            questionsContainer.appendChild(element);
+        });
+    });
+}
+
+/* =========================================
+   ΕΛΕΓΧΟΣ ΕΡΩΤΗΣΕΩΝ
+========================================= */
+
+function saveAnswer(sectionIndex, questionIndex) {
+    const key = questionKey(sectionIndex, questionIndex);
+
+    if (answeredQuestions[key]) {
+        return;
+    }
+
+    answeredQuestions[key] = true;
+
+    try {
+        localStorage.setItem(
+            QUIZ_KEY,
+            JSON.stringify(answeredQuestions)
+        );
+    } catch (error) {
+        console.warn("Δεν αποθηκεύτηκε η πρόοδος.");
+    }
+
+    refreshScore();
+}
+
+function checkChoice(
+    button,
+    sectionIndex,
+    questionIndex,
+    optionIndex
+) {
+    const question =
+        sections[sectionIndex].questions[questionIndex];
+
+    const element =
+        getQuestionElement(sectionIndex, questionIndex);
+
+    const feedback = element.querySelector(".feedback");
+
+    if (
+        answeredQuestions[
+            questionKey(sectionIndex, questionIndex)
+        ]
+    ) {
+        return;
+    }
+
+    if (optionIndex === question.correct) {
+        button.classList.add("correct-option");
+
+        element.querySelectorAll(".option").forEach(btn => {
+            btn.disabled = true;
+        });
+
+        feedback.textContent =
+            "✓ Σωστά! " + question.explanation;
+
+        feedback.className = "feedback correct";
+
+        saveAnswer(sectionIndex, questionIndex);
+    } else {
+        button.classList.add("wrong-option");
+        button.disabled = true;
+
+        feedback.textContent =
+            "✗ Λάθος απάντηση. Προσπάθησε ξανά.";
+
+        feedback.className = "feedback wrong";
+    }
+}
+
+function checkInput(
+    button,
+    sectionIndex,
+    questionIndex
+) {
+    const question =
+        sections[sectionIndex].questions[questionIndex];
+
+    const element =
+        getQuestionElement(sectionIndex, questionIndex);
+
+    const input = element.querySelector(".answer-input");
+    const feedback = element.querySelector(".feedback");
+
+    if (
+        answeredQuestions[
+            questionKey(sectionIndex, questionIndex)
+        ]
+    ) {
+        return;
+    }
+
+    const answer = input.value.trim();
+
+    const isCorrect = question.correct.some(
+        correctAnswer => answer === correctAnswer
+    );
+
+    if (isCorrect) {
+        input.disabled = true;
+        button.disabled = true;
+
+        feedback.textContent =
+            "✓ Σωστά! " + question.explanation;
+
+        feedback.className = "feedback correct";
+
+        saveAnswer(sectionIndex, questionIndex);
+    } else {
+        feedback.textContent =
+            "✗ Έλεγξε την απάντησή σου και προσπάθησε ξανά.";
+
+        feedback.className = "feedback wrong";
+    }
+}
+
+/* =========================================
+   ΒΑΘΜΟΛΟΓΙΑ
+========================================= */
+
+function refreshScore() {
+    let total = 0;
+
+    sections.forEach((section, sectionIndex) => {
+        let sectionScore = 0;
+
+        section.questions.forEach((question, questionIndex) => {
+            if (
+                answeredQuestions[
+                    questionKey(sectionIndex, questionIndex)
+                ] === true
+            ) {
+                sectionScore++;
+                total++;
+            }
+        });
+
+        document.getElementById(
+            "section-score-" + sectionIndex
+        ).textContent = sectionScore;
+    });
+
+    document.getElementById("total-score").textContent =
+        total;
+
+    document.getElementById("progress-text").textContent =
+        "Έχεις ολοκληρώσει " +
+        total + " από τις " +
+        totalQuestions + " ερωτήσεις.";
+
+    document.getElementById("progress-fill").style.width =
+        (total / totalQuestions * 100) + "%";
+
+    checkCompletion();
+}
+
+/* =========================================
+   ΕΠΑΝΑΦΟΡΑ ΑΠΟΘΗΚΕΥΜΕΝΩΝ ΑΠΑΝΤΗΣΕΩΝ
+========================================= */
+
+function restoreProgress() {
+    sections.forEach((section, sectionIndex) => {
+        section.questions.forEach((question, questionIndex) => {
+            if (
+                !answeredQuestions[
+                    questionKey(sectionIndex, questionIndex)
+                ]
+            ) {
+                return;
+            }
+
+            const element =
+                getQuestionElement(sectionIndex, questionIndex);
+
+            const feedback =
+                element.querySelector(".feedback");
+
+            feedback.textContent =
+                "✓ Έχεις ήδη απαντήσει σωστά!";
+
+            feedback.className = "feedback correct";
+
+            if (question.type === "choice") {
+                element.querySelectorAll(".option").forEach(
+                    (button, optionIndex) => {
+                        button.disabled = true;
+
+                        if (optionIndex === question.correct) {
+                            button.classList.add("correct-option");
+                        }
+                    }
+                );
+            } else {
+                const input =
+                    element.querySelector(".answer-input");
+
+                const button =
+                    element.querySelector("button");
+
+                input.value = question.correct[0];
+                input.disabled = true;
+                button.disabled = true;
+            }
+        });
+    });
+
+    refreshScore();
+}
+
+/* =========================================
+   ΕΛΕΓΧΟΣ ΠΡΑΚΤΙΚΩΝ ΑΣΚΗΣΕΩΝ
+========================================= */
+
+function removeComments(code) {
+    return code
+        .replace(/\/\*[\s\S]*?\*\//g, "")
+        .replace(/\/\/[^\n]*/g, "");
+}
+
+function checkEditor(number) {
+    if (completedEditors[number]) {
+        return;
+    }
+
+    const textarea =
+        document.getElementById("editor" + number);
+
+    const feedback =
+        document.getElementById(
+            "editor-feedback" + number
+        );
+
+    const code = removeComments(textarea.value);
+    const missing = [];
+
+    if (!/#\s*include\s*<stdio\.h>/.test(code)) {
+        missing.push("Πρόσθεσε #include <stdio.h>.");
+    }
+
+    if (!/\bint\s+main\s*\(\s*(?:void\s*)?\)/.test(code)) {
+        missing.push("Χρειάζεται η συνάρτηση int main().");
+    }
+
+    if (!/\breturn\s+0\s*;/.test(code)) {
+        missing.push("Πρόσθεσε return 0;.");
+    }
+
+    /* ΑΣΚΗΣΗ 1: STRING */
+
+    if (number === 1) {
+        if (
+            !/\bchar\s+name\s*\[\s*30\s*\]\s*=\s*"Maria"\s*;/.test(code)
+        ) {
+            missing.push(
+                'Δήλωσε char name[30] = "Maria";'
+            );
+        }
+
+        if (
+            !/printf\s*\(\s*"[^"]*%s[^"]*"\s*,\s*name\s*\)/.test(code)
+        ) {
+            missing.push(
+                "Εμφάνισε το name με printf και %s."
+            );
+        }
+    }
+
+    /* ΑΣΚΗΣΗ 2: STRUCT */
+
+    if (number === 2) {
+        if (
+            !/\bstruct\s+Student\s*\{[\s\S]*?\}\s*;/.test(code)
+        ) {
+            missing.push(
+                "Δημιούργησε τη δομή struct Student."
+            );
+        }
+
+        if (!/\bint\s+age\s*;/.test(code)) {
+            missing.push("Πρόσθεσε το πεδίο int age;.");
+        }
+
+        if (!/\bfloat\s+grade\s*;/.test(code)) {
+            missing.push(
+                "Πρόσθεσε το πεδίο float grade;."
+            );
+        }
+
+        if (
+            !/\bstruct\s+Student\s+s1\b/.test(code)
+        ) {
+            missing.push(
+                "Δήλωσε struct Student s1;."
+            );
+        }
+
+        if (
+            !/\bs1\s*\.\s*age\s*=\s*20\s*;/.test(code)
+        ) {
+            missing.push(
+                "Δώσε την τιμή 20 στο s1.age."
+            );
+        }
+
+        if (
+            !/\bs1\s*\.\s*grade\s*=\s*18\.5f?\s*;/.test(code)
+        ) {
+            missing.push(
+                "Δώσε την τιμή 18.5f στο s1.grade."
+            );
+        }
+
+        if (
+            !/printf\s*\(\s*"[^"]*%d[^"]*"\s*,\s*s1\s*\.\s*age\s*\)/.test(code)
+        ) {
+            missing.push(
+                "Εμφάνισε το s1.age με printf."
+            );
+        }
+    }
+
+    /* ΑΣΚΗΣΗ 3: ENUM + TYPEDEF */
+
+    if (number === 3) {
+        if (
+            !/\btypedef\s+enum\s*\{[\s\S]*?\}\s*Priority\s*;/.test(code)
+        ) {
+            missing.push(
+                "Δημιούργησε typedef enum με όνομα Priority."
+            );
+        }
+
+        if (
+            !/\bLOW\s*,\s*MEDIUM\s*,\s*HIGH\b/.test(code)
+        ) {
+            missing.push(
+                "Χρησιμοποίησε LOW, MEDIUM, HIGH."
+            );
+        }
+
+        if (
+            !/\bPriority\s+task\s*=\s*HIGH\s*;/.test(code)
+        ) {
+            missing.push(
+                "Δήλωσε Priority task = HIGH;."
+            );
+        }
+
+        if (
+            !/\bif\s*\(\s*task\s*==\s*HIGH\s*\)/.test(code)
+        ) {
+            missing.push(
+                "Έλεγξε if (task == HIGH)."
+            );
+        }
+
+        if (!/\bprintf\s*\(/.test(code)) {
+            missing.push(
+                "Εμφάνισε μήνυμα με printf."
+            );
+        }
+    }
+
+    if (missing.length === 0) {
+        completedEditors[number] = textarea.value;
+
+        try {
+            localStorage.setItem(
+                EDITOR_KEY,
+                JSON.stringify(completedEditors)
+            );
+        } catch (error) {
+            console.warn(
+                "Δεν αποθηκεύτηκε η άσκηση."
+            );
+        }
+
+        textarea.disabled = true;
+
+        textarea.parentElement.querySelector(
+            ".primary-button"
+        ).disabled = true;
+
+        feedback.textContent =
+            "✓ Μπράβο! Ο κώδικας περιλαμβάνει τα ζητούμενα στοιχεία. Δεν εκτελέστηκε σε compiler.";
+
+        feedback.className = "feedback correct";
+
+        refreshEditorScore();
+    } else {
+        feedback.textContent =
+            "Χρειάζονται διορθώσεις: " +
+            missing.join(" ");
+
+        feedback.className = "feedback wrong";
+    }
+}
+
+/* =========================================
+   ΠΡΟΟΔΟΣ ΠΡΑΚΤΙΚΩΝ ΑΣΚΗΣΕΩΝ
+========================================= */
+
+function refreshEditorScore() {
+    let score = 0;
+
+    for (let number = 1; number <= 3; number++) {
+        if (completedEditors[number]) {
+            score++;
+        }
+    }
+
+    document.getElementById(
+        "editor-score"
+    ).textContent = score;
+
+    document.getElementById(
+        "editor-progress"
+    ).textContent = score + " / 3";
+
+    checkCompletion();
+}
+
+function restoreEditors() {
+    for (let number = 1; number <= 3; number++) {
+        if (!completedEditors[number]) {
+            continue;
+        }
+
+        const textarea =
+            document.getElementById("editor" + number);
+
+        const feedback =
+            document.getElementById(
+                "editor-feedback" + number
+            );
+
+        textarea.value = completedEditors[number];
+        textarea.disabled = true;
+
+        textarea.parentElement.querySelector(
+            ".primary-button"
+        ).disabled = true;
+
+        feedback.textContent =
+            "✓ Έχεις ήδη ολοκληρώσει αυτή την άσκηση.";
+
+        feedback.className = "feedback correct";
+    }
+
+    refreshEditorScore();
+}
+
+/* =========================================
+   ΟΛΟΚΛΗΡΩΣΗ ΕΠΙΠΕΔΟΥ
+========================================= */
+
+function checkCompletion() {
+    const answered = sections.reduce(
+        (total, section, sectionIndex) => {
+            return total + section.questions.filter(
+                (question, questionIndex) =>
+                    answeredQuestions[
+                        questionKey(sectionIndex, questionIndex)
+                    ] === true
+            ).length;
+        },
+        0
+    );
+
+    const editorsDone = [1, 2, 3].filter(
+        number => Boolean(completedEditors[number])
+    ).length;
+
+    const completed =
+        answered === totalQuestions &&
+        editorsDone === 3;
+
+    document.getElementById(
+        "completion-message"
+    ).style.display = completed ? "block" : "none";
+
+    try {
+        if (completed) {
+            localStorage.setItem(
+                COMPLETION_KEY,
+                "true"
+            );
+        } else {
+            localStorage.removeItem(COMPLETION_KEY);
+        }
+    } catch (error) {
+        console.warn(
+            "Δεν ενημερώθηκε η ολοκλήρωση."
+        );
+    }
+}
+
+/* =========================================
+   ΑΡΧΙΚΟΣ ΚΩΔΙΚΑΣ EDITORS
+========================================= */
+
+const initialCode = [
+    "",
+
+    `#include <stdio.h>
+
+int main(void) {
+
+    // Δήλωσε τη συμβολοσειρά name
+
+    // Εμφάνισε το όνομα
+
+    return 0;
+}`,
+
+    `#include <stdio.h>
+
+// Δημιούργησε εδώ τη struct Student
+
+int main(void) {
+
+    // Δήλωσε τη μεταβλητή s1
+
+    // Δώσε τιμές στα πεδία
+
+    // Εμφάνισε την ηλικία
+
+    return 0;
+}`,
+
+    `#include <stdio.h>
+
+// Δημιούργησε τον τύπο Priority
+
+int main(void) {
+
+    // Δήλωσε τη μεταβλητή task
+
+    // Έλεγξε αν task == HIGH
+
+    return 0;
+}`
+];
+
+/* =========================================
+   ΕΠΑΝΑΦΟΡΑ ΠΡΟΟΔΟΥ
+========================================= */
+
+function resetProgress() {
+    const confirmed = confirm(
+        "Θέλεις να μηδενίσεις τις 30 ερωτήσεις και τις 3 ασκήσεις;"
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+        localStorage.removeItem(QUIZ_KEY);
+        localStorage.removeItem(EDITOR_KEY);
+        localStorage.removeItem(COMPLETION_KEY);
+    } catch (error) {
+        console.warn(
+            "Δεν διαγράφηκε η πρόοδος."
+        );
+    }
+
+    answeredQuestions = {};
+    completedEditors = {};
+
+    createSections();
+    refreshScore();
+
+    for (let number = 1; number <= 3; number++) {
+        const textarea =
+            document.getElementById("editor" + number);
+
+        const feedback =
+            document.getElementById(
+                "editor-feedback" + number
+            );
+
+        textarea.value = initialCode[number];
+        textarea.disabled = false;
+
+        textarea.parentElement.querySelector(
+            ".primary-button"
+        ).disabled = false;
+
+        feedback.textContent = "";
+        feedback.className = "feedback";
+    }
+
+    refreshEditorScore();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+/* =========================================
+   ΕΚΚΙΝΗΣΗ
+========================================= */
+
+createSections();
+restoreProgress();
+restoreEditors();
+
+</script>
+
+</body>
+</html>
