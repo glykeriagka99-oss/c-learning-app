@@ -1287,7 +1287,7 @@ function createSections() {
         sectionElement.className = "card";
 
         sectionElement.innerHTML = `
-            <h2>${escapeHTML(section.title)}</h2>
+            <h2>Ενότητα ${String.fromCharCode(65 + sectionIndex)}: ${escapeHTML(section.title.replace(/^\d+\.\s*/, ""))}</h2>
 
             <p class="description">
                 ${escapeHTML(section.description)}
